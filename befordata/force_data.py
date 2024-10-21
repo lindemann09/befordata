@@ -49,7 +49,7 @@ class BeForData:
         self.new_sessions.append(nbefore)
 
     @property
-    def n_total_samples(self) -> int:
+    def n_samples(self) -> int:
         """Number of sample in all sessions"""
         return self.dat.shape[0]
 
@@ -116,7 +116,7 @@ class BeForData:
         """Write the data a Arrow data file"""
 
         # Convert the DataFrame to a PyArrow table
-        table = Table.from_pandas(self.dat)
+        table = Table.from_pandas(self.dat, preserve_index=False)
 
         # Add metadata to the schema (serialize sampling_rate, timestamp, trigger, and meta)
         schema_metadata = {
@@ -131,7 +131,7 @@ class BeForData:
                             compression_level=6)
 
 def to_befordata(pyarrow_table:Table) -> BeForData:
-    """Converts a PyArrow table to BeforData object"""
+    """Converts a PyArrow table to a BeforData object"""
 
     sr = 0
     columns = []
