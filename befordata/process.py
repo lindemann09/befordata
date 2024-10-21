@@ -10,3 +10,6 @@ def detect_sessions(data:BeForData, time_column:str, time_gap:float) -> BeForDat
     return BeForData(data.dat, sampling_rate=data.sampling_rate,
               columns=data.columns, new_sessions=new_sessions,
               meta=data.meta)
+
+def lowpass_filter():
+    raise NotImplementedError() ## TODO
