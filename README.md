@@ -1,2 +1,5 @@
 # BeForData
-Python implementation of Behavioral Force Data
+
+Data structure for handling behavioural force data
+
+(c) Oliver Lindemann

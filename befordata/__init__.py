@@ -1,6 +1,6 @@
-"""Data Structure for handling behavioural force Data"""
+"""Data structure for handling behavioural force data"""
 
 __author__ = "Oliver Lindemann"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 from .force_data import BeForData, to_befordata, read_force_data
