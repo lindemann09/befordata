@@ -1,12 +1,16 @@
 """Before Data"""
 
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
+import numpy as np
 import pandas as pd
+from numpy.typing import NDArray
 from pyarrow import Table, feather
 
+from ._epochs import BeForEpochs
 
 @dataclass
 class BeForData:
@@ -127,6 +131,59 @@ class BeForData:
             self.columns.remove(name)
         except ValueError:
             pass
+
+    def extract_epochs(self,
+            column: str,
+            zero_samples: Union[List[int], NDArray[np.int_]],
+            n_samples: int,
+            n_samples_before: int = 0,
+            design: pd.DataFrame = pd.DataFrame()) -> BeForEpochs:
+        """extracts epochs from BeForData
+
+        Parameter
+        ---------
+        column: str
+            name of column containing the force data to be used
+        zero_samples: List[int]
+            zero sample that define the epochs
+        n_samples: int
+            number of samples to be extract (from zero sample on)
+        n_samples_before: int, optional
+            number of samples to be extracted before the zero sample (default=0)
+
+        design: pd.DataFrame, optional
+            design information
+
+        Note
+        ----
+        use `find_times` to detect zero samples with time-based
+
+        """
+
+        fd = self.dat.loc[:, column]
+        n = len(fd)  # samples for data
+        n_epochs = len(zero_samples)
+        n_col = n_samples_before + n_samples
+        force_mtx = np.empty((n_epochs, n_col), dtype=np.float64)
+        for (r, zs) in enumerate(zero_samples):
+            f = zs - n_samples_before
+            if f > 0 and f < n:
+                t = zs + n_samples
+                if t > n:
+                    warnings.warn(
+                        f"extract_force_epochs: last force epoch is incomplete, {t-n} samples missing.",
+                        RuntimeWarning)
+                    tmp = fd[f:]
+                    force_mtx[r, :len(tmp)] = tmp
+                    force_mtx[r, len(tmp):] = 0
+                else:
+                    force_mtx[r, :] = fd[f:t]
+
+        return BeForEpochs(force_mtx,
+                        sampling_rate=self.sampling_rate,
+                        design=design,
+                        zero_sample=n_samples_before)
+
 
     def write_feather(self, filepath: Union[Path, str]) -> None:
         """Write the data a feather data file"""

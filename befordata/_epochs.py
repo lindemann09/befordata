@@ -1,14 +1,11 @@
 """Epochs Data"""
 
-import warnings
 from dataclasses import dataclass, field
-from typing import List, Tuple, Union
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
-from numpy.typing import ArrayLike, NDArray
-
-from ._data import BeForData
+from numpy.typing import NDArray
 
 # NPEpochs = NDArray[np.float_]
 
@@ -49,6 +46,20 @@ class BeForEpochs:
             raise ValueError(
                 "baseline must be a 1D array. The number of elements must match the of epochs")
 
+
+    def __repr__(self):
+        rtn = "BeForEpochs"
+        rtn += f"\n  n epochs: {self.n_epochs}"
+        rtn += f", n_samples: {self.n_samples}"
+        rtn += f"\n  sampling_rate: {self.sampling_rate}"
+        rtn += f", zero_sample: {self.zero_sample}"
+        if len(self.design) == 0:
+            rtn += "\n  design: None"
+        else:
+            rtn += f"\n  design: {self.design.columns}".replace("[", "").replace("]", "")
+        rtn += "\n" + str(self.dat)
+        return rtn
+
     @property
     def n_epochs(self):
         """number of epochs"""
@@ -77,58 +88,3 @@ class BeForEpochs:
         i = range(reference_window[0], reference_window[1])
         self.baseline = np.mean(dat[:, i], axis=1)
         self.dat = dat - np.atleast_2d(self.baseline).T
-
-
-def epochs(d: BeForData,
-           column: str,
-           zero_samples: Union[List[int], NDArray[np.int_]],
-           n_samples: int,
-           n_samples_before: int = 0,
-           design: pd.DataFrame = pd.DataFrame()) -> BeForEpochs:
-    """extracts epochs from BeForData
-
-    Parameter
-    ---------
-    d: BeForData
-        data
-    column: str
-        name of column containing the force data to be used
-    zero_samples: List[int]
-        zero sample that define the epochs
-    n_samples: int
-        number of samples to be extract (from zero sample on)
-    n_samples_before: int, optional
-        number of samples to be extracted before the zero sample (default=0)
-
-    design: pd.DataFrame, optional
-        design information
-
-    Note
-    ----
-    use `find_times` to detect zero samples with time-based
-
-    """
-
-    fd = d.dat.loc[:, column]
-    n = len(fd)  # samples for data
-    n_epochs = len(zero_samples)
-    n_col = n_samples_before + n_samples
-    force_mtx = np.empty((n_epochs, n_col), dtype=np.float64)
-    for (r, zs) in enumerate(zero_samples):
-        f = zs - n_samples_before
-        if f > 0 and f < n:
-            t = zs + n_samples
-            if t > n:
-                warnings.warn(
-                    f"extract_force_epochs: last force epoch is incomplete, {t-n} samples missing.",
-                    RuntimeWarning)
-                tmp = fd[f:]
-                force_mtx[r, :len(tmp)] = tmp
-                force_mtx[r, len(tmp):] = 0
-            else:
-                force_mtx[r, :] = fd[f:t]
-
-    return BeForEpochs(force_mtx,
-                       sampling_rate=d.sampling_rate,
-                       design=design,
-                       zero_sample=n_samples_before)
