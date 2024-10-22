@@ -40,6 +40,17 @@ class BeForData:
         if len(self.sessions) == 0:
             self.sessions.append(0)
 
+    def __repr__(self):
+        rtn = "BeForData"
+        rtn += f"\n  sampling_rate: {self.sampling_rate}"
+        rtn += f", n sessions: {self.n_sessions}"
+        rtn += f"\n  columns: {self.columns}".replace("[", "").replace("]", "")
+        rtn += "\n  metadata"
+        for k, v in self.meta.items():
+            rtn += f"\n  - {k}: {v}".rstrip()
+        rtn += "\n" + str(self.dat)
+        return rtn
+
     def add_session(self, dat: pd.DataFrame):
         """Adds data (dataframe) as a new recording
 
@@ -150,7 +161,7 @@ def arrow2befor(pyarrow_table:Table) -> BeForData:
         elif k == b"sessions":
             sessions = [int(x) for x in v.decode("utf-8").split(",")]
         else:
-            meta[k.decode("utf-8")] = v.decode("utf-8")
+            meta[k.decode("utf-8")] = v.decode("utf-8").strip()
 
     return BeForData(dat=pyarrow_table.to_pandas(),
                      sampling_rate=sr,
