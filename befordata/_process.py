@@ -3,7 +3,7 @@ from typing import Union, List
 import numpy as np
 from scipy.signal import butter, filtfilt
 import pandas as pd
-from .force_data import BeForData
+from ._force_data import BeForData
 
 
 def detect_sessions(data: BeForData, time_column: str, time_gap: float) -> BeForData:
