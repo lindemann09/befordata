@@ -1,7 +1,8 @@
 """Before Data"""
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from pathlib import Path
+from typing import List, Optional, Tuple, Union
 
 import pandas as pd
 from pyarrow import Table, feather
@@ -28,7 +29,7 @@ class BeForData:
     dat: pd.DataFrame
     sampling_rate: float
     columns: List[str] = field(default_factory=list[str])
-    new_sessions: List[int] = field(default_factory=list[int])
+    sessions: List[int] = field(default_factory=list[int])
     meta: dict = field(default_factory=dict)
 
     def __post_init__(self):
@@ -36,8 +37,8 @@ class BeForData:
             # make col forces
             self.columns = self.dat.columns.values.tolist()
 
-        if len(self.new_sessions) == 0:
-            self.new_sessions.append(0)
+        if len(self.sessions) == 0:
+            self.sessions.append(0)
 
     def add_session(self, dat: pd.DataFrame):
         """Adds data (dataframe) as a new recording
@@ -46,7 +47,7 @@ class BeForData:
         """
         nbefore = self.dat.shape[0]
         self.dat = pd.concat([self.dat, dat], ignore_index=True)
-        self.new_sessions.append(nbefore)
+        self.sessions.append(nbefore)
 
     @property
     def n_samples(self) -> int:
@@ -61,7 +62,16 @@ class BeForData:
     @property
     def n_sessions(self) -> int:
         """Number of recoding sessions"""
-        return len(self.new_sessions)
+        return len(self.sessions)
+
+    def session_rows(self, session:int) -> Tuple[int, int]:
+        """returns row range (from, to) of this sessions"""
+        f = self.sessions[session]
+        try:
+            t = self.sessions[session+1]
+        except IndexError:
+            t = self.dat.shape[0]
+        return f, t-1
 
     def get_data(self,
                columns: Union[None,  str, List[str]] = None,
@@ -73,13 +83,8 @@ class BeForData:
         if session is None:
             return self.dat.loc[:, columns] # type: ignore
         else:
-            f = self.new_sessions[session]
-            try:
-                t = self.new_sessions[session+1]
-            except IndexError:
-                t = self.dat.shape[0]
-
-            return self.dat.loc[f:(t-1), columns] # type: ignore
+            f, t = self.session_rows(session)
+            return self.dat.loc[f:t, columns] # type: ignore
 
     def forces(self, session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
         """Returns force data of a particular session"""
@@ -112,8 +117,8 @@ class BeForData:
         except ValueError:
             pass
 
-    def write_arrow(self, filepath: str) -> None:
-        """Write the data a Arrow data file"""
+    def write_feather(self, filepath: Union[Path, str]) -> None:
+        """Write the data a feather data file"""
 
         # Convert the DataFrame to a PyArrow table
         table = Table.from_pandas(self.dat, preserve_index=False)
@@ -122,7 +127,7 @@ class BeForData:
         schema_metadata = {
             'sampling_rate': str(self.sampling_rate),
             'columns': ",".join(self.columns),
-            'new_sessions': ",".join([str(x) for x in self.new_sessions])
+            'sessions': ",".join([str(x) for x in self.sessions])
         }
         schema_metadata.update(self.meta)
         table = table.replace_schema_metadata(schema_metadata)
@@ -130,32 +135,32 @@ class BeForData:
         feather.write_feather(table, filepath, compression="lz4",
                             compression_level=6)
 
-def to_befordata(pyarrow_table:Table) -> BeForData:
+def arrow2befor(pyarrow_table:Table) -> BeForData:
     """Converts a PyArrow table to a BeforData object"""
 
     sr = 0
     columns = []
-    new_sessions = []
+    sessions = []
     meta = {}
     for k, v in pyarrow_table.schema.metadata.items():
         if k == b"sampling_rate":
             sr = float(v)
         elif k == b"columns":
             columns = v.decode("utf-8").split(",")
-        elif k == b"new_sessions":
-            new_sessions = [int(x) for x in v.decode("utf-8").split(",")]
+        elif k == b"sessions":
+            sessions = [int(x) for x in v.decode("utf-8").split(",")]
         else:
             meta[k.decode("utf-8")] = v.decode("utf-8")
 
     return BeForData(dat=pyarrow_table.to_pandas(),
                      sampling_rate=sr,
                      columns=columns,
-                     new_sessions=new_sessions,
+                     sessions=sessions,
                      meta=meta)
 
-def read_force_data(filepath: str) -> BeForData:
-    """Read BeForData file in Arrow format"""
+def read_befor_feather(filepath: str) -> BeForData:
+    """Read BeForData file in feather file format"""
 
-    return to_befordata(feather.read_table(filepath))
+    return arrow2befor(feather.read_table(filepath))
 
 
