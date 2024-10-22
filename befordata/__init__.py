@@ -5,4 +5,4 @@ __version__ = "0.1.7"
 
 from ._data import BeForData, arrow2befor, read_befor_feather
 from ._epochs import BeForEpochs, epochs
-from ._process import detect_sessions
+from ._process import detect_sessions, find_times
