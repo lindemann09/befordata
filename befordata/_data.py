@@ -2,15 +2,19 @@
 
 import warnings
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import List, Optional, Tuple, Union
+try:
+    from typing import Self  # type: ignore
+except ImportError:
+    from typing_extensions import Self
 
 import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
-from pyarrow import Table, feather
+from pyarrow import Table
 
 from ._epochs import BeForEpochs
+
 
 @dataclass
 class BeForData:
@@ -37,11 +41,19 @@ class BeForData:
     meta: dict = field(default_factory=dict)
 
     def __post_init__(self):
-        if len(self.columns) == 0:
+
+        if not isinstance(self.dat, pd.DataFrame):
+            raise TypeError(f"must be pandas.DataFrame, not {type(self.dat)}")
+
+        if isinstance(self.columns, str):
+            self.columns = [self.columns]
+        elif len(self.columns) == 0:
             # make col forces
             self.columns = self.dat.columns.values.tolist()
 
-        if len(self.sessions) == 0:
+        if isinstance(self.sessions, int):
+            self.sessions = [self.sessions]
+        elif len(self.sessions) == 0:
             self.sessions.append(0)
 
     def __repr__(self):
@@ -79,7 +91,7 @@ class BeForData:
         """Number of recoding sessions"""
         return len(self.sessions)
 
-    def session_rows(self, session:int) -> Tuple[int, int]:
+    def session_rows(self, session: int) -> Tuple[int, int]:
         """returns row range (from, to) of this sessions"""
         f = self.sessions[session]
         try:
@@ -89,24 +101,24 @@ class BeForData:
         return f, t-1
 
     def get_data(self,
-               columns: Union[None,  str, List[str]] = None,
-               session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
+                 columns: Union[None,  str, List[str]] = None,
+                 session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
         """Returns data of a particular column and/or a particular session"""
         if columns is None:
             columns = self.dat.columns.values.tolist()
 
         if session is None:
-            return self.dat.loc[:, columns] # type: ignore
+            return self.dat.loc[:, columns]  # type: ignore
         else:
             f, t = self.session_rows(session)
-            return self.dat.loc[f:t, columns] # type: ignore
+            return self.dat.loc[f:t, columns]  # type: ignore
 
     def forces(self, session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
         """Returns force data of a particular session"""
         return self.get_data(self.columns, session)
 
-    def add_column(self, name:str, data:Union[List, pd.Series],
-                        is_force_column:bool=True):
+    def add_column(self, name: str, data: Union[List, pd.Series],
+                   is_force_column: bool = True):
         """Add data column (in place).
 
         Parameters
@@ -124,7 +136,7 @@ class BeForData:
         if is_force_column:
             self.columns.append(name)
 
-    def drop_column(self, name:str):
+    def drop_column(self, name: str):
         """Drop a column for the data (in place)"""
         self.dat = self.dat.drop(name, axis=1)
         try:
@@ -133,11 +145,11 @@ class BeForData:
             pass
 
     def extract_epochs(self,
-            column: str,
-            zero_samples: Union[List[int], NDArray[np.int_]],
-            n_samples: int,
-            n_samples_before: int = 0,
-            design: pd.DataFrame = pd.DataFrame()) -> BeForEpochs:
+                       column: str,
+                       zero_samples: Union[List[int], NDArray[np.int_]],
+                       n_samples: int,
+                       n_samples_before: int = 0,
+                       design: pd.DataFrame = pd.DataFrame()) -> BeForEpochs:
         """extracts epochs from BeForData
 
         Parameter
@@ -180,13 +192,16 @@ class BeForData:
                     force_mtx[r, :] = fd[f:t]
 
         return BeForEpochs(force_mtx,
-                        sampling_rate=self.sampling_rate,
-                        design=design,
-                        zero_sample=n_samples_before)
+                           sampling_rate=self.sampling_rate,
+                           design=design,
+                           zero_sample=n_samples_before)
 
+    def to_arrow(self) -> Table:
+        """converts BeForData to `pyarrow.Table`
 
-    def write_feather(self, filepath: Union[Path, str]) -> None:
-        """Write the data a feather data file"""
+        metadata of schema will be defines and can converted back to
+        BeForData struct using `BeForData.from_arrow()`
+        """
 
         # Convert the DataFrame to a PyArrow table
         table = Table.from_pandas(self.dat, preserve_index=False)
@@ -198,37 +213,62 @@ class BeForData:
             'sessions': ",".join([str(x) for x in self.sessions])
         }
         schema_metadata.update(self.meta)
-        table = table.replace_schema_metadata(schema_metadata)
+        return table.replace_schema_metadata(schema_metadata)
 
-        feather.write_feather(table, filepath, compression="lz4",
-                            compression_level=6)
+    @staticmethod
+    def from_arrow(tbl: Table,
+                   sampling_rate: Optional[float] = None,
+                   columns: Union[None, str, List[str]] = None,
+                   sessions: Optional[List[int]] = None,
+                   meta: dict = {}) -> Self:
+        """Creates BeForData struct from `pyarrow.Table`
 
-def arrow2befor(pyarrow_table:Table) -> BeForData:
-    """Converts a PyArrow table to a BeforData object"""
+        Parameter
+        ---------
+        tbl : pyarrow.Table
 
-    sr = 0
-    columns = []
-    sessions = []
-    meta = {}
-    for k, v in pyarrow_table.schema.metadata.items():
-        if k == b"sampling_rate":
-            sr = float(v)
-        elif k == b"columns":
-            columns = v.decode("utf-8").split(",")
-        elif k == b"sessions":
-            sessions = [int(x) for x in v.decode("utf-8").split(",")]
-        else:
-            meta[k.decode("utf-8")] = v.decode("utf-8").strip()
+        Example
+        -------
+        ```
+        from pyarrow import feather
+        dat = feather.read_table("my_force_data.feather")
+        dat = BeforeData.from_arrow(dat)
+        ```
 
-    return BeForData(dat=pyarrow_table.to_pandas(),
-                     sampling_rate=sr,
-                     columns=columns,
-                     sessions=sessions,
-                     meta=meta)
+        """
 
-def read_befor_feather(filepath: str) -> BeForData:
-    """Read BeForData file in feather file format"""
+        if not isinstance(tbl, Table):
+            raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
 
-    return arrow2befor(feather.read_table(filepath))
+        if isinstance(columns, str):
+            columns = [columns]
 
+        # search info in meta data
+        file_meta = {}
+        if tbl.schema.metadata is not None:
+            for k, v in tbl.schema.metadata.items():
+                if k == b"sampling_rate":
+                    if sampling_rate is None:
+                        sampling_rate = float(v)
+                elif k == b"columns":
+                    if columns is None:
+                        columns = v.decode("utf-8").split(",")
+                elif k == b"sessions":
+                    if sessions is None:
+                        sessions = [int(x) for x in v.decode("utf-8").split(",")]
+                else:
+                    file_meta[k.decode("utf-8")] = v.decode("utf-8").strip()
 
+        if sampling_rate is None:
+            raise RuntimeError("No sampling rate defined!")
+        if columns is None:
+            columns = []
+        if sessions is None:
+            sessions = []
+        meta.update(file_meta)
+
+        return BeForData(dat=tbl.to_pandas(),
+                         sampling_rate=sampling_rate,
+                         columns=columns,  # type: ignore
+                         sessions=sessions,
+                         meta=meta)
