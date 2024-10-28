@@ -9,16 +9,32 @@ import pandas as _pd
 from ._data import BeForData
 
 def read_csv(file_path: _tp.Union[str, _Path],
+            columns: _tp.Union[None, str, _tp.List[str]] = None,
              encoding: str = "utf-8",
              comment_char: str = '#'):
-    """Reads CSV files.
+    """Reads CSV file
 
-    The function can handle comments as well as compressed csvs, if the end
+    The function can handle comments as well as compressed CSVs, if the end
     with `.csv.xz` or `.csv.gz`
+
+    Parameter
+    ---------
+    file_path : str | Path
+        the path to the CSV file. If file end with `.csv.xz` or `.csv.gz`,
+        decompression will be used
+    columns : str | list[str], Optional
+        the columns that should be read. If no columns are specified all columns
+        are read
+    encoding : str, optional
+        file encoding, default="utf-8",
+
+    comment_char: str, Optional
+        line starting with character or string will be treated as comments and
+        returned as a list of strings.
 
     Returns
     -------
-        pandas.DataFrame and list[str] with all comments
+    pandas.DataFrame and list[str] with all comments
     """
 
     p = _Path(file_path)
@@ -38,7 +54,13 @@ def read_csv(file_path: _tp.Union[str, _Path],
             csv_str += l
     fl.close()
 
-    return _pd.read_csv(_StringIO(csv_str)), comments
+    df = _pd.read_csv(_StringIO(csv_str))
+    if isinstance(columns, str):
+        columns = [columns]
+    if isinstance(columns, list):
+        df = df.loc[:, columns]
+
+    return df, comments
 
 
 def read_csv_as_befordata(file_path: _tp.Union[str, _Path],
@@ -49,7 +71,7 @@ def read_csv_as_befordata(file_path: _tp.Union[str, _Path],
                           meta: _tp.Optional[dict] = None,
                           encoding: str = "utf-8",
                           comment_char: str = '#'):
-    """read csv file as befordata
+    """Read CSV file as befordata
     """
 
     df, _ = read_csv(file_path=file_path,
