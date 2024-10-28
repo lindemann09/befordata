@@ -251,7 +251,7 @@ class BeForData:
                    columns: Union[None, str, List[str]] = None,
                    sessions: Optional[List[int]] = None,
                    time_column: Optional[str] = None,
-                   meta: dict = {}) -> Self:
+                   meta: Optional[dict] = None) -> Self:
         """Creates BeForData struct from `pyarrow.Table`
 
         Parameter
@@ -301,7 +301,10 @@ class BeForData:
             time_column = ""
         if sessions is None:
             sessions = []
-        meta.update(file_meta)
+        if isinstance(meta, dict):
+            meta.update(file_meta)
+        else:
+            meta = file_meta
 
         return BeForData(dat=tbl.to_pandas(),
                          sampling_rate=sampling_rate,

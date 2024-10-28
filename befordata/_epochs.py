@@ -88,4 +88,5 @@ class BeForEpochs:
         self.dat = dat - np.atleast_2d(self.baseline).T
 
     def to_arrow(self):
+        #FIXME
         pass
