@@ -158,6 +158,8 @@ class BeForData:
             self.columns.remove(name)
         except ValueError:
             pass
+        if self.time_column == name:
+            self.time_column = ""
 
     def find_samples_by_time(self, times: ArrayLike) -> NDArray:
         """returns sample index (i) of the closes time in the BeForData.
