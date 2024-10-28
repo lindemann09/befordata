@@ -16,29 +16,10 @@ def detect_sessions(data: BeForData, time_column: str, time_gap: float) -> BeFor
     breaks = _np.flatnonzero(_np.diff(data.dat[time_column]) >= time_gap) + 1
     sessions.extend(breaks.tolist())
     return BeForData(data.dat, sampling_rate=data.sampling_rate,
-                     columns=data.columns, sessions=sessions,
+                     columns=data.columns,
+                     sessions=sessions,
+                     time_column=time_column,
                      meta=data.meta)
-
-
-def find_times(timeline: _ArrayLike, needles: _ArrayLike) -> _NDArray[_np.int_]:
-    """returns index (i) of the closes time. If not found, it return next larger
-    element.
-
-    ``time_stamps[i-1] <= t < time_stamps[i]``
-
-    Parameter
-    ---------
-    timeline : ArrayLike
-        the sorted array of time stamps
-
-    needles : number or ArrayLike
-        the time(s) to be found in the timeline
-
-    """
-
-    return _np.searchsorted(timeline, _np.atleast_1d(needles), 'right')
-
-# filtering
 
 
 def _butter_lowpass_filter(data: _pd.Series, cutoff: float, sampling_rate: float, order: int):
@@ -61,7 +42,7 @@ def lowpass_filter(d: BeForData,
         columns = [columns]
 
     df = d.dat.copy()
-    for s in range(d.n_sessions):
+    for s in range(d.n_sessions()):
         f, t = d.session_rows(s)
         for c in columns:  # type: ignore
             df.loc[f:t, c] = _butter_lowpass_filter(
@@ -72,4 +53,9 @@ def lowpass_filter(d: BeForData,
     meta = _copy(d.meta)
     meta["cutoff_freq"] = cutoff_freq
     meta["butterworth_order"] = butterworth_order
-    return BeForData(df, d.sampling_rate, d.columns, d.sessions, meta)
+    return BeForData(df,
+                     sampling_rate=d.sampling_rate,
+                     columns=d.columns,
+                     sessions=d.sessions,
+                     time_column=d.time_column,
+                     meta=meta)

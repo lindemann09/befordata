@@ -36,7 +36,7 @@ class BeForEpochs:
         if self.dat.ndim != 2:
             raise ValueError("Epoch data but be a 2D numpy array")
 
-        ne = self.n_epochs
+        ne = self.n_epochs()
         if self.design.shape[0] > 0 and self.design.shape[0] != ne:
             raise ValueError(
                 "Epoch data and design must have the same number of rows")
@@ -49,23 +49,21 @@ class BeForEpochs:
 
     def __repr__(self):
         rtn = "BeForEpochs"
-        rtn += f"\n  n epochs: {self.n_epochs}"
-        rtn += f", n_samples: {self.n_samples}"
+        rtn += f"\n  n epochs: {self.n_epochs()}"
+        rtn += f", n_samples: {self.n_samples()}"
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
         rtn += f", zero_sample: {self.zero_sample}"
         if len(self.design) == 0:
             rtn += "\n  design: None"
         else:
-            rtn += f"\n  design: {self.design.columns}".replace("[", "").replace("]", "")
-        rtn += "\n" + str(self.dat)
+            rtn += f"\n  design: {list(self.design.columns)}".replace("[", "").replace("]", "")
+        #rtn += "\n" + str(self.dat)
         return rtn
 
-    @property
     def n_epochs(self):
         """number of epochs"""
         return self.dat.shape[0]
 
-    @property
     def n_samples(self):
         """number of sample of one epoch"""
         return self.dat.shape[1]
@@ -88,3 +86,6 @@ class BeForEpochs:
         i = range(reference_window[0], reference_window[1])
         self.baseline = np.mean(dat[:, i], axis=1)
         self.dat = dat - np.atleast_2d(self.baseline).T
+
+    def to_arrow(self):
+        pass

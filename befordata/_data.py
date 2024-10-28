@@ -10,11 +10,12 @@ except ImportError:
 
 import numpy as np
 import pandas as pd
-from numpy.typing import NDArray
+from numpy.typing import NDArray, ArrayLike
 from pyarrow import Table
 
 from ._epochs import BeForEpochs
 
+ENC = "utf-8"
 
 @dataclass
 class BeForData:
@@ -38,6 +39,7 @@ class BeForData:
     sampling_rate: float
     columns: List[str] = field(default_factory=list[str])
     sessions: List[int] = field(default_factory=list[int])
+    time_column : str = ""
     meta: dict = field(default_factory=dict)
 
     def __post_init__(self):
@@ -55,12 +57,16 @@ class BeForData:
             self.sessions = [self.sessions]
         elif len(self.sessions) == 0:
             self.sessions.append(0)
+        if len(self.time_column) > 0 and self.time_column not in self.dat:
+            raise ValueError(f"Time column {self.time_column} not found in DataFrame")
 
     def __repr__(self):
         rtn = "BeForData"
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
-        rtn += f", n sessions: {self.n_sessions}"
+        rtn += f", n sessions: {self.n_sessions()}"
         rtn += f"\n  columns: {self.columns}".replace("[", "").replace("]", "")
+        if len(self.time_column) >=0:
+            rtn += f"\n  time_column: {self.time_column}"
         rtn += "\n  metadata"
         for k, v in self.meta.items():
             rtn += f"\n  - {k}: {v}".rstrip()
@@ -76,20 +82,29 @@ class BeForData:
         self.dat = pd.concat([self.dat, dat], ignore_index=True)
         self.sessions.append(nbefore)
 
-    @property
     def n_samples(self) -> int:
         """Number of sample in all sessions"""
         return self.dat.shape[0]
 
-    @property
     def n_forces(self) -> int:
         """Number of force columns"""
         return len(self.columns)
 
-    @property
     def n_sessions(self) -> int:
         """Number of recoding sessions"""
         return len(self.sessions)
+
+    def time_stamps(self) -> NDArray:
+        """The time stamps (numpy.array)
+
+        Creates time stamps, of they are not define in the data
+        """
+        if len(self.time_column) > 0:
+            return self.dat.loc[:, self.time_column].to_numpy()
+        else:
+            step = 1000.0 / self.sampling_rate
+            final_time = self.dat.shape[0] * step
+            return np.arange(0, final_time, step)
 
     def session_rows(self, session: int) -> Tuple[int, int]:
         """returns row range (from, to) of this sessions"""
@@ -143,6 +158,20 @@ class BeForData:
             self.columns.remove(name)
         except ValueError:
             pass
+
+    def find_samples_by_time(self, times: ArrayLike) -> NDArray:
+        """returns sample index (i) of the closes time in the BeForData.
+        Takes the next larger element, if the exact time could not be found.
+
+        ``time_stamps[i-1] <= t < time_stamps[i]``
+
+        Parameter
+        ---------
+        timeline : ArrayLike
+            the sorted array of time stamps
+
+        """
+        return np.searchsorted(self.time_stamps(), np.atleast_1d(times), 'right')
 
     def extract_epochs(self,
                        column: str,
@@ -210,6 +239,7 @@ class BeForData:
         schema_metadata = {
             'sampling_rate': str(self.sampling_rate),
             'columns': ",".join(self.columns),
+            'time_column': self.time_column,
             'sessions': ",".join([str(x) for x in self.sessions])
         }
         schema_metadata.update(self.meta)
@@ -220,6 +250,7 @@ class BeForData:
                    sampling_rate: Optional[float] = None,
                    columns: Union[None, str, List[str]] = None,
                    sessions: Optional[List[int]] = None,
+                   time_column: Optional[str] = None,
                    meta: dict = {}) -> Self:
         """Creates BeForData struct from `pyarrow.Table`
 
@@ -252,17 +283,22 @@ class BeForData:
                         sampling_rate = float(v)
                 elif k == b"columns":
                     if columns is None:
-                        columns = v.decode("utf-8").split(",")
+                        columns = v.decode(ENC).split(",")
+                elif k == b"time_column":
+                    if time_column is None:
+                        time_column = v.decode(ENC)
                 elif k == b"sessions":
                     if sessions is None:
-                        sessions = [int(x) for x in v.decode("utf-8").split(",")]
+                        sessions = [int(x) for x in v.decode(ENC).split(",")]
                 else:
-                    file_meta[k.decode("utf-8")] = v.decode("utf-8").strip()
+                    file_meta[k.decode(ENC)] = v.decode(ENC).strip()
 
         if sampling_rate is None:
             raise RuntimeError("No sampling rate defined!")
         if columns is None:
             columns = []
+        if time_column is None:
+            time_column = ""
         if sessions is None:
             sessions = []
         meta.update(file_meta)
@@ -271,4 +307,5 @@ class BeForData:
                          sampling_rate=sampling_rate,
                          columns=columns,  # type: ignore
                          sessions=sessions,
+                         time_column=time_column,
                          meta=meta)
