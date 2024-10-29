@@ -1,7 +1,7 @@
 """BeFoR-Data structure for handling behavioural force data"""
 
 __author__ = "Oliver Lindemann"
-__version__ = "0.1.10"
+__version__ = "0.2.0"
 
-from ._data import BeForData
+from ._record import BeForRecord
 from ._epochs import BeForEpochs

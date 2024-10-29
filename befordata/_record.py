@@ -18,8 +18,8 @@ from ._epochs import BeForEpochs
 ENC = "utf-8"
 
 @dataclass
-class BeForData:
-    """Data Structure for handling behavioural force Data
+class BeForRecord:
+    """Data Structure for handling behavioural force measurements
 
     Attributes
     ----------
@@ -61,7 +61,7 @@ class BeForData:
             raise ValueError(f"Time column {self.time_column} not found in DataFrame")
 
     def __repr__(self):
-        rtn = "BeForData"
+        rtn = "BeForDat"
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
         rtn += f", n sessions: {self.n_sessions()}"
         rtn += f"\n  columns: {self.columns}".replace("[", "").replace("]", "")
@@ -128,7 +128,7 @@ class BeForData:
             f, t = self.session_rows(session)
             return self.dat.loc[f:t, columns]  # type: ignore
 
-    def forces(self, session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
+    def get_forces(self, session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
         """Returns force data of a particular session"""
         return self.get_data(self.columns, session)
 
@@ -162,7 +162,7 @@ class BeForData:
             self.time_column = ""
 
     def find_samples_by_time(self, times: ArrayLike) -> NDArray:
-        """returns sample index (i) of the closes time in the BeForData.
+        """returns sample index (i) of the closes time in the BeForRecord.
         Takes the next larger element, if the exact time could not be found.
 
         ``time_stamps[i-1] <= t < time_stamps[i]``
@@ -181,7 +181,7 @@ class BeForData:
                        n_samples: int,
                        n_samples_before: int = 0,
                        design: pd.DataFrame = pd.DataFrame()) -> BeForEpochs:
-        """extracts epochs from BeForData
+        """extracts epochs from BeForRecord
 
         Parameter
         ---------
@@ -228,10 +228,10 @@ class BeForData:
                            zero_sample=n_samples_before)
 
     def to_arrow(self) -> Table:
-        """converts BeForData to `pyarrow.Table`
+        """converts BeForRecord to `pyarrow.Table`
 
         metadata of schema will be defines and can converted back to
-        BeForData struct using `BeForData.from_arrow()`
+        BeForRecord struct using `BeForRecord.from_arrow()`
         """
 
         # Convert the DataFrame to a PyArrow table
@@ -254,7 +254,7 @@ class BeForData:
                    sessions: Optional[List[int]] = None,
                    time_column: Optional[str] = None,
                    meta: Optional[dict] = None) -> Self:
-        """Creates BeForData struct from `pyarrow.Table`
+        """Creates BeForRecord struct from `pyarrow.Table`
 
         Parameter
         ---------
@@ -308,7 +308,7 @@ class BeForData:
         else:
             meta = file_meta
 
-        return BeForData(dat=tbl.to_pandas(),
+        return BeForRecord(dat=tbl.to_pandas(),
                          sampling_rate=sampling_rate,
                          columns=columns,  # type: ignore
                          sessions=sessions,

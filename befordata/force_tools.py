@@ -7,15 +7,15 @@ from numpy.typing import ArrayLike as _ArrayLike
 from numpy.typing import NDArray as _NDArray
 from scipy import signal as _signal
 
-from ._data import BeForData
+from ._record import BeForRecord
 
 
-def detect_sessions(data: BeForData, time_column: str, time_gap: float) -> BeForData:
+def detect_sessions(data: BeForRecord, time_column: str, time_gap: float) -> BeForRecord:
     """detects sessions based on time gaps in the time column"""
     sessions = [0]
     breaks = _np.flatnonzero(_np.diff(data.dat[time_column]) >= time_gap) + 1
     sessions.extend(breaks.tolist())
-    return BeForData(data.dat, sampling_rate=data.sampling_rate,
+    return BeForRecord(data.dat, sampling_rate=data.sampling_rate,
                      columns=data.columns,
                      sessions=sessions,
                      time_column=time_column,
@@ -30,7 +30,7 @@ def _butter_lowpass_filter(data: _pd.Series, cutoff: float, sampling_rate: float
     return y
 
 
-def lowpass_filter(d: BeForData,
+def lowpass_filter(d: BeForRecord,
                    cutoff_freq: float,
                    butterworth_order: int,
                    columns: _tp.Union[None, str, _tp.List[str]] = None):
@@ -53,7 +53,7 @@ def lowpass_filter(d: BeForData,
     meta = _copy(d.meta)
     meta["cutoff_freq"] = cutoff_freq
     meta["butterworth_order"] = butterworth_order
-    return BeForData(df,
+    return BeForRecord(df,
                      sampling_rate=d.sampling_rate,
                      columns=d.columns,
                      sessions=d.sessions,

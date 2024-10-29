@@ -6,7 +6,7 @@ import typing as _tp
 
 import pandas as _pd
 
-from ._data import BeForData
+from ._record import BeForRecord
 
 def read_csv(file_path: _tp.Union[str, _Path],
             columns: _tp.Union[None, str, _tp.List[str]] = None,
@@ -89,7 +89,7 @@ def read_csv_as_befordata(file_path: _tp.Union[str, _Path],
     if not isinstance(meta, dict):
         meta = {}
 
-    return BeForData(dat=df,
+    return BeForRecord(dat=df,
                      sampling_rate=sampling_rate,
                      columns=columns,
                      sessions=sessions,
