@@ -61,7 +61,7 @@ class BeForRecord:
             raise ValueError(f"Time column {self.time_column} not found in DataFrame")
 
     def __repr__(self):
-        rtn = "BeForDat"
+        rtn = "BeForRecord"
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
         rtn += f", n sessions: {self.n_sessions()}"
         rtn += f"\n  columns: {self.columns}".replace("[", "").replace("]", "")
