@@ -29,8 +29,10 @@ class BeForRecord:
         the sampling rate of the force measurements
     columns: list of strings
         the columns in 'dat' that comprise the force measurements
-    new_session: list of integer
+    sessions: list of integer
         sample numbers at which a new recording session starts, if the exists
+    time_column :
+            str = ""
     meta: dictionary
         any kind of meta data
     """
@@ -230,8 +232,19 @@ class BeForRecord:
     def to_arrow(self) -> Table:
         """converts BeForRecord to `pyarrow.Table`
 
-        metadata of schema will be defines and can converted back to
+        metadata of schema will be defined. Files can converted back to
         BeForRecord struct using `BeForRecord.from_arrow()`
+
+        Example
+        -------
+        ```
+        from pyarrow import feather
+
+        feather.write_feather(data.to_arrow(), "filename.feather",
+                          compression="lz4", compression_level=6)
+        ```
+
+
         """
 
         # Convert the DataFrame to a PyArrow table

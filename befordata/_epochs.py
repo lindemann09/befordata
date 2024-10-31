@@ -7,9 +7,6 @@ import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
 
-# NPEpochs = NDArray[np.float_]
-
-
 @dataclass
 class BeForEpochs:
     """Behavioural force data organized epoch-wis
