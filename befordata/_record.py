@@ -2,7 +2,8 @@
 
 import warnings
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple, Union
+from typing import List, Tuple
+
 try:
     from typing import Self  # type: ignore
 except ImportError:
@@ -10,12 +11,13 @@ except ImportError:
 
 import numpy as np
 import pandas as pd
-from numpy.typing import NDArray, ArrayLike
+from numpy.typing import ArrayLike, NDArray
 from pyarrow import Table
 
 from ._epochs import BeForEpochs
 
 ENC = "utf-8"
+
 
 @dataclass
 class BeForRecord:
@@ -41,11 +43,10 @@ class BeForRecord:
     sampling_rate: float
     columns: List[str] = field(default_factory=list[str])
     sessions: List[int] = field(default_factory=list[int])
-    time_column : str = ""
+    time_column: str = ""
     meta: dict = field(default_factory=dict)
 
     def __post_init__(self):
-
         if not isinstance(self.dat, pd.DataFrame):
             raise TypeError(f"must be pandas.DataFrame, not {type(self.dat)}")
 
@@ -67,7 +68,7 @@ class BeForRecord:
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
         rtn += f", n sessions: {self.n_sessions()}"
         rtn += f"\n  columns: {self.columns}".replace("[", "").replace("]", "")
-        if len(self.time_column) >=0:
+        if len(self.time_column) >= 0:
             rtn += f"\n  time_column: {self.time_column}"
         rtn += "\n  metadata"
         for k, v in self.meta.items():
@@ -112,14 +113,14 @@ class BeForRecord:
         """returns row range (from, to) of this sessions"""
         f = self.sessions[session]
         try:
-            t = self.sessions[session+1]
+            t = self.sessions[session + 1]
         except IndexError:
             t = self.dat.shape[0]
-        return f, t-1
+        return f, t - 1
 
-    def get_data(self,
-                 columns: Union[None,  str, List[str]] = None,
-                 session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
+    def get_data(
+        self, columns: str | List[str] | None = None, session: int | None = None
+    ) -> pd.DataFrame | pd.Series:
         """Returns data of a particular column and/or a particular session"""
         if columns is None:
             columns = self.dat.columns.values.tolist()
@@ -130,12 +131,13 @@ class BeForRecord:
             f, t = self.session_rows(session)
             return self.dat.loc[f:t, columns]  # type: ignore
 
-    def get_forces(self, session: Optional[int] = None) -> Union[pd.DataFrame, pd.Series]:
+    def get_forces(self, session: int | None = None) -> pd.DataFrame | pd.Series:
         """Returns force data of a particular session"""
         return self.get_data(self.columns, session)
 
-    def add_column(self, name: str, data: Union[List, pd.Series],
-                   is_force_column: bool = True):
+    def add_column(
+        self, name: str, data: List | pd.Series, is_force_column: bool = True
+    ):
         """Add data column (in place).
 
         Parameters
@@ -175,14 +177,16 @@ class BeForRecord:
             the sorted array of time stamps
 
         """
-        return np.searchsorted(self.time_stamps(), np.atleast_1d(times), 'right')
+        return np.searchsorted(self.time_stamps(), np.atleast_1d(times), "right")
 
-    def extract_epochs(self,
-                       column: str,
-                       zero_samples: Union[List[int], NDArray[np.int_]],
-                       n_samples: int,
-                       n_samples_before: int = 0,
-                       design: pd.DataFrame = pd.DataFrame()) -> BeForEpochs:
+    def extract_epochs(
+        self,
+        column: str,
+        zero_samples: List[int] | NDArray[np.int_],
+        n_samples: int,
+        n_samples_before: int = 0,
+        design: pd.DataFrame = pd.DataFrame(),
+    ) -> BeForEpochs:
         """extracts epochs from BeForRecord
 
         Parameter
@@ -210,24 +214,27 @@ class BeForRecord:
         n_epochs = len(zero_samples)
         n_col = n_samples_before + n_samples
         force_mtx = np.empty((n_epochs, n_col), dtype=np.float64)
-        for (r, zs) in enumerate(zero_samples):
+        for r, zs in enumerate(zero_samples):
             f = zs - n_samples_before
             if f > 0 and f < n:
                 t = zs + n_samples
                 if t > n:
                     warnings.warn(
                         f"extract_force_epochs: last force epoch is incomplete, {t-n} samples missing.",
-                        RuntimeWarning)
+                        RuntimeWarning,
+                    )
                     tmp = fd[f:]
-                    force_mtx[r, :len(tmp)] = tmp
-                    force_mtx[r, len(tmp):] = 0
+                    force_mtx[r, : len(tmp)] = tmp
+                    force_mtx[r, len(tmp) :] = 0
                 else:
                     force_mtx[r, :] = fd[f:t]
 
-        return BeForEpochs(force_mtx,
-                           sampling_rate=self.sampling_rate,
-                           design=design,
-                           zero_sample=n_samples_before)
+        return BeForEpochs(
+            force_mtx,
+            sampling_rate=self.sampling_rate,
+            design=design,
+            zero_sample=n_samples_before,
+        )
 
     def to_arrow(self) -> Table:
         """converts BeForRecord to `pyarrow.Table`
@@ -252,21 +259,23 @@ class BeForRecord:
 
         # Add metadata to the schema (serialize sampling_rate, timestamp, trigger, and meta)
         schema_metadata = {
-            'sampling_rate': str(self.sampling_rate),
-            'columns': ",".join(self.columns),
-            'time_column': self.time_column,
-            'sessions': ",".join([str(x) for x in self.sessions])
+            "sampling_rate": str(self.sampling_rate),
+            "columns": ",".join(self.columns),
+            "time_column": self.time_column,
+            "sessions": ",".join([str(x) for x in self.sessions]),
         }
         schema_metadata.update(self.meta)
         return table.replace_schema_metadata(schema_metadata)
 
     @staticmethod
-    def from_arrow(tbl: Table,
-                   sampling_rate: Optional[float] = None,
-                   columns: Union[None, str, List[str]] = None,
-                   sessions: Optional[List[int]] = None,
-                   time_column: Optional[str] = None,
-                   meta: Optional[dict] = None) -> Self:
+    def from_arrow(
+        tbl: Table,
+        sampling_rate: float | None = None,
+        columns: str | List[str] | None = None,
+        sessions: List[int] | None = None,
+        time_column: str | None = None,
+        meta: dict | None = None,
+    ) -> Self:
         """Creates BeForRecord struct from `pyarrow.Table`
 
         Parameter
@@ -321,9 +330,11 @@ class BeForRecord:
         else:
             meta = file_meta
 
-        return BeForRecord(dat=tbl.to_pandas(),
-                         sampling_rate=sampling_rate,
-                         columns=columns,  # type: ignore
-                         sessions=sessions,
-                         time_column=time_column,
-                         meta=meta)
+        return BeForRecord(
+            dat=tbl.to_pandas(),
+            sampling_rate=sampling_rate,
+            columns=columns,  # type: ignore
+            sessions=sessions,
+            time_column=time_column,
+            meta=meta,
+        )
