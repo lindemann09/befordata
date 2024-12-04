@@ -1,13 +1,10 @@
 """Before Data"""
 
+from __future__ import annotations
+
 import warnings
 from dataclasses import dataclass, field
 from typing import List, Tuple
-
-try:
-    from typing import Self  # type: ignore
-except ImportError:
-    from typing_extensions import Self
 
 import numpy as np
 import pandas as pd
@@ -275,7 +272,7 @@ class BeForRecord:
         sessions: List[int] | None = None,
         time_column: str | None = None,
         meta: dict | None = None,
-    ) -> Self:
+    ) -> BeForRecord:
         """Creates BeForRecord struct from `pyarrow.Table`
 
         Parameter
