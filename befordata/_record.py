@@ -95,7 +95,7 @@ class BeForRecord:
         return len(self.sessions)
 
     def time_stamps(self) -> NDArray:
-        """The time stamps (numpy.array)
+        """The time stamps (numpy array)
 
         Creates time stamps, of they are not define in the data
         """
@@ -106,8 +106,8 @@ class BeForRecord:
             final_time = self.dat.shape[0] * step
             return np.arange(0, final_time, step)
 
-    def session_rows(self, session: int) -> Tuple[int, int]:
-        """returns row range (from, to) of this sessions"""
+    def session_samples(self, session: int) -> Tuple[int, int]:
+        """tuple represents the range of the samples (from, to) of this sessions"""
         f = self.sessions[session]
         try:
             t = self.sessions[session + 1]
@@ -125,7 +125,7 @@ class BeForRecord:
         if session is None:
             return self.dat.loc[:, columns]  # type: ignore
         else:
-            f, t = self.session_rows(session)
+            f, t = self.session_samples(session)
             return self.dat.loc[f:t, columns]  # type: ignore
 
     def get_forces(self, session: int | None = None) -> pd.DataFrame | pd.Series:
@@ -247,8 +247,6 @@ class BeForRecord:
         feather.write_feather(data.to_arrow(), "filename.feather",
                           compression="lz4", compression_level=6)
         ```
-
-
         """
 
         # Convert the DataFrame to a PyArrow table

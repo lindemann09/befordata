@@ -11,7 +11,23 @@ from .._record import BeForRecord
 def detect_sessions(
     data: BeForRecord, time_gap: float, time_column: str | None = None
 ) -> BeForRecord:
-    """detects sessions based on time gaps in the time column"""
+    """Detect recording sessions in the BeForRecord based on time gaps
+
+    Parameters
+    ----------
+    data : BeForRecord
+        the data
+    time_gap : float
+        smallest time gap that should be considered as pause of the recording
+        and the start of a new session
+    time_column : str | None, optional
+        name of column that represents the time
+
+    Returns
+    -------
+    BeForRecord
+    """
+
     if time_column is None:
         time_column = data.time_column
     sessions = [0]
@@ -40,12 +56,30 @@ def butter_filter(
     d: BeForRecord,
     order: int,
     cutoff: float,
-    btype="lowpass",
+    btype: str = "lowpass",
     columns: str | List[str] | None = None,
 ) -> BeForRecord:
-    """Lowpass Butterworth filter of BeforData
+    """Lowpass Butterworth filter of BeforRecord
 
     temporarily shifted data (first sample = 0) will be used for the filtering
+
+    Parameters
+    ----------
+    d : BeForRecord
+        the data
+    order : int
+        order of the filter.
+    cutoff : float
+        cutoff frequency
+    btype : {‘lowpass’, ‘highpass’, ‘bandpass’, ‘bandstop’}, optional
+        type of filter, by default "lowpass"
+    columns : str | List[str] | None, optional
+        column(s) of data the should be filtered. By default None; in this case,
+        all data columns will be filtered
+
+    Returns
+    -------
+    BeForRecord with filtered data
 
     Notes
     -----
@@ -60,7 +94,7 @@ def butter_filter(
 
     df = d.dat.copy()
     for s in range(d.n_sessions()):
-        f, t = d.session_rows(s)
+        f, t = d.session_samples(s)
         for c in columns:  # type: ignore
             df.loc[f:t, c] = _butter_lowpass_filter(
                 data=df.loc[f:t, c],

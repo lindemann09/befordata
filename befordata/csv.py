@@ -17,7 +17,7 @@ def read_csv(
 ):
     """Reads CSV file
 
-    The function can handle comments as well as compressed CSVs, if the end
+    The function can handle comments as well as compressed CSVs, if they end
     with `.csv.xz` or `.csv.gz`
 
     Parameter
@@ -31,7 +31,7 @@ def read_csv(
     encoding : str, optional
         file encoding, default="utf-8",
 
-    comment_char: str, Optional
+    comment_char : str, Optional
         line starting with character or string will be treated as comments and
         returned as a list of strings.
 
@@ -76,7 +76,24 @@ def read_csv_as_befordata(
     encoding: str = "utf-8",
     comment_char: str = "#",
 ):
-    """Read CSV file as befordata"""
+    """Read CSV file as befordata
+
+    Parameter
+    ---------
+    file_path: _description_
+    sampling_rate: _description_
+    columns: _description_. Defaults to None.
+    sessions: _description_. Defaults to None.
+    time_column: _description_. Defaults to None.
+    meta: _description_. Defaults to None.
+    encoding: _description_. Defaults to "utf-8".
+    comment_char: _description_. Defaults to "#".
+
+    Returns
+    -------
+    BeForRecord
+
+    """
 
     df, _ = read_csv(file_path=file_path, encoding=encoding, comment_char=comment_char)
     if columns is None:
