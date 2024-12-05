@@ -1,9 +1,7 @@
 name: readthedoc
-
 on:
   push:
-    branches:
-      - main
+    tags: ['*']
 
 jobs:
   build:
