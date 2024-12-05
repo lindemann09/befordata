@@ -15,6 +15,8 @@ import befordata.csv
 import befordata.tools
 
 numpydoc_show_class_members = False
+add_module_names = False
+
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

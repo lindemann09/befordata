@@ -1,5 +1,5 @@
-Data Classes
-============
+beforedata
+==========
 
 .. autoclass:: befordata.BeForRecord
    :members:
@@ -8,16 +8,16 @@ Data Classes
    :members:
 
 
-Tools
-=====
+beforedata.tools
+================
 
 .. autofunction:: befordata.tools.detect_sessions
 
 .. autofunction:: befordata.tools.butter_filter
 
 
-csv
-===
+beforedata.csv
+==============
 
 .. autofunction:: befordata.csv.read_csv_as_befordata
 
