@@ -3,4 +3,4 @@ numpydoc==1.7.0
 numpy==1.22
 pandas>=2.0
 scipy>=1.10
-pyarrow>=16.0.0
+pyarrow>=17.0.0
