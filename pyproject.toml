@@ -17,3 +17,6 @@ dependencies =  ["numpy>=1.22",
 
 [project.urls]
 Home = "https://github.com/lindemann09/befordata"
+
+[project.optional-dependencies]
+docs = ["sphinx>=8.1", "sphinx-rtd-theme>=3.0", "numpydoc>=1.7"]
