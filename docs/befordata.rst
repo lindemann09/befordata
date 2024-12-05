@@ -3,11 +3,9 @@ Data Classes
 
 .. autoclass:: befordata.BeForRecord
    :members:
-   :show-inheritance:
 
 .. autoclass:: befordata.BeForEpochs
    :members:
-   :show-inheritance:
 
 
 Tools
