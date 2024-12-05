@@ -20,9 +20,9 @@ ENC = "utf-8"
 class BeForRecord:
     """Data Structure for handling behavioural force measurements
 
-    Attributes
-    ----------
-    dat:  Pandas Dataframe
+    Args
+    ----
+    dat: Pandas Dataframe
         data
     sample_rate: float
         the sampling rate of the force measurements
@@ -84,6 +84,7 @@ class BeForRecord:
 
     def n_samples(self) -> int:
         """Number of sample in all sessions"""
+
         return self.dat.shape[0]
 
     def n_forces(self) -> int:
@@ -166,10 +167,10 @@ class BeForRecord:
         """returns sample index (i) of the closes time in the BeForRecord.
         Takes the next larger element, if the exact time could not be found.
 
-        ``time_stamps[i-1] <= t < time_stamps[i]``
+        .. math:: \\text{time_stamps}[i-1] <= t < \\text{time_stamps}[i]
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         timeline : ArrayLike
             the sorted array of time stamps
 
@@ -186,8 +187,8 @@ class BeForRecord:
     ) -> BeForEpochs:
         """extracts epochs from BeForRecord
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         column: str
             name of column containing the force data to be used
         zero_samples: List[int]
@@ -200,8 +201,8 @@ class BeForRecord:
         design: pd.DataFrame, optional
             design information
 
-        Note
-        ----
+        Notes
+        -----
         use `find_times` to detect zero samples with time-based
 
         """
@@ -234,19 +235,20 @@ class BeForRecord:
         )
 
     def to_arrow(self) -> Table:
-        """converts BeForRecord to `pyarrow.Table`
+        """converts BeForRecord to ``pyarrow.Table``
 
         metadata of schema will be defined. Files can converted back to
-        BeForRecord struct using `BeForRecord.from_arrow()`
+        BeForRecord struct using ``BeForRecord.from_arrow()``
 
-        Example
+        Returns
         -------
-        ```
-        from pyarrow import feather
+        pyarrow.Table
 
-        feather.write_feather(data.to_arrow(), "filename.feather",
+        Examples
+        --------
+        >>> from pyarrow import feather
+        >>> feather.write_feather(data.to_arrow(), "filename.feather",
                           compression="lz4", compression_level=6)
-        ```
         """
 
         # Convert the DataFrame to a PyArrow table
@@ -273,17 +275,15 @@ class BeForRecord:
     ) -> BeForRecord:
         """Creates BeForRecord struct from `pyarrow.Table`
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         tbl : pyarrow.Table
 
-        Example
-        -------
-        ```
-        from pyarrow import feather
-        dat = feather.read_table("my_force_data.feather")
-        dat = BeforeData.from_arrow(dat)
-        ```
+        Examples
+        --------
+        >>> from pyarrow import feather
+        >>> dat = feather.read_table("my_force_data.feather")
+        >>> dat = BeforeData.from_arrow(dat)
 
         """
 

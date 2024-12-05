@@ -20,8 +20,8 @@ def read_csv(
     The function can handle comments as well as compressed CSVs, if they end
     with `.csv.xz` or `.csv.gz`
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     file_path : str | Path
         the path to the CSV file. If file end with `.csv.xz` or `.csv.gz`,
         decompression will be used
@@ -78,8 +78,8 @@ def read_csv_as_befordata(
 ):
     """Read CSV file as befordata
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     file_path: _description_
     sampling_rate: _description_
     columns: _description_. Defaults to None.

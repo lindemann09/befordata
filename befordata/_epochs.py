@@ -12,8 +12,8 @@ from numpy.typing import NDArray
 class BeForEpochs:
     """Behavioural force data organized epoch-wis
 
-    Attributes
-    ----------
+    Args
+    ----
     dat: : 2d numpy array
         data. Each row of the 2D numpy array represents one epoch. Thus, the number
         of rows equals the number of epochs and number of columns equals the number
@@ -83,8 +83,8 @@ class BeForEpochs:
         """Adjust the baseline of each epoch using the mean value of
         a defined range of sample (reference window)
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         reference_window : Tuple[int, int]
             sample range that is used for the baseline adjustment
 
