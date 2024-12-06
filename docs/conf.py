@@ -11,13 +11,6 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 
 
-import befordata.csv
-import befordata.tools
-
-numpydoc_show_class_members = False
-add_module_names = False
-
-
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -32,6 +25,7 @@ release = "0.2.3"
 extensions = [
     "sphinx.ext.autodoc",
     # "sphinx.ext.viewcode",
+    "sphinx_autodoc_typehints",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "numpydoc",
@@ -44,5 +38,10 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_rtd_theme"
+html_theme = 'pydata_sphinx_theme'
 html_static_path = ["_static"]
+
+
+numpydoc_show_class_members = True
+add_module_names = True
+typehints_use_signature_return = False

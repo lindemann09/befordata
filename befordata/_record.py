@@ -73,15 +73,6 @@ class BeForRecord:
         rtn += "\n" + str(self.dat)
         return rtn
 
-    def add_session(self, dat: pd.DataFrame):
-        """Adds data (dataframe) as a new recording
-
-        Dataframe has to have the same columns as the already existing data
-        """
-        nbefore = self.dat.shape[0]
-        self.dat = pd.concat([self.dat, dat], ignore_index=True)
-        self.sessions.append(nbefore)
-
     def n_samples(self) -> int:
         """Number of sample in all sessions"""
 
@@ -107,15 +98,6 @@ class BeForRecord:
             final_time = self.dat.shape[0] * step
             return np.arange(0, final_time, step)
 
-    def session_samples(self, session: int) -> Tuple[int, int]:
-        """tuple represents the range of the samples (from, to) of this sessions"""
-        f = self.sessions[session]
-        try:
-            t = self.sessions[session + 1]
-        except IndexError:
-            t = self.dat.shape[0]
-        return f, t - 1
-
     def get_data(
         self, columns: str | List[str] | None = None, session: int | None = None
     ) -> pd.DataFrame | pd.Series:
@@ -132,6 +114,15 @@ class BeForRecord:
     def get_forces(self, session: int | None = None) -> pd.DataFrame | pd.Series:
         """Returns force data of a particular session"""
         return self.get_data(self.columns, session)
+
+    def add_session(self, dat: pd.DataFrame):
+        """Adds data (dataframe) as a new recording
+
+        Dataframe has to have the same columns as the already existing data
+        """
+        nbefore = self.dat.shape[0]
+        self.dat = pd.concat([self.dat, dat], ignore_index=True)
+        self.sessions.append(nbefore)
 
     def add_column(
         self, name: str, data: List | pd.Series, is_force_column: bool = True
@@ -163,6 +154,15 @@ class BeForRecord:
         if self.time_column == name:
             self.time_column = ""
 
+    def session_samples(self, session: int) -> Tuple[int, int]:
+        """tuple represents the range of the samples (from, to) of this sessions"""
+        f = self.sessions[session]
+        try:
+            t = self.sessions[session + 1]
+        except IndexError:
+            t = self.dat.shape[0]
+        return f, t - 1
+
     def find_samples_by_time(self, times: ArrayLike) -> NDArray:
         """returns sample index (i) of the closes time in the BeForRecord.
         Takes the next larger element, if the exact time could not be found.
@@ -171,7 +171,7 @@ class BeForRecord:
 
         Parameters
         ----------
-        timeline : ArrayLike
+        times : ArrayLike
             the sorted array of time stamps
 
         """

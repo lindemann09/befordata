@@ -7,7 +7,7 @@ Welcome to BeforData's documentation!
 =====================================
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 1
    :caption: Contents:
 
    usage
