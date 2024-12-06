@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to BeforData’s documentation! &#8212; BeforData 0.2.3 documentation</title>
+    <title>API Reference &#8212; BeforData 0.2.3 documentation</title>
   
   
   
@@ -42,10 +42,11 @@
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="next" title="Data Classes" href="befordata.html" />
+    <link rel="prev" title="Usage" href="usage.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -103,7 +104,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="index.html">
   
   
   
@@ -131,8 +132,8 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="api.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     API Reference
   </a>
 </li>
@@ -194,10 +195,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -219,8 +218,8 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="api.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     API Reference
   </a>
 </li>
@@ -247,6 +246,20 @@
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="befordata.html">Data Classes</a></li>
+
+
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -262,7 +275,31 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article d-print-none"></div>
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">API Reference</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
               
               
               
@@ -270,23 +307,49 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="welcome-to-befordata-s-documentation">
-<h1>Welcome to BeforData’s documentation!<a class="headerlink" href="#welcome-to-befordata-s-documentation" title="Link to this heading">#</a></h1>
+  <section id="module-befordata">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-befordata" title="Link to this heading">#</a></h1>
+<p>BeFoR-Data structure for handling behavioural force data</p>
 <div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="befordata.html">Data Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="befordata.html#befordata.BeForRecord"><code class="docutils literal notranslate"><span class="pre">BeForRecord</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.n_samples"><code class="docutils literal notranslate"><span class="pre">BeForRecord.n_samples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.n_forces"><code class="docutils literal notranslate"><span class="pre">BeForRecord.n_forces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.n_sessions"><code class="docutils literal notranslate"><span class="pre">BeForRecord.n_sessions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.time_stamps"><code class="docutils literal notranslate"><span class="pre">BeForRecord.time_stamps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.get_data"><code class="docutils literal notranslate"><span class="pre">BeForRecord.get_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.get_forces"><code class="docutils literal notranslate"><span class="pre">BeForRecord.get_forces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.add_session"><code class="docutils literal notranslate"><span class="pre">BeForRecord.add_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.add_column"><code class="docutils literal notranslate"><span class="pre">BeForRecord.add_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.drop_column"><code class="docutils literal notranslate"><span class="pre">BeForRecord.drop_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.session_samples"><code class="docutils literal notranslate"><span class="pre">BeForRecord.session_samples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.find_samples_by_time"><code class="docutils literal notranslate"><span class="pre">BeForRecord.find_samples_by_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.extract_epochs"><code class="docutils literal notranslate"><span class="pre">BeForRecord.extract_epochs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.to_arrow"><code class="docutils literal notranslate"><span class="pre">BeForRecord.to_arrow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForRecord.from_arrow"><code class="docutils literal notranslate"><span class="pre">BeForRecord.from_arrow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="befordata.html#befordata.BeForEpochs"><code class="docutils literal notranslate"><span class="pre">BeForEpochs</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForEpochs.n_epochs"><code class="docutils literal notranslate"><span class="pre">BeForEpochs.n_epochs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForEpochs.n_samples"><code class="docutils literal notranslate"><span class="pre">BeForEpochs.n_samples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="befordata.html#befordata.BeForEpochs.adjust_baseline"><code class="docutils literal notranslate"><span class="pre">BeForEpochs.adjust_baseline()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="befordata.html#module-tools">Module: tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="befordata.html#befordata.tools.detect_sessions"><code class="docutils literal notranslate"><span class="pre">detect_sessions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="befordata.html#befordata.tools.butter_filter"><code class="docutils literal notranslate"><span class="pre">butter_filter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="befordata.html#module-csv">Module: csv</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="befordata.html#befordata.csv.read_csv_as_befordata"><code class="docutils literal notranslate"><span class="pre">read_csv_as_befordata()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="befordata.html#befordata.csv.read_csv"><code class="docutils literal notranslate"><span class="pre">read_csv()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
-</section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">#</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </section>
 
 
@@ -299,12 +362,21 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="right-next"
+    <a class="left-prev"
        href="usage.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Usage</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="befordata.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Usage</p>
+        <p class="prev-next-title">Data Classes</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -320,23 +392,9 @@
 
 
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Welcome to BeforData’s documentation!</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="_sources/index.rst.txt">
+    <a href="_sources/api.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
