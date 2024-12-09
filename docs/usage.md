@@ -1,6 +1,6 @@
 # Usage
 
-## Create BeForRecord from csvfile
+## Create BeForRecord from csv-file
 
 
 ```python
@@ -76,11 +76,11 @@ print(mydata)
 
 ## Epochs-based representation
 
-Epochs are represented in a matrix. Each row is one trial
+Epochs are represented as matrix. Each row is one trial
 
 Example
 
-* Extracting epochs of the length 2000 from `Fx` (plut 100 samples before)
+* Extracting epochs of the length 2000 from `Fx` (plus 100 samples before)
 * the 6 epochs  start at the 6 "zero samples"
 
 
@@ -100,7 +100,7 @@ print(epochs)
 
 ## Pyarrow format
 
-Arrow and feather file format is very fast and plattform & language independed
+Arrow and feather file format is very fast and platform & language independent
 
 
 ### Saving to feather file
@@ -109,7 +109,7 @@ Arrow and feather file format is very fast and plattform & language independed
 ```python
 from pyarrow.feather import write_feather
 
-# 1. convert to pyarrow
+# 1. convert to pyarrow table
 tbl = mydata.to_arrow()
 
 
@@ -150,7 +150,7 @@ mydata = BeForRecord(df,
                    time_column = "time",
                    meta = {"Exp": "my experiment"})
 
-# 3. detect pauses in the recordings and treat data as recodring with different sessions
+# 3. detect pauses and treat data as recording with different sessions
 mydata = tools.detect_sessions(mydata, time_gap=2000)
 
 # 4. filter data (takes into account the different sessions)
@@ -159,7 +159,7 @@ mydata = tools.butter_filter(mydata, cutoff=30, order=4, btype="lowpass")
 # 5. read design data (csv)
 design = pd.read_csv("demo_design_data.csv")
 
-# 6. get samples from times of the trial onset in the design (`udp_times`)
+# 6. get samples from times of the trial onset in the design (`trial_time`)
 samples = mydata.find_samples_by_time(design.trial_time)
 
 # 7. extract epochs

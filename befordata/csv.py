@@ -78,6 +78,9 @@ def read_csv_as_befordata(
 ):
     """Read CSV file as befordata
 
+    The function can handle comments as well as compressed CSVs, if they end
+    with `.csv.xz` or `.csv.gz`
+
     Parameters
     ----------
     file_path: _description_
