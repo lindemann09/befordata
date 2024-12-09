@@ -3,19 +3,38 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to BeforData's documentation!
-=====================================
+BeforData's documentation!
+==========================
+
+
+Data structure for handling behavioural force data
+
+|GitHub license| |PyPI|
+
+see https://lindemann09.github.io/befordata/
+
+Install via pip
+---------------
+
+::
+
+   pip install befordata
+
+
+\(c\) Oliver Lindemann
+
+.. |GitHub license| image:: https://img.shields.io/github/license/lindemann09/befordata
+   :target: https://github.com/lindemann09/befordata/blob/master/LICENSE
+.. |PyPI| image:: https://img.shields.io/pypi/v/befordata?style=flat
+   :target: https://pypi.org/project/befordata/
+
+
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Contents:
 
    usage
    api
 
-Indices and tables
-==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

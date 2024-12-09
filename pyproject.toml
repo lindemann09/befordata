@@ -19,4 +19,5 @@ dependencies =  ["numpy>=1.22",
 Home = "https://github.com/lindemann09/befordata"
 
 [project.optional-dependencies]
-docs = ["sphinx>=8.1", "pydata-sphinx-theme>=0.16.0", "sphinx_autodoc_typehints>=2.5.0", "numpydoc>=1.7"]
+docs = ["sphinx>=8.1", "pydata-sphinx-theme>=0.16.0",
+        "sphinx_autodoc_typehints>=2.5.0", "numpydoc>=1.7", "myst_parser>=4.0"]
