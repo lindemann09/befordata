@@ -5,10 +5,12 @@ API Reference
 
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   befordata
-
+   beforrecord
+   beforepochs
+   module_tools
+   module_csv
 
 Indices and tables
 ------------------
