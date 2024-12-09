@@ -100,7 +100,10 @@ print(epochs)
 
 ## Pyarrow format
 
-Arrow and feather file format is very fast and platform & language independent
+[Apache Arrow](https://arrow.apache.org/) and it's feather file format a universal
+columnar format and multi-language toolbox for fast data interchange. Arrow
+libraries are available for **R, MATLAB, Python, Julia** as well as for
+C, C++, C#, Go, Java, JavaScript,  Ruby, and Rust.
 
 
 ### Saving to feather file
