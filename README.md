@@ -14,8 +14,6 @@ see  https://lindemann09.github.io/befordata/
 pip install befordata
 ```
 
-[BeForData Demo](https://lindemann09.github.io/befordata/demo_befordata.html)
-
 ## Julia
 
 A [Julia implementation of BeFordata](https://github.com/lindemann09/BeForData.jl) is under development.

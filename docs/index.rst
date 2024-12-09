@@ -11,7 +11,8 @@ Data structure for handling behavioural force data
 
 |GitHub license| |PyPI|
 
-see https://lindemann09.github.io/befordata/
+GitHub: https://github.com/lindemann09/befordata
+
 
 Install via pip
 ---------------
