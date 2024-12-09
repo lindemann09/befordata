@@ -261,7 +261,7 @@ class BeForRecord:
             "time_column": self.time_column,
             "sessions": ",".join([str(x) for x in self.sessions]),
         }
-        schema_metadata.update(self.meta)
+        schema_metadata.update(values_as_string(self.meta))
         return table.replace_schema_metadata(schema_metadata)
 
     @staticmethod
@@ -299,7 +299,7 @@ class BeForRecord:
             for k, v in tbl.schema.metadata.items():
                 if k == b"sampling_rate":
                     if sampling_rate is None:
-                        sampling_rate = float(v)
+                        sampling_rate = try_num(v)
                 elif k == b"columns":
                     if columns is None:
                         columns = v.decode(ENC).split(",")
@@ -310,7 +310,7 @@ class BeForRecord:
                     if sessions is None:
                         sessions = [int(x) for x in v.decode(ENC).split(",")]
                 else:
-                    file_meta[k.decode(ENC)] = v.decode(ENC).strip()
+                    file_meta[k.decode(ENC)] = try_num(v.decode(ENC).strip())
 
         if sampling_rate is None:
             raise RuntimeError("No sampling rate defined!")
@@ -333,3 +333,26 @@ class BeForRecord:
             time_column=time_column,
             meta=meta,
         )
+
+
+def values_as_string(d: dict) -> dict:
+    """Helper function returns all keys as strings"""
+    rtn = {}
+    for v, k in d.items():
+        if isinstance(k, (list, tuple)):
+            rtn[v] = ",".join([str(x) for x in k])
+        else:
+            rtn[v] = str(k)
+    return rtn
+
+
+def try_num(val):
+    if isinstance(val, (int, float)):
+        return val
+    try:
+        return int(val)
+    except ValueError:
+        try:
+            return float(val)
+        except ValueError:
+            return val
