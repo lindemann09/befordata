@@ -114,7 +114,6 @@ def read_csv_as_befordata(
     return BeForRecord(
         dat=df,
         sampling_rate=sampling_rate,
-        columns=columns,
         sessions=sessions,
         time_column=time_column,
         meta=meta,
