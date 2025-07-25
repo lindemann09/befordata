@@ -204,7 +204,8 @@ class BeForRecord:
             zero_sample=n_samples_before,
         )
 
-    def to_arrow(self, filepath : str | Path ) -> Table:
+    def to_arrow(self, filepath : str | Path,
+                 compression : str="lz4", compression_level : int=6) -> Table:
         """saves BeForRecord to ``pyarrow feather file``
 
         metadata of schema will be defined. Files can read ``BeForRecord.from_arrow()``
@@ -226,7 +227,7 @@ class BeForRecord:
         schema_metadata.update(values_as_string(self.meta))
         table = table.replace_schema_metadata(schema_metadata)
         feather.write_feather(table, filepath,
-                              compression="lz4", compression_level=6)
+                compression=compression, compression_level=compression_level)
 
     @staticmethod
     def from_arrow(
