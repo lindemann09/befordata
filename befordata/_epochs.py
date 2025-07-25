@@ -101,4 +101,3 @@ class BeForEpochs:
     def to_arrow(self):
         # FIXME
         pass
-        pass

@@ -4,17 +4,17 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass, field
-from typing import List, Tuple
+from pathlib import Path
+from typing import List
 
 import numpy as np
 import pandas as pd
 from numpy.typing import ArrayLike, NDArray
-from pyarrow import Table
+from pyarrow import Table, feather
 
 from ._epochs import BeForEpochs
 
 ENC = "utf-8"
-
 
 @dataclass
 class BeForRecord:
@@ -24,10 +24,8 @@ class BeForRecord:
     ----
     dat: Pandas Dataframe
         data
-    sample_rate: float
+    sampling_rate: float
         the sampling rate of the force measurements
-    columns: list of strings
-        the columns in 'dat' that comprise the force measurements
     sessions: list of integer
         sample numbers at which a new recording session starts, if the exists
     time_column :
@@ -38,7 +36,6 @@ class BeForRecord:
 
     dat: pd.DataFrame
     sampling_rate: float
-    columns: List[str] = field(default_factory=list[str])
     sessions: List[int] = field(default_factory=list[int])
     time_column: str = ""
     meta: dict = field(default_factory=dict)
@@ -47,16 +44,16 @@ class BeForRecord:
         if not isinstance(self.dat, pd.DataFrame):
             raise TypeError(f"must be pandas.DataFrame, not {type(self.dat)}")
 
-        if isinstance(self.columns, str):
-            self.columns = [self.columns]
-        elif len(self.columns) == 0:
-            # make col forces
-            self.columns = self.dat.columns.values.tolist()
-
-        if isinstance(self.sessions, int):
-            self.sessions = [self.sessions]
-        elif len(self.sessions) == 0:
+        if len(self.sessions) == 0:
             self.sessions.append(0)
+        else:
+            if isinstance(self.sessions, int):
+                self.sessions = [self.sessions]
+            if self.sessions[0] < 0:
+                self.sessions[0] = 0
+            elif self.sessions[0] > 0:
+                self.sessions.insert(0, 0)
+
         if len(self.time_column) > 0 and self.time_column not in self.dat:
             raise ValueError(f"Time column {self.time_column} not found in DataFrame")
 
@@ -64,7 +61,6 @@ class BeForRecord:
         rtn = "BeForRecord"
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
         rtn += f", n sessions: {self.n_sessions()}"
-        rtn += f"\n  columns: {self.columns}".replace("[", "").replace("]", "")
         if len(self.time_column) >= 0:
             rtn += f"\n  time_column: {self.time_column}"
         rtn += "\n  metadata"
@@ -73,14 +69,16 @@ class BeForRecord:
         rtn += "\n" + str(self.dat)
         return rtn
 
+    def force_cols(self) -> NDArray[np.intp]:
+        return np.flatnonzero(self.dat.columns != self.time_column)
+
     def n_samples(self) -> int:
         """Number of sample in all sessions"""
-
         return self.dat.shape[0]
 
     def n_forces(self) -> int:
         """Number of force columns"""
-        return len(self.columns)
+        return len(self.force_cols())
 
     def n_sessions(self) -> int:
         """Number of recoding sessions"""
@@ -98,22 +96,16 @@ class BeForRecord:
             final_time = self.dat.shape[0] * step
             return np.arange(0, final_time, step)
 
-    def get_data(
-        self, columns: str | List[str] | None = None, session: int | None = None
+    def forces(self, session: int | None = None
     ) -> pd.DataFrame | pd.Series:
-        """Returns data of a particular column and/or a particular session"""
-        if columns is None:
-            columns = self.dat.columns.values.tolist()
-
+        """Returns force data of a particular column and/or a particular session"""
+        columns = self.force_cols()
         if session is None:
             return self.dat.loc[:, columns]  # type: ignore
         else:
-            f, t = self.session_samples(session)
-            return self.dat.loc[f:t, columns]  # type: ignore
+            r = self.session_range(session)
+            return self.dat.loc[r.start:r.stop, columns] # type: ignore
 
-    def get_forces(self, session: int | None = None) -> pd.DataFrame | pd.Series:
-        """Returns force data of a particular session"""
-        return self.get_data(self.columns, session)
 
     def add_session(self, dat: pd.DataFrame):
         """Adds data (dataframe) as a new recording
@@ -124,44 +116,22 @@ class BeForRecord:
         self.dat = pd.concat([self.dat, dat], ignore_index=True)
         self.sessions.append(nbefore)
 
-    def add_column(
-        self, name: str, data: List | pd.Series, is_force_column: bool = True
-    ):
-        """Add data column (in place).
+    def session_ranges(self) ->  List[range]:
+        """list of ranges of the samples of all sessions
 
-        Parameters
-        ----------
-        name : str
-            columns name
-        data : List or Pandas Series
-            column data, that has to have the correct length
-        is_force_column : bool, optional
-            set this to False, if the added data do not comprise force
-            measurements (default=true)
         """
+        return [self.session_range(s) for s in range(len(self.sessions))]
 
-        self.dat[name] = data
-        if is_force_column:
-            self.columns.append(name)
-
-    def drop_column(self, name: str):
-        """Drop a column for the data (in place)"""
-        self.dat = self.dat.drop(name, axis=1)
-        try:
-            self.columns.remove(name)
-        except ValueError:
-            pass
-        if self.time_column == name:
-            self.time_column = ""
-
-    def session_samples(self, session: int) -> Tuple[int, int]:
-        """tuple represents the range of the samples (from, to) of this sessions"""
+    def session_range(self, session: int) -> range:
+        """range of the samples (from, to) of one particular session
+        """
         f = self.sessions[session]
         try:
             t = self.sessions[session + 1]
         except IndexError:
             t = self.dat.shape[0]
-        return f, t - 1
+        return range(f, t - 1)
+
 
     def find_samples_by_time(self, times: ArrayLike) -> NDArray:
         """returns sample index (i) of the closes time in the BeForRecord.
@@ -234,21 +204,14 @@ class BeForRecord:
             zero_sample=n_samples_before,
         )
 
-    def to_arrow(self) -> Table:
-        """converts BeForRecord to ``pyarrow.Table``
+    def to_arrow(self, filepath : str | Path ) -> Table:
+        """saves BeForRecord to ``pyarrow feather file``
 
-        metadata of schema will be defined. Files can converted back to
-        BeForRecord struct using ``BeForRecord.from_arrow()``
+        metadata of schema will be defined. Files can read ``BeForRecord.from_arrow()``
 
         Returns
         -------
         pyarrow.Table
-
-        Examples
-        --------
-        >>> from pyarrow import feather
-        >>> feather.write_feather(data.to_arrow(), "filename.feather",
-                          compression="lz4", compression_level=6)
         """
 
         # Convert the DataFrame to a PyArrow table
@@ -257,39 +220,31 @@ class BeForRecord:
         # Add metadata to the schema (serialize sampling_rate, timestamp, trigger, and meta)
         schema_metadata = {
             "sampling_rate": str(self.sampling_rate),
-            "columns": ",".join(self.columns),
             "time_column": self.time_column,
             "sessions": ",".join([str(x) for x in self.sessions]),
         }
         schema_metadata.update(values_as_string(self.meta))
-        return table.replace_schema_metadata(schema_metadata)
+        table = table.replace_schema_metadata(schema_metadata)
+        feather.write_feather(table, filepath,
+                              compression="lz4", compression_level=6)
 
     @staticmethod
     def from_arrow(
-        tbl: Table,
+        filepath: str | Path,
         sampling_rate: float | None = None,
         columns: str | List[str] | None = None,
         sessions: List[int] | None = None,
         time_column: str | None = None,
         meta: dict | None = None,
     ) -> BeForRecord:
-        """Creates BeForRecord struct from `pyarrow.Table`
+        """Read BeForRecord from `pyarrow` file
 
         Parameters
         ----------
-        tbl : pyarrow.Table
-
-        Examples
-        --------
-        >>> from pyarrow import feather
-        >>> dat = feather.read_table("my_force_data.feather")
-        >>> dat = BeforeData.from_arrow(dat)
-
+        filepath : str | Path
         """
 
-        if not isinstance(tbl, Table):
-            raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
-
+        tbl = feather.read_table(filepath)
         if isinstance(columns, str):
             columns = [columns]
 
@@ -319,7 +274,7 @@ class BeForRecord:
         if time_column is None:
             time_column = ""
         if sessions is None:
-            sessions = []
+            sessions = [0]
         if isinstance(meta, dict):
             meta.update(file_meta)
         else:
@@ -328,10 +283,9 @@ class BeForRecord:
         return BeForRecord(
             dat=tbl.to_pandas(),
             sampling_rate=sampling_rate,
-            columns=columns,  # type: ignore
             sessions=sessions,
             time_column=time_column,
-            meta=meta,
+            meta=meta
         )
 
 

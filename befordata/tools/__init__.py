@@ -1,1 +1,1 @@
-from ._preprocess import butter_filter, detect_sessions
+from ._preprocess import detect_sessions, lowpass_filter
