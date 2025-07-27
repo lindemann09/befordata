@@ -12,8 +12,8 @@ from numpy.typing import ArrayLike, NDArray
 from pyarrow import Table
 
 from ._epochs import BeForEpochs
+from .misc import ENC, try_num, values_as_string
 
-ENC = "utf-8"
 
 @dataclass
 class BeForRecord:
@@ -257,7 +257,7 @@ class BeForRecord:
         if not isinstance(tbl, Table):
             raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
 
-        # search arrow meta data for beforrecod parameter
+        # search arrow meta data for befor record parameter
         arrow_meta = {}
         if tbl.schema.metadata is not None:
             for k, v in tbl.schema.metadata.items():
@@ -294,24 +294,3 @@ class BeForRecord:
             meta=meta
         )
 
-def values_as_string(d: dict) -> dict:
-    """Helper function returns all keys as strings"""
-    rtn = {}
-    for v, k in d.items():
-        if isinstance(k, (list, tuple)):
-            rtn[v] = ",".join([str(x) for x in k])
-        else:
-            rtn[v] = str(k)
-    return rtn
-
-
-def try_num(val):
-    if isinstance(val, (int, float)):
-        return val
-    try:
-        return int(val)
-    except ValueError:
-        try:
-            return float(val)
-        except ValueError:
-            return val
