@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "BeforData"
+project = "BeForData"
 copyright = "2024, Oliver Lindemann"
 author = "Oliver Lindemann"
 release = befordata.__version__

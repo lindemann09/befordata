@@ -1,4 +1,4 @@
-"""BeFoR-Data structure for handling behavioural force data"""
+"""BeForData structure for handling behavioural force data"""
 
 __author__ = "Oliver Lindemann"
 __version__ = "0.3.1-dev0"
