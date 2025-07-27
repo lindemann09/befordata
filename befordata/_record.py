@@ -4,13 +4,12 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import List
 
 import numpy as np
 import pandas as pd
 from numpy.typing import ArrayLike, NDArray
-from pyarrow import Table, feather
+from pyarrow import Table
 
 from ._epochs import BeForEpochs
 
@@ -204,15 +203,22 @@ class BeForRecord:
             zero_sample=n_samples_before,
         )
 
-    def to_arrow(self, filepath : str | Path,
-                 compression : str="lz4", compression_level : int=6) -> Table:
-        """saves BeForRecord to ``pyarrow feather file``
 
-        metadata of schema will be defined. Files can read ``BeForRecord.from_arrow()``
+    def to_arrow(self) -> Table:
+        """converts BeForRecord to ``pyarrow.Table``
+
+        metadata of schema will be defined. Files can converted back to
+        BeForRecord struct using ``BeForRecord.from_arrow()``
 
         Returns
         -------
         pyarrow.Table
+
+        Examples
+        --------
+        >>> from pyarrow import feather
+        >>> feather.write_feather(data.to_arrow(), "filename.feather",
+                          compression="lz4", compression_level=6)
         """
 
         # Convert the DataFrame to a PyArrow table
@@ -225,40 +231,39 @@ class BeForRecord:
             "sessions": ",".join([str(x) for x in self.sessions]),
         }
         schema_metadata.update(values_as_string(self.meta))
-        table = table.replace_schema_metadata(schema_metadata)
-        feather.write_feather(table, filepath,
-                compression=compression, compression_level=compression_level)
+        return table.replace_schema_metadata(schema_metadata)
 
     @staticmethod
     def from_arrow(
-        filepath: str | Path,
+        tbl: Table,
         sampling_rate: float | None = None,
-        columns: str | List[str] | None = None,
         sessions: List[int] | None = None,
         time_column: str | None = None,
         meta: dict | None = None,
     ) -> BeForRecord:
-        """Read BeForRecord from `pyarrow` file
+        """Creates BeForRecord struct from `pyarrow.Table`
 
         Parameters
         ----------
-        filepath : str | Path
+        tbl : pyarrow.Table
+
+        Examples
+        --------
+        >>> from pyarrow import feather
+        >>> dat = BeForRecord.from_arrow(feather.read_table("my_force_data.feather"))
+
         """
 
-        tbl = feather.read_table(filepath)
-        if isinstance(columns, str):
-            columns = [columns]
+        if not isinstance(tbl, Table):
+            raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
 
-        # search info in meta data
-        file_meta = {}
+        # search arrow meta data for beforrecod parameter
+        arrow_meta = {}
         if tbl.schema.metadata is not None:
             for k, v in tbl.schema.metadata.items():
                 if k == b"sampling_rate":
                     if sampling_rate is None:
                         sampling_rate = try_num(v)
-                elif k == b"columns":
-                    if columns is None:
-                        columns = v.decode(ENC).split(",")
                 elif k == b"time_column":
                     if time_column is None:
                         time_column = v.decode(ENC)
@@ -266,20 +271,20 @@ class BeForRecord:
                     if sessions is None:
                         sessions = [int(x) for x in v.decode(ENC).split(",")]
                 else:
-                    file_meta[k.decode(ENC)] = try_num(v.decode(ENC).strip())
+                    arrow_meta[k.decode(ENC)] = try_num(v.decode(ENC).strip())
+
+        # make befor meta data
+        if isinstance(meta, dict):
+            meta.update(arrow_meta)
+        else:
+            meta = arrow_meta
 
         if sampling_rate is None:
             raise RuntimeError("No sampling rate defined!")
-        if columns is None:
-            columns = []
         if time_column is None:
             time_column = ""
         if sessions is None:
-            sessions = [0]
-        if isinstance(meta, dict):
-            meta.update(file_meta)
-        else:
-            meta = file_meta
+            sessions = []
 
         return BeForRecord(
             dat=tbl.to_pandas(),
@@ -288,7 +293,6 @@ class BeForRecord:
             time_column=time_column,
             meta=meta
         )
-
 
 def values_as_string(d: dict) -> dict:
     """Helper function returns all keys as strings"""
