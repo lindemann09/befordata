@@ -10,7 +10,7 @@ import pandas as pd
 import pyarrow as pa
 from numpy.typing import NDArray
 
-from .misc import ENC, try_num, values_as_string
+from .misc import try_num
 
 BSL_COL_NAME = '__befor_baseline__'
 
@@ -57,9 +57,11 @@ class BeForEpochs:
             raise ValueError("Epoch data and design must have the same number of rows")
 
         self.baseline = np.atleast_1d(self.baseline)
-        if self.baseline.ndim != 1 and len(self.baseline) != ne:
+        if self.baseline.ndim != 1:
+            raise ValueError("Baseline must be a 1D array.")
+        if len(self.baseline) > 0 and len(self.baseline) != ne:
             raise ValueError(
-                "baseline must be a 1D array. The number of elements must match the of epochs"
+                "If baseline is not empty, the number of elements must match number of epochs."
             )
 
     def __repr__(self):
@@ -85,6 +87,28 @@ class BeForEpochs:
         """number of sample of one epoch"""
         return self.dat.shape[1]
 
+    def append(self, other: BeForEpochs):
+        """Append epochs to the data structure"""
+
+        if other.n_samples() != self.n_samples():
+            raise ValueError("Number of samples per epoch are not the same")
+        if other.sampling_rate != self.sampling_rate:
+            raise ValueError("Sampling rates are not the same.")
+        if other.zero_sample != self.zero_sample:
+            raise ValueError("Zero samples are not the same.")
+        if other.is_baseline_adjusted() != self.is_baseline_adjusted():
+            raise ValueError("One data structure is baseline adjusted, the other not.")
+        if np.any(other.design.columns != self.design.columns):
+            raise ValueError("Design column names are not the same.")
+
+        self.dat = np.concat([self.dat, other.dat], axis=0)
+        self.design = pd.concat([self.design, other.design], axis=0)
+        self.baseline = np.append(self.baseline, other.baseline)
+
+    def is_baseline_adjusted(self):
+        """Returns true if data is baseline adjusted"""
+        return len(self.baseline) > 0
+
     def adjust_baseline(self, reference_window: Tuple[int, int]):
         """Adjust the baseline of each epoch using the mean value of
         a defined range of sample (reference window)
@@ -96,7 +120,7 @@ class BeForEpochs:
 
         """
 
-        if len(self.baseline) > 0:
+        if self.is_baseline_adjusted():
             dat = self.dat + np.atleast_2d(self.baseline).T  # rest baseline
         else:
             dat = self.dat
@@ -123,7 +147,7 @@ class BeForEpochs:
         """
 
         dat = pd.concat([pd.DataFrame(self.dat), self.design], axis=1)
-        if len(self.baseline) >0:
+        if self.is_baseline_adjusted():
             dat[BSL_COL_NAME] = self.baseline
         tbl = pa.Table.from_pandas(dat, preserve_index=False)
 
