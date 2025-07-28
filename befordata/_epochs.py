@@ -200,7 +200,7 @@ class BeForEpochs:
         except KeyError:
             baseline = np.array([])
 
-        # count columns_name that have not int as name
+        # n_epoch_samples: count columns_name that have not int as name
         n_epoch_samples = dat.shape[1]
         for cn in reversed(dat.columns):
             try:
