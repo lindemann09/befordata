@@ -115,6 +115,21 @@ class BeForRecord:
         self.dat = pd.concat([self.dat, dat], ignore_index=True)
         self.sessions.append(nbefore)
 
+
+    def split_sessions(self) -> List[BeForRecord]:
+        """split record in list of records of separate sessions
+        """
+
+        rtn = []
+        for idx in self.session_ranges():
+            dat = BeForRecord(dat=self.dat.iloc[idx, :],  # type: ignore
+                        sampling_rate=self.sampling_rate,
+                        time_column=self.time_column,
+                        meta=self.meta)
+            rtn.append(dat)
+
+        return rtn
+
     def session_ranges(self) ->  List[range]:
         """list of ranges of the samples of all sessions
 
