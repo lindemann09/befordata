@@ -40,7 +40,13 @@ def channel_info(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Dict:
     channel_id = _get_channel_id(xdf_streams, channel)
     info = xdf_streams[channel_id]["info"]
     fields = ("name", "type", "channel_count", "channel_format") # FIXME add clock and offset
-    return {k: info[k][0] for k in fields}
+    rtn = {k: info[k][0] for k in fields}
+
+    tmp = xdf_streams[channel_id]["clock_times"]
+    rtn["clock_times"] = ",".join([str(x) for x in tmp])
+    tmp = xdf_streams[channel_id]["clock_values"]
+    rtn["clock_values"] = ",".join([str(x) for x in tmp])
+    return rtn
 
 def _channel_labels(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.List[str]:
     """channel labels from xdf stream data
