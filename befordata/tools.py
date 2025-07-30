@@ -11,7 +11,26 @@ import numpy as _np
 import pandas as _pd
 from scipy import signal as _signal
 
-from ._record import BeForRecord
+from ._record import BeForEpochs, BeForRecord
+
+
+def scale_record(data:BeForRecord, factor:float) -> BeForRecord:
+    """scale force data"""
+    df = data.dat.copy()
+    df.iloc[:, data.force_cols] *= factor
+    return BeForRecord(dat=df,
+            sampling_rate=data.sampling_rate,
+            sessions=_deepcopy(data.sessions),
+            time_column=data.time_column,
+            meta=_deepcopy(data.meta))
+
+def scale_epochs(data:BeForEpochs, factor:float) -> BeForEpochs:
+    """scale force data"""
+    return BeForEpochs(dat=data.dat * factor,
+            sampling_rate=data.sampling_rate,
+            design=data.design.copy(),
+            baseline= data.baseline * factor,
+            zero_sample=data.zero_sample)
 
 
 def detect_sessions(
@@ -40,7 +59,7 @@ def detect_sessions(
     breaks = _np.flatnonzero(_np.diff(rec.dat[time_column]) >= time_gap) + 1
     sessions.extend(breaks.tolist())
     return BeForRecord(
-        rec.dat,
+        dat=rec.dat,
         sampling_rate=rec.sampling_rate,
         sessions=sessions,
         time_column=time_column,
@@ -99,10 +118,16 @@ def lowpass_filter(
     meta = _deepcopy(rec.meta)
     meta["filter"] = f"butterworth: cutoff={cutoff}, order={order}"
     return BeForRecord(
-        df,
+        dat=df,
         sampling_rate=rec.sampling_rate,
         sessions=rec.sessions,
         time_column=rec.time_column,
         meta=meta,
     )
+
+
+
+
+
+
 
