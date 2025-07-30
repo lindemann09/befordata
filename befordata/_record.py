@@ -56,6 +56,8 @@ class BeForRecord:
         if len(self.time_column) > 0 and self.time_column not in self.dat:
             raise ValueError(f"Time column {self.time_column} not found in DataFrame")
 
+        self.force_cols = np.flatnonzero(self.dat.columns != self.time_column)
+
     def __repr__(self):
         rtn = "BeForRecord"
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
@@ -68,17 +70,13 @@ class BeForRecord:
         rtn += "\n" + str(self.dat)
         return rtn
 
-    def force_cols(self) -> NDArray[np.intp]:
-        """List of indices of the columns that contain the force data"""
-        return np.flatnonzero(self.dat.columns != self.time_column)
-
     def n_samples(self) -> int:
         """Number of sample in all sessions"""
         return self.dat.shape[0]
 
     def n_forces(self) -> int:
         """Number of force columns"""
-        return len(self.force_cols())
+        return len(self.force_cols)
 
     def n_sessions(self) -> int:
         """Number of recoding sessions"""
@@ -99,12 +97,11 @@ class BeForRecord:
     def forces(self, session: int | None = None
     ) -> pd.DataFrame | pd.Series:
         """Returns force data of a particular column and/or a particular session"""
-        columns = self.force_cols()
         if session is None:
-            return self.dat.loc[:, columns]  # type: ignore
+            return self.dat.loc[:, self.force_cols]  # type: ignore
         else:
             r = self.session_range(session)
-            return self.dat.loc[r.start:r.stop, columns] # type: ignore
+            return self.dat.loc[r.start:r.stop, self.force_cols] # type: ignore
 
 
     def add_session(self, dat: pd.DataFrame):

@@ -89,7 +89,7 @@ def lowpass_filter(
 
     df = rec.dat.copy()
     for idx in rec.session_ranges():
-        for c in rec.force_cols():
+        for c in rec.force_cols:
             df.iloc[idx, c] = __butter_lowpass_filter(rec=df.iloc[idx, c], # type: ignore
                 cutoff=cutoff,
                 sampling_rate=rec.sampling_rate,
