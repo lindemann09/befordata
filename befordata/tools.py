@@ -1,13 +1,17 @@
-import warnings
-from copy import deepcopy
+"""
+Collection of useful function to deal with BeForData structures
 
-import numpy as np
-import pandas as pd
-from scipy import signal
+(c) O. Lindemann
+"""
 
-from .._record import BeForRecord
+import warnings as _warnings
+from copy import deepcopy as _deepcopy
 
-pd.set_option("mode.copy_on_write", True)
+import numpy as _np
+import pandas as _pd
+from scipy import signal as _signal
+
+from ._record import BeForRecord
 
 
 def detect_sessions(
@@ -28,12 +32,12 @@ def detect_sessions(
     """
 
     if len(rec.time_column) == 0:
-        warnings.warn("No time column defined!", RuntimeWarning)
+        _warnings.warn("No time column defined!", RuntimeWarning)
         return rec
     else:
         time_column = rec.time_column
     sessions = [0]
-    breaks = np.flatnonzero(np.diff(rec.dat[time_column]) >= time_gap) + 1
+    breaks = _np.flatnonzero(_np.diff(rec.dat[time_column]) >= time_gap) + 1
     sessions.extend(breaks.tolist())
     return BeForRecord(
         rec.dat,
@@ -44,14 +48,14 @@ def detect_sessions(
     )
 
 def __butter_lowpass_filter(
-    rec: pd.Series, order: int, cutoff: float, sampling_rate: float, center_data: bool
+    rec: _pd.Series, order: int, cutoff: float, sampling_rate: float, center_data: bool
 ):
-    b, a = signal.butter(order, cutoff, fs=sampling_rate, btype='lowpass', analog=False)  # type: ignore
+    b, a = _signal.butter(order, cutoff, fs=sampling_rate, btype='lowpass', analog=False)  # type: ignore
     if center_data:
         # filter centred data (first sample = 0)
-        return signal.filtfilt(b, a, rec - rec.iat[0]) + rec.iat[0]
+        return _signal.filtfilt(b, a, rec - rec.iat[0]) + rec.iat[0]
     else:
-        return signal.filtfilt(b, a, rec)
+        return _signal.filtfilt(b, a, rec)
 
 
 def lowpass_filter(
@@ -92,7 +96,7 @@ def lowpass_filter(
                 order=order,
                 center_data=center_data,
             )
-    meta = deepcopy(rec.meta)
+    meta = _deepcopy(rec.meta)
     meta["filter"] = f"butterworth: cutoff={cutoff}, order={order}"
     return BeForRecord(
         df,
@@ -101,3 +105,4 @@ def lowpass_filter(
         time_column=rec.time_column,
         meta=meta,
     )
+

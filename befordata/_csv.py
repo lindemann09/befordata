@@ -3,6 +3,7 @@ import lzma as _lzma
 from io import StringIO as _StringIO
 from pathlib import Path as _Path
 from typing import List as _List
+from typing import Tuple as _Tuple
 
 import pandas as _pd
 
@@ -14,7 +15,7 @@ def read_csv(
     columns: str | _List[str] | None = None,
     encoding: str = "utf-8",
     comment_char: str = "#",
-):
+) -> _Tuple[_pd.DataFrame, _List[str]]:
     """Reads CSV file
 
     The function can handle comments as well as compressed CSVs, if they end
@@ -66,7 +67,7 @@ def read_csv(
     return df, comments
 
 
-def read_csv_as_befordata(
+def read_csv_as_record(
     file_path: str | _Path,
     sampling_rate: float,
     columns: str | _List[str] | None = None,
@@ -118,3 +119,4 @@ def read_csv_as_befordata(
         time_column=time_column,
         meta=meta,
     )
+

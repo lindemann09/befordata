@@ -7,10 +7,7 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
-import pyarrow as pa
 from numpy.typing import NDArray
-
-from .misc import try_num
 
 BSL_COL_NAME = '__befor_baseline__'
 
@@ -127,92 +124,3 @@ class BeForEpochs:
         i = range(reference_window[0], reference_window[1])
         self.baseline = np.mean(dat[:, i], axis=1)
         self.dat = dat - np.atleast_2d(self.baseline).T
-
-    def to_arrow(self):
-        """converts BeForEpochs to ``pyarrow.Table``
-
-        Samples and design will be concatenated to one arrow table. If baseline
-        is adjusted, additionally the baseline value will be added a column.
-
-        Zero sample and sampling_rate will be included to schema meta data.
-        of schema will be defined.
-
-        Arrow tables can converted back to BeForRecord struct using
-        ``BeForEpochs.from_arrow()``
-
-        Returns
-        -------
-        pyarrow.Table
-
-        """
-
-        dat = pd.concat([pd.DataFrame(self.dat), self.design], axis=1)
-        if self.is_baseline_adjusted():
-            dat[BSL_COL_NAME] = self.baseline
-        tbl = pa.Table.from_pandas(dat, preserve_index=False)
-
-        schema_metadata = {
-            "sampling_rate": str(self.sampling_rate),
-            "zero_sample": str(self.zero_sample)
-        }
-        return tbl.replace_schema_metadata(schema_metadata)
-
-
-    @staticmethod
-    def from_arrow(
-        tbl: pa.Table,
-        sampling_rate: float | None = None,
-        zero_sample: int | None = None,
-    ) -> BeForEpochs:
-        """Creates BeForEpoch struct from `pyarrow.Table`
-
-        Parameters
-        ----------
-        tbl : pyarrow.Table
-
-        """
-
-        if not isinstance(tbl, pa.Table):
-            raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
-
-        # search arrow meta data for befor parameter
-        if tbl.schema.metadata is not None:
-            for k, v in tbl.schema.metadata.items():
-                if k == b"sampling_rate":
-                    if sampling_rate is None:
-                        sampling_rate = try_num(v)
-                elif k == b"zero_sample":
-                    if zero_sample is None:
-                        try:
-                            zero_sample = int(try_num(v))
-                        except ValueError:
-                            zero_sample = 0
-
-        if sampling_rate is None:
-            raise RuntimeError("No sampling rate defined!")
-        if zero_sample is None:
-            zero_sample = 0
-
-        dat = tbl.to_pandas()
-
-        try:
-            baseline = np.array(dat.pop(BSL_COL_NAME))
-        except KeyError:
-            baseline = np.array([])
-
-        # n_epoch_samples: count columns_name that have not int as name
-        n_epoch_samples = dat.shape[1]
-        for cn in reversed(dat.columns):
-            try:
-                int(cn)
-                break
-            except ValueError:
-                n_epoch_samples -= 1
-
-        return BeForEpochs(
-            dat= dat.iloc[:, :n_epoch_samples],
-            sampling_rate=sampling_rate,
-            design=dat.iloc[:, n_epoch_samples:],
-            baseline=baseline,
-            zero_sample=zero_sample
-        )

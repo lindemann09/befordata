@@ -4,16 +4,16 @@ reading xdf stream data and converts to BeForData
 (c) O. Lindemann
 """
 
-from typing import Dict, List
+import typing as _tp
 
-import numpy as np
-import pandas as pd
+import numpy as _np
+import pandas as _pd
 
 from ._record import BeForRecord
 
 TIME_STAMPS = "time_stamps"
 
-def _get_channel_id(xdf_streams:List[dict], name_or_id: int | str) -> int:
+def _get_channel_id(xdf_streams:_tp.List[dict], name_or_id: int | str) -> int:
     if isinstance(name_or_id, int):
         return name_or_id
 
@@ -22,7 +22,7 @@ def _get_channel_id(xdf_streams:List[dict], name_or_id: int | str) -> int:
             return id_
     raise ValueError(f"Can't find channel {name_or_id}")
 
-def channel_info(xdf_streams: List[dict], channel : int | str) -> Dict:
+def channel_info(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Dict:
     """channel info from xdf stream data
 
     Args
@@ -39,10 +39,10 @@ def channel_info(xdf_streams: List[dict], channel : int | str) -> Dict:
     """
     channel_id = _get_channel_id(xdf_streams, channel)
     info = xdf_streams[channel_id]["info"]
-    fields = ("name", "type", "channel_count", "channel_format")
+    fields = ("name", "type", "channel_count", "channel_format") # FIXME add clock and offset
     return {k: info[k][0] for k in fields}
 
-def channel_labels(xdf_streams: List[dict], channel : int | str) -> List[str]:
+def _channel_labels(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.List[str]:
     """channel labels from xdf stream data
 
     Args
@@ -69,7 +69,7 @@ def channel_labels(xdf_streams: List[dict], channel : int | str) -> List[str]:
     else:
         return [x["label"][0] for x in ch_info]
 
-def data(xdf_streams: List[dict], channel : int | str) -> pd.DataFrame :
+def data(xdf_streams: _tp.List[dict], channel : int | str) -> _pd.DataFrame :
     """channel pandas dataframe from xdf stream data
 
     Args
@@ -85,12 +85,14 @@ def data(xdf_streams: List[dict], channel : int | str) -> pd.DataFrame :
 
     """
     channel_id = _get_channel_id(xdf_streams, channel)
-    lbs = [TIME_STAMPS] + channel_labels(xdf_streams, channel_id)
-    dat = np.atleast_2d(xdf_streams[channel_id]["time_series"])
-    t = np.atleast_2d(xdf_streams[channel_id]["time_stamps"]).T
-    return pd.DataFrame(np.hstack((t, dat)), columns=lbs)
+    lbs = [TIME_STAMPS] + _channel_labels(xdf_streams, channel_id)
+    dat = _np.atleast_2d(xdf_streams[channel_id]["time_series"])
+    t = _np.atleast_2d(xdf_streams[channel_id]["time_stamps"]).T
+    return _pd.DataFrame(_np.hstack((t, dat)), columns=lbs)
 
-def before_record(xdf_streams: List[dict], channel : int | str, sampling_rate:float) -> BeForRecord:
+def before_record(xdf_streams: _tp.List[dict],
+                  channel : int | str,
+                  sampling_rate:float) -> BeForRecord:
     """BeforeData from xdf stream data
 
     Args

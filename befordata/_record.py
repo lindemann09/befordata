@@ -9,10 +9,10 @@ from typing import List
 import numpy as np
 import pandas as pd
 from numpy.typing import ArrayLike, NDArray
-from pyarrow import Table
 
 from ._epochs import BeForEpochs
-from .misc import ENC, try_num, values_as_string
+
+pd.set_option("mode.copy_on_write", True)
 
 
 @dataclass
@@ -69,6 +69,7 @@ class BeForRecord:
         return rtn
 
     def force_cols(self) -> NDArray[np.intp]:
+        """List of indices of the columns that contain the force data"""
         return np.flatnonzero(self.dat.columns != self.time_column)
 
     def n_samples(self) -> int:
@@ -217,95 +218,3 @@ class BeForRecord:
             design=design,
             zero_sample=n_samples_before,
         )
-
-
-    def to_arrow(self) -> Table:
-        """converts BeForRecord to ``pyarrow.Table``
-
-        metadata of schema will be defined. Files can converted back to
-        BeForRecord struct using ``BeForRecord.from_arrow()``
-
-        Returns
-        -------
-        pyarrow.Table
-
-        Examples
-        --------
-        >>> from pyarrow import feather
-        >>> feather.write_feather(data.to_arrow(), "filename.feather",
-                          compression="lz4", compression_level=6)
-        """
-
-        # Convert the DataFrame to a PyArrow table
-        table = Table.from_pandas(self.dat, preserve_index=False)
-
-        # Add metadata to the schema (serialize sampling_rate, timestamp, trigger, and meta)
-        schema_metadata = {
-            "sampling_rate": str(self.sampling_rate),
-            "time_column": self.time_column,
-            "sessions": ",".join([str(x) for x in self.sessions]),
-        }
-        schema_metadata.update(values_as_string(self.meta))
-        return table.replace_schema_metadata(schema_metadata)
-
-    @staticmethod
-    def from_arrow(
-        tbl: Table,
-        sampling_rate: float | None = None,
-        sessions: List[int] | None = None,
-        time_column: str | None = None,
-        meta: dict | None = None,
-    ) -> BeForRecord:
-        """Creates BeForRecord struct from `pyarrow.Table`
-
-        Parameters
-        ----------
-        tbl : pyarrow.Table
-
-        Examples
-        --------
-        >>> from pyarrow import feather
-        >>> dat = BeForRecord.from_arrow(feather.read_table("my_force_data.feather"))
-
-        """
-
-        if not isinstance(tbl, Table):
-            raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
-
-        # search arrow meta data for befor record parameter
-        arrow_meta = {}
-        if tbl.schema.metadata is not None:
-            for k, v in tbl.schema.metadata.items():
-                if k == b"sampling_rate":
-                    if sampling_rate is None:
-                        sampling_rate = try_num(v)
-                elif k == b"time_column":
-                    if time_column is None:
-                        time_column = v.decode(ENC)
-                elif k == b"sessions":
-                    if sessions is None:
-                        sessions = [int(x) for x in v.decode(ENC).split(",")]
-                else:
-                    arrow_meta[k.decode(ENC)] = try_num(v.decode(ENC).strip())
-
-        # make befor meta data
-        if isinstance(meta, dict):
-            meta.update(arrow_meta)
-        else:
-            meta = arrow_meta
-
-        if sampling_rate is None:
-            raise RuntimeError("No sampling rate defined!")
-        if time_column is None:
-            time_column = ""
-        if sessions is None:
-            sessions = []
-
-        return BeForRecord(
-            dat=tbl.to_pandas(),
-            sampling_rate=sampling_rate,
-            sessions=sessions,
-            time_column=time_column,
-            meta=meta
-        )
-
