@@ -57,6 +57,7 @@ def read_csv(
     fl.close()
 
     df = _pd.read_csv(_StringIO(csv_str))
+    df = df.copy() # copy: to solve potential fragmented dataframe problem
     if isinstance(columns, str):
         columns = [columns]
     if isinstance(columns, list):
