@@ -1,6 +1,9 @@
 """
 Converting XDF streaming data from `pyxdf` to BeForData
 
+Set string variable `befordata.xdf.before.TIME_STAMPS` (default = "time") to
+change column name of the time stamps in the dataframe.
+
 (c) O. Lindemann
 """
 
@@ -23,7 +26,7 @@ def _get_channel_id(xdf_streams:_tp.List[dict], name_or_id: int | str) -> int:
     raise ValueError(f"Can't find channel {name_or_id}")
 
 def channel_info(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Dict:
-    """channel info from xdf stream data
+    """Channel info from XDF streaming data
 
     Parameters
     ----------
@@ -47,7 +50,7 @@ def channel_info(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Dict:
     return rtn
 
 def _channel_labels(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.List[str]:
-    """channel labels from xdf stream data
+    """channel labels from XDF streaming data
 
     Parameters
     ----------
@@ -74,7 +77,7 @@ def _channel_labels(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Lis
         return [x["label"][0] for x in ch_info]
 
 def data(xdf_streams: _tp.List[dict], channel : int | str) -> _pd.DataFrame :
-    """Channel Pandas dataframe from xdf stream data
+    """Channel Pandas dataframe from XDF streaming data
 
     Parameters
     ----------

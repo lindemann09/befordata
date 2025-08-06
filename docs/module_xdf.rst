@@ -1,9 +1,10 @@
-Module: csv
+Module: xdf
 ==============
 
 Converting XDF streaming data from `pyxdf` to BeForData
 
-.. autofunction:: befordata.xdf.TIME_STAMPS
+Set string variable `befordata.xdf.before.TIME_STAMPS` (default = "time") to
+change column name of the time stamps in the dataframe.
 
 .. autofunction:: befordata.xdf.before_record
 
