@@ -19,9 +19,9 @@ pd.set_option("mode.copy_on_write", True)
 class BeForRecord:
     """Data Structure for handling behavioural force measurements
 
-    Args
-    ----
-    dat: Pandas Dataframe
+    Parameters
+    ----------
+     dat: Pandas Dataframe
         data
     sampling_rate: float
         the sampling rate of the force measurements
@@ -82,7 +82,7 @@ class BeForRecord:
         """Number of recoding sessions"""
         return len(self.sessions)
 
-    def time_stamps(self) -> NDArray:
+    def time_stamps(self) -> NDArray[np.floating]:
         """The time stamps (numpy array)
 
         Creates time stamps, of they are not define in the data
