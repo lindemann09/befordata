@@ -83,7 +83,7 @@ def lowpass_filter(
     order: int,
     center_data: bool = True
 ) -> BeForRecord:
-    """Lowpass Butterworth filter of BeforRecord
+    """Lowpass Butterworth filter of BeForRecord
 
     Parameters
     ----------

@@ -2,9 +2,16 @@
 Module: tools
 ================
 
+.. autofunction:: befordata.tools.scale_record
+
 .. autofunction:: befordata.tools.detect_sessions
 
-.. autofunction:: befordata.tools.butter_filter
+.. autofunction:: befordata.tools.lowpass_filter
 
+
+Epochs functions
+----------------
+
+.. autofunction:: befordata.tools.scale_epochs
 
 
