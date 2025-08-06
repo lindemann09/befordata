@@ -1,78 +1,59 @@
-# Usage
+# “BeForData”: Behavioral Force Data
+
+
+- [“BeForData”: Behavioral Force Data](#befordata-behavioral-force-data)
+  - [Create BeForRecord from csv-file](#create-beforrecord-from-csv-file)
+  - [Epochs-based representation](#epochs-based-representation)
+  - [Pyarrow \& Feather Format](#pyarrow--feather-format)
+    - [Writing and reading BeforRecord using the feather format](#writing-and-reading-beforrecord-using-the-feather-format)
+    - [Writing and reading epochs](#writing-and-reading-epochs)
+  - [Extracting data for XDF files (as used by LSL)](#extracting-data-for-xdf-files-as-used-by-lsl)
+- [Example of data preprocessing with experimental design](#example-of-data-preprocessing-with-experimental-design)
+
+Install package
+
+    pip install beforedata
 
 ## Create BeForRecord from csv-file
 
-
-```python
+``` python
 import pandas as pd
 from befordata import BeForRecord
 
 # 1. read csv with Pandas
-df = pd.read_csv("demo_force_data.csv")
+df = pd.read_csv("samples/demo_force_data.csv")
 
 # 2. converting to before record
-mydata = BeForRecord(df, sampling_rate = 1000)
+mydata = BeForRecord(df, sampling_rate=1000)
 print(mydata)
 ```
 
-
-
-
     BeForRecord
       sampling_rate: 1000, n sessions: 1
-      columns: 'Fx', 'Fy', 'time', 'trigger'
       time_column:
       metadata
-                 Fx      Fy     time  trigger
-    0       -0.1717 -0.1143   601676   0.0000
-    1       -0.1719 -0.1136   601678   0.0000
-    2       -0.1719 -0.1133   601679   0.0000
-    3       -0.1718 -0.1209   601680   0.0000
-    4       -0.1697 -0.1020   601681   0.0000
-    ...         ...     ...      ...      ...
-    2334873  0.0991 -0.3851  3120147   0.9656
-    2334874  0.1034 -0.3789  3120147   0.9650
-    2334875  0.1013 -0.3704  3120149   0.9653
-    2334876  0.1013 -0.3875  3120149   0.9653
-    2334877  0.0992 -0.3883  3120151   0.9660
+                 Fx      Fy     time
+    0       -0.1717 -0.1143   601676
+    1       -0.1719 -0.1136   601678
+    2       -0.1719 -0.1133   601679
+    3       -0.1718 -0.1209   601680
+    4       -0.1697 -0.1020   601681
+    ...         ...     ...      ...
+    2334873  0.0991 -0.3851  3120147
+    2334874  0.1034 -0.3789  3120147
+    2334875  0.1013 -0.3704  3120149
+    2334876  0.1013 -0.3875  3120149
+    2334877  0.0992 -0.3883  3120151
 
-    [2334878 rows x 4 columns]
+    [2334878 rows x 3 columns]
 
+``` python
+# Adding some additional meta data
 
-
-Adding some additional information
-
-
-```python
-mydata = BeForRecord(df, sampling_rate = 1000,
-                         columns=["Fx"],
-                         time_column = "time",
-                         meta = {"Exp": "my experiment"})
-
-print(mydata)
+mydata = BeForRecord(
+    df, sampling_rate=1000, time_column="time", meta={"Exp": "my experiment"}
+)
 ```
-
-    BeForRecord
-      sampling_rate: 1000, n sessions: 1
-      columns: 'Fx'
-      time_column: time
-      metadata
-      - Exp: my experiment
-                 Fx      Fy     time  trigger
-    0       -0.1717 -0.1143   601676   0.0000
-    1       -0.1719 -0.1136   601678   0.0000
-    2       -0.1719 -0.1133   601679   0.0000
-    3       -0.1718 -0.1209   601680   0.0000
-    4       -0.1697 -0.1020   601681   0.0000
-    ...         ...     ...      ...      ...
-    2334873  0.0991 -0.3851  3120147   0.9656
-    2334874  0.1034 -0.3789  3120147   0.9650
-    2334875  0.1013 -0.3704  3120149   0.9653
-    2334876  0.1013 -0.3875  3120149   0.9653
-    2334877  0.0992 -0.3883  3120151   0.9660
-
-    [2334878 rows x 4 columns]
-
 
 ## Epochs-based representation
 
@@ -80,15 +61,17 @@ Epochs are represented as matrix. Each row is one trial
 
 Example
 
-* Extracting epochs of the length 2000 from `Fx` (plus 100 samples before)
-* the 6 epochs  start at the 6 "zero samples"
+-   Extracting epochs of the length 2000 from `Fx` (plus 100 samples
+    before)
+-   the 6 epochs start at the 6 “zero samples”
 
-
-```python
-epochs = mydata.extract_epochs("Fx",
-            n_samples=2000,
-            n_samples_before=10,
-            zero_samples = [1530, 6021, 16983, 28952, 67987])
+``` python
+epochs = mydata.extract_epochs(
+    "Fx",
+    zero_samples=[1530, 6021, 16983, 28952, 67987],
+    n_samples=2000,
+    n_samples_before=10,
+)
 print(epochs)
 ```
 
@@ -97,58 +80,94 @@ print(epochs)
       sampling_rate: 1000, zero_sample: 10
       design: None
 
+**Note**:
 
-## Pyarrow format
+BeForEpochs should contain information about the exerimental design. See
+the example of data preprocessing below.
 
-[Apache Arrow](https://arrow.apache.org/) and it's feather file format a universal
-columnar format and multi-language toolbox for fast data interchange. Arrow
-libraries are available for **R, MATLAB, Python, Julia** as well as for
-C, C++, C#, Go, Java, JavaScript,  Ruby, and Rust.
+## Pyarrow & Feather Format
 
+Arrow and feather file format is fast and platform & language
+independent
 
-### Saving to feather file
+### Writing and reading BeforRecord using the feather format
 
-BeForData and BeForEpochs can be save as feather files. For example,
+``` python
+from pyarrow.feather import write_feather, read_table
+from befordata import arrow
 
-```python
-from pyarrow.feather import write_feather
-from befordata.arrow import record_to_arrow
+# writing
+tbl = arrow.record_to_arrow(mydata)
+write_feather(tbl, "demo.feather", compression="lz4", compression_level=6)
 
-# 1. convert to pyarrow table
-tbl = record_to_arrow(my_record)
-
-# 2. e.g. save pyarrow table to feather file
-write_feather(tbl, "demo_record.feather", compression="lz4",
-               compression_level=6)
+# reading
+mydata2 = arrow.arrow_to_record(read_table("demo.feather"))
 ```
 
-and loading ..
+### Writing and reading epochs
 
+``` python
+# writing
+tbl = arrow.epochs_to_arrow(epochs)
+write_feather(tbl, "epochs.feather", compression="lz4", compression_level=6)
 
-```python
-from pyarrow.feather import read_table
-from befordata.arrow import arrow_to_record
-
-# 1. load files as arrow table
-tbl = read_table("demo_record.feather")
-
-# 2. Convert to BeForRecord
-mydata = arrow_to_record(tbl)
+# reading
+epochs2 = arrow.arrow_to_epochs(read_table("epochs.feather"))
 ```
 
-## Example of the data preprocessing of experimental data with design
+## Extracting data for XDF files (as used by LSL)
 
+``` python
+from pyxdf import load_xdf
+from befordata import xdf
 
-```python
+# read xdf
+streams, header = load_xdf("samples/xdf_sample.xdf")
+
+# extract data
+rec = xdf.before_record(streams, "MousePosition", 1000)
+rec
+```
+
+    BeForRecord
+      sampling_rate: 1000, n sessions: 1
+      time_column: time_stamps
+      metadata
+      - name: MousePosition
+      - type: Position
+      - channel_count: 2
+      - channel_format: float32
+      - clock_times: [29570.8205096245, 29575.8203263595, 29580.8201211015]
+      - clock_values: [-7.819500751793385e-06, -7.819498932803981e-06, -5.864501872565597e-06]
+          time_stamps  MouseX  MouseY
+    0    29570.255833   592.0   373.0
+    1    29570.268411   575.0   373.0
+    2    29570.280998   553.0   373.0
+    3    29570.293601   523.0   376.0
+    4    29570.305144   493.0   380.0
+    ..            ...     ...     ...
+    204  29581.561514   192.0   146.0
+    205  29581.574091   194.0   146.0
+    206  29581.599295   195.0   146.0
+    207  29581.637042   197.0   146.0
+    208  29581.662244   198.0   146.0
+
+    [209 rows x 3 columns]
+
+# Example of data preprocessing with experimental design
+
+``` python
 import pandas as pd
 from befordata import BeForRecord, BeForEpochs, tools
 
 # 1. read csv with Pandas
 df = pd.read_csv("samples/demo_force_data.csv")
 
+
 # 2. converting pandas data to before record
-mydata = BeForRecord(df, sampling_rate=1000, time_column="time",
-                        meta={"Exp": "my experiment"})
+mydata = BeForRecord(
+    df, sampling_rate=1000, time_column="time", meta={"Exp": "my experiment"}
+)
 
 # 3. detect pauses and treat data as recording with different sessions
 mydata = tools.detect_sessions(mydata, time_gap=2000)
@@ -175,6 +194,3 @@ print(ep)
       n epochs: 391, n_samples: 5100
       sampling_rate: 1000, zero_sample: 100
       design: 'operand_1', 'operand_2', 'operator', 'correct_response', 'response', 'resp_number_digits', 'resp_num_category', 'subject_id', 'trial', 'trial_time'
-
-
-
