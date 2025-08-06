@@ -1,7 +1,10 @@
-# “BeForData”: Behavioral Force Data
+# Usage
+
+## “BeForData”: Behavioral Force Data
 
 
-- [“BeForData”: Behavioral Force Data](#befordata-behavioral-force-data)
+- [Usage](#usage)
+  - [“BeForData”: Behavioral Force Data](#befordata-behavioral-force-data)
   - [Create BeForRecord from csv-file](#create-beforrecord-from-csv-file)
   - [Epochs-based representation](#epochs-based-representation)
   - [Pyarrow \& Feather Format](#pyarrow--feather-format)
