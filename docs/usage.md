@@ -11,7 +11,7 @@
     - [Writing and reading BeforRecord using the feather format](#writing-and-reading-beforrecord-using-the-feather-format)
     - [Writing and reading epochs](#writing-and-reading-epochs)
   - [Extracting data for XDF files (as used by LSL)](#extracting-data-for-xdf-files-as-used-by-lsl)
-- [Example of data preprocessing with experimental design](#example-of-data-preprocessing-with-experimental-design)
+  - [Example of data preprocessing with experimental design](#example-of-data-preprocessing-with-experimental-design)
 
 Install package
 
@@ -157,7 +157,7 @@ rec
 
     [209 rows x 3 columns]
 
-# Example of data preprocessing with experimental design
+## Example of data preprocessing with experimental design
 
 ``` python
 import pandas as pd

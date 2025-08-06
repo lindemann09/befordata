@@ -21,12 +21,12 @@ class BeForRecord:
 
     Parameters
     ----------
-     dat: Pandas Dataframe
+    dat: Pandas Dataframe
         data
     sampling_rate: float
         the sampling rate of the force measurements
     sessions: list of integer
-        sample numbers at which a new recording session starts, if the exists
+        sample numbers at which a new recording session starts
     time_column :
             str = ""
     meta: dictionary
