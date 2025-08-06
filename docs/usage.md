@@ -108,31 +108,32 @@ C, C++, C#, Go, Java, JavaScript,  Ruby, and Rust.
 
 ### Saving to feather file
 
+BeForData and BeForEpochs can be save as feather files. For example,
 
 ```python
 from pyarrow.feather import write_feather
+from befordata.arrow import record_to_arrow
 
 # 1. convert to pyarrow table
-tbl = mydata.to_arrow()
-
+tbl = record_to_arrow(my_record)
 
 # 2. e.g. save pyarrow table to feather file
-write_feather(tbl, "demo.feather", compression="lz4",
+write_feather(tbl, "demo_record.feather", compression="lz4",
                compression_level=6)
 ```
 
-### Loading BeforRecord from feather file
+and loading ..
 
 
 ```python
-
 from pyarrow.feather import read_table
+from befordata.arrow import arrow_to_record
 
 # 1. load files as arrow table
-tbl = read_table("demo.feather")
+tbl = read_table("demo_record.feather")
 
 # 2. Convert to BeForRecord
-mydata = BeForRecord.from_arrow(tbl)
+mydata = arrow_to_record(tbl)
 ```
 
 ## Example of the data preprocessing of experimental data with design
@@ -140,34 +141,32 @@ mydata = BeForRecord.from_arrow(tbl)
 
 ```python
 import pandas as pd
-from befordata import BeForRecord, tools
+from befordata import BeForRecord, BeForEpochs, tools
 
 # 1. read csv with Pandas
-df = pd.read_csv("demo_force_data.csv")
-
+df = pd.read_csv("samples/demo_force_data.csv")
 
 # 2. converting pandas data to before record
-mydata = BeForRecord(df,
-                   sampling_rate=1000,
-                   columns=["Fx", "Fy"],
-                   time_column = "time",
-                   meta = {"Exp": "my experiment"})
+mydata = BeForRecord(df, sampling_rate=1000, time_column="time",
+                        meta={"Exp": "my experiment"})
 
 # 3. detect pauses and treat data as recording with different sessions
 mydata = tools.detect_sessions(mydata, time_gap=2000)
 
 # 4. filter data (takes into account the different sessions)
-mydata = tools.butter_filter(mydata, cutoff=30, order=4, btype="lowpass")
+mydata = tools.lowpass_filter(mydata, cutoff=30, order=4)
 
 # 5. read design data (csv)
-design = pd.read_csv("demo_design_data.csv")
+design = pd.read_csv("samples/demo_design_data.csv")
 
-# 6. get samples from times of the trial onset in the design (`trial_time`)
-samples = mydata.find_samples_by_time(design.trial_time)
+# 6. extract epochs
+ep = mydata.extract_epochs(
+    "Fx", n_samples=5000, n_samples_before=100, design=design,
+    zero_times = design.trial_time
+)
 
-# 7. extract epochs
-ep = mydata.extract_epochs("Fx", samples,
-                    n_samples = 5000, n_samples_before=100, design=design)
+# 7. adjust baseline
+ep.adjust_baseline((80, 100))
 
 print(ep)
 ```

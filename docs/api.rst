@@ -10,6 +10,8 @@ API Reference
    beforrecord
    beforepochs
    module_tools
+   module_arrow
+   module_xdf
    module_csv
 
 Indices and tables

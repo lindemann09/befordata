@@ -1,5 +1,5 @@
 """
-reading xdf stream data and converts to BeForData
+Converting XDF streaming data from `pyxdf` to BeForData
 
 (c) O. Lindemann
 """
@@ -11,7 +11,7 @@ import pandas as _pd
 
 from ._record import BeForRecord
 
-TIME_STAMPS = "time_stamps"
+TIME_STAMPS = "time"
 
 def _get_channel_id(xdf_streams:_tp.List[dict], name_or_id: int | str) -> int:
     if isinstance(name_or_id, int):
@@ -25,8 +25,8 @@ def _get_channel_id(xdf_streams:_tp.List[dict], name_or_id: int | str) -> int:
 def channel_info(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Dict:
     """channel info from xdf stream data
 
-    Args
-    ----
+    Parameters
+    ----------
     xdf: list of dicts
         xdf streams (as returned by `pyxdf.load_xdf`)
     channel: int | str
@@ -49,8 +49,8 @@ def channel_info(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Dict:
 def _channel_labels(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.List[str]:
     """channel labels from xdf stream data
 
-    Args
-    ----
+    Parameters
+    ----------
     xdf: list of dicts
         xdf streams (as returned by `pyxdf.load_xdf`)
     channel: int | str
@@ -74,10 +74,10 @@ def _channel_labels(xdf_streams: _tp.List[dict], channel : int | str) -> _tp.Lis
         return [x["label"][0] for x in ch_info]
 
 def data(xdf_streams: _tp.List[dict], channel : int | str) -> _pd.DataFrame :
-    """channel pandas dataframe from xdf stream data
+    """Channel Pandas dataframe from xdf stream data
 
-    Args
-    ----
+    Parameters
+    ----------
     xdf: list of dicts
         xdf streams (as returned by `pyxdf.load_xdf`)
     channel: int | str
@@ -99,8 +99,8 @@ def before_record(xdf_streams: _tp.List[dict],
                   sampling_rate:float) -> BeForRecord:
     """BeforeData from xdf stream data
 
-    Args
-    ----
+    Parameters
+    ----------
     xdf: list of dicts
         xdf streams (as returned by `pyxdf.load_xdf`)
     channel: int | str

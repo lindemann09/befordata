@@ -1,3 +1,6 @@
+"""Reading compressed csv files with comments
+"""
+
 import gzip as _gzip
 import lzma as _lzma
 from io import StringIO as _StringIO

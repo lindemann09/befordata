@@ -18,8 +18,7 @@ BSL_COL_NAME = '__befor_baseline__'
 def record_to_arrow(rec:BeForRecord) -> _pa.Table:
     """converts BeForRecord to ``pyarrow.Table``
 
-    metadata of schema will be defined. Files can converted back to
-    BeForRecord struct using ``BeForRecord.from_arrow()``
+    metadata of schema will be defined.
 
     Returns
     -------
@@ -28,7 +27,8 @@ def record_to_arrow(rec:BeForRecord) -> _pa.Table:
     Examples
     --------
     >>> from pyarrow import feather
-    >>> feather.write_feather(data.to_arrow(), "filename.feather",
+    >>> tbl = record_to_arrow(my_record)
+    >>> feather.write_feather(tbl, "filename.feather",
                         compression="lz4", compression_level=6)
     """
 
@@ -59,8 +59,8 @@ def arrow_to_record(
 
     Examples
     --------
-    >>> from pyarrow import feather
-    >>> dat = BeForRecord.from_arrow(feather.read_table("my_force_data.feather"))
+    >>> from pyarrow.feather import read_table
+    >>> dat = arrow_to_record(read_table("my_force_data.feather"))
 
     """
 
@@ -114,13 +114,16 @@ def epochs_to_arrow(rec:BeForEpochs) -> _pa.Table:
     Zero sample and sampling_rate will be included to schema meta data.
     of schema will be defined.
 
-    Arrow tables can converted back to BeForRecord struct using
-    ``BeForEpochs.from_arrow()``
-
     Returns
     -------
     pyarrow.Table
 
+    Examples
+    --------
+    >>> from pyarrow import feather
+    >>> tbl = record_to_arrow(my_epochs)
+    >>> feather.write_feather(tbl, "my_epochs.feather",
+                        compression="lz4", compression_level=6)
     """
 
     dat = _pd.concat([_pd.DataFrame(rec.dat), rec.design], axis=1)
@@ -145,6 +148,11 @@ def arrow_to_epochs(
     Parameters
     ----------
     tbl : pyarrow.Table
+
+    Examples
+    --------
+    >>> from pyarrow.feather import read_table
+    >>> dat = arrow_to_epochs(read_table("my_epochs.feather"))
 
     """
 
