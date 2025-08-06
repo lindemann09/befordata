@@ -94,15 +94,13 @@ class BeForRecord:
             final_time = self.dat.shape[0] * step
             return np.arange(0, final_time, step)
 
-    def forces(self, session: int | None = None
-    ) -> pd.DataFrame | pd.Series:
+    def forces(self, session: int | None = None) -> pd.DataFrame | pd.Series:
         """Returns force data of a particular column and/or a particular session"""
         if session is None:
             return self.dat.loc[:, self.force_cols]  # type: ignore
         else:
             r = self.session_range(session)
-            return self.dat.loc[r.start:r.stop, self.force_cols] # type: ignore
-
+            return self.dat.loc[r.start : r.stop, self.force_cols]  # type: ignore
 
     def add_session(self, dat: pd.DataFrame):
         """Adds data (dataframe) as a new recording
@@ -113,37 +111,33 @@ class BeForRecord:
         self.dat = pd.concat([self.dat, dat], ignore_index=True)
         self.sessions.append(nbefore)
 
-
     def split_sessions(self) -> List[BeForRecord]:
-        """split record in list of records of separate sessions
-        """
+        """split record in list of records of separate sessions"""
 
         rtn = []
         for idx in self.session_ranges():
-            dat = BeForRecord(dat=self.dat.iloc[idx, :],  # type: ignore
-                        sampling_rate=self.sampling_rate,
-                        time_column=self.time_column,
-                        meta=self.meta)
+            dat = BeForRecord(
+                dat=self.dat.iloc[idx, :],  # type: ignore
+                sampling_rate=self.sampling_rate,
+                time_column=self.time_column,
+                meta=self.meta,
+            )
             rtn.append(dat)
 
         return rtn
 
-    def session_ranges(self) ->  List[range]:
-        """list of ranges of the samples of all sessions
-
-        """
+    def session_ranges(self) -> List[range]:
+        """list of ranges of the samples of all sessions"""
         return [self.session_range(s) for s in range(len(self.sessions))]
 
     def session_range(self, session: int) -> range:
-        """range of the samples (from, to) of one particular session
-        """
+        """range of the samples (from, to) of one particular session"""
         f = self.sessions[session]
         try:
             t = self.sessions[session + 1]
         except IndexError:
             t = self.dat.shape[0]
         return range(f, t - 1)
-
 
     def find_samples_by_time(self, times: ArrayLike) -> NDArray:
         """returns sample index (i) of the closes time in the BeForRecord.
@@ -162,9 +156,10 @@ class BeForRecord:
     def extract_epochs(
         self,
         column: str,
-        zero_samples: List[int] | NDArray[np.int_],
         n_samples: int,
-        n_samples_before: int = 0,
+        n_samples_before: int,
+        zero_samples: List[int] | NDArray[np.int_] | None = None,
+        zero_times: List[float] | NDArray[np.floating] | None = None,
         design: pd.DataFrame = pd.DataFrame(),
     ) -> BeForEpochs:
         """extracts epochs from BeForRecord
@@ -173,22 +168,48 @@ class BeForRecord:
         ----------
         column: str
             name of column containing the force data to be used
-        zero_samples: List[int]
-            zero sample that define the epochs
         n_samples: int
             number of samples to be extract (from zero sample on)
         n_samples_before: int, optional
             number of samples to be extracted before the zero sample (default=0)
-
+        zero_samples: List or np.array of integer, optional
+            zero sample that define the epochs
+        zero_times:  List or np.array of float, optional
+            zero times that define the epochs
         design: pd.DataFrame, optional
             design information
 
         Notes
         -----
-        use `find_times` to detect zero samples with time-based
+        Either `zero_samples` or `zero_times` has to be define!
+
+        Use `find_samples_by_time` to get list of zero samples, if you have
+        times only, or simply use `zero_times`
 
         """
 
+        if zero_samples is None and zero_times is None:
+            raise ValueError(
+                "Define either the samples or times where to extract the epochs "
+                "(i.e. parameter zero_samples or zero_time)"
+            )
+
+        elif zero_samples is not None and zero_times is not None:
+            raise ValueError(
+                "Define only one the samples or times where to extract the epochs, "
+                "not both."
+            )
+
+        elif zero_times is not None:
+            return self.extract_epochs(
+                column=column,
+                n_samples=n_samples,
+                n_samples_before=n_samples_before,
+                zero_samples=self.find_samples_by_time(zero_times),
+                design=design,
+            )
+
+        assert zero_samples is not None  ## always!
         fd = self.dat.loc[:, column]
         n = len(fd)  # samples for data
         n_epochs = len(zero_samples)
@@ -200,7 +221,7 @@ class BeForRecord:
                 t = zs + n_samples
                 if t > n:
                     warnings.warn(
-                        f"extract_force_epochs: last force epoch is incomplete, {t-n} samples missing.",
+                        f"extract_force_epochs: last force epoch is incomplete, {t - n} samples missing.",
                         RuntimeWarning,
                     )
                     tmp = fd[f:]

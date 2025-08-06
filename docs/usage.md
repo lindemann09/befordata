@@ -86,9 +86,9 @@ Example
 
 ```python
 epochs = mydata.extract_epochs("Fx",
-            zero_samples = [1530, 6021, 16983, 28952, 67987],
             n_samples=2000,
-            n_samples_before=10)
+            n_samples_before=10,
+            zero_samples = [1530, 6021, 16983, 28952, 67987])
 print(epochs)
 ```
 

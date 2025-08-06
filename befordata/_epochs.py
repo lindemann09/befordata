@@ -98,7 +98,7 @@ class BeForEpochs:
             raise ValueError("Design column names are not the same.")
 
         self.dat = np.concat([self.dat, other.dat], axis=0)
-        self.design = pd.concat([self.design, other.design], axis=0)
+        self.design = pd.concat([self.design, other.design], ignore_index=True)
         self.baseline = np.append(self.baseline, other.baseline)
 
     def is_baseline_adjusted(self):
