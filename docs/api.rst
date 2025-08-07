@@ -12,6 +12,7 @@ API Reference
    module_tools
    module_arrow
    module_xdf
+   module_plot
    module_csv
 
 Indices and tables
