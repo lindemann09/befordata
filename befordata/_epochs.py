@@ -44,7 +44,8 @@ class BeForEpochs:
         1D numpy array containing baseline values for each epoch at
         `zero_sample`.
     zero_sample : int, optional
-        Sample index representing time zero within each epoch (default: 0).
+        Sample index representing the sample of the time zero within
+        each epoch (default: 0).
 
     """
 
