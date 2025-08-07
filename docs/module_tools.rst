@@ -1,6 +1,6 @@
 
 Module: tools
-==============
+===============
 
 **Several tools for manipulation of BeForRecord and BeForEpochs data**
 
@@ -9,10 +9,6 @@ Module: tools
 .. autofunction:: befordata.tools.detect_sessions
 
 .. autofunction:: befordata.tools.lowpass_filter
-
-
-Epochs functions
-----------------
 
 .. autofunction:: befordata.tools.scale_epochs
 

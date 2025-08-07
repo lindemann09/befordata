@@ -8,7 +8,7 @@ enabling efficient data manipulation and analysis.
 
 MIT License
 
-(c) Oliver Lindemann
+Author: Oliver Lindemann
 
 """
 
