@@ -1,4 +1,6 @@
-# BeForData Usage Examples
+# Usage
+
+BeForData Usage Examples
 
 ## Create BeForRecord from csv-file
 

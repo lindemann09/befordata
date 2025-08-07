@@ -1,6 +1,6 @@
 # Behavioural Force Data (BeForData)
 
-**: Data structures for handling behavioural force data**
+**Data structures for handling behavioural force data**
 
 
 This package provides core classes and utilities for loading, processing, and analysing behavioural force data, such as those collected in experimental psychology or neuroscience. It offers a structured approach to manage epochs and records of force measurements, enabling efficient data manipulation and analysis.
@@ -14,6 +14,8 @@ This package provides core classes and utilities for loading, processing, and an
 - Integration with scientific Python libraries (NumPy, pandas) for advanced analysis.
 
 Source code: https://github.com/lindemann09/befordata
+
+Documentation: https://lindemann09.github.io/befordata/
 
 (c) Oliver Lindemann
 
