@@ -7,7 +7,7 @@ BeForData's documentation!
 ==========================
 
 
-Data structure for handling behavioural force data
+A Python library for efficient handling, analysis, and visualisation of behavioural force data.
 
 |GitHub license| |PyPI|
 

@@ -1,4 +1,12 @@
-"""Before Data"""
+"""
+BeForData: Behavioural Force Data Management
+
+This module defines the `BeForRecord` class for handling behavioural force
+measurement datasets. It provides tools for session management, force data
+manipulation, and conversion to an epoch-based representation. The structure
+encapsulates measurement data, session boundaries, and metadata, offering a
+unified and extensible interface.
+"""
 
 from __future__ import annotations
 
@@ -17,20 +25,24 @@ pd.set_option("mode.copy_on_write", True)
 
 @dataclass
 class BeForRecord:
-    """Data Structure for handling behavioural force measurements
+    """Data Structure for handling behavioural force measurements.
+
+    This data structure encapsulates force measurement data, session information,
+    and metadata, providing methods for session management, force extraction,
+    and epoch extraction.
 
     Parameters
     ----------
-    dat: Pandas Dataframe
-        data
-    sampling_rate: float
-        the sampling rate of the force measurements
-    sessions: list of integer
-        sample numbers at which a new recording session starts
-    time_column :
-            str = ""
-    meta: dictionary
-        any kind of meta data
+    dat : pd.DataFrame
+        The main data table containing force measurements and optionally a time column.
+    sampling_rate : float
+        The sampling rate (Hz) of the force measurements.
+    sessions : list of int, optional
+        List of sample indices where new recording sessions start. Defaults to [0].
+    time_column : str, optional
+        Name of the column containing time stamps. If empty, time stamps are generated.
+    meta : dict, optional
+        Arbitrary metadata associated with the record.
     """
 
     dat: pd.DataFrame
@@ -40,6 +52,7 @@ class BeForRecord:
     meta: dict = field(default_factory=dict)
 
     def __post_init__(self):
+        """Validate and initialize the BeForRecord instance."""
         if not isinstance(self.dat, pd.DataFrame):
             raise TypeError(f"must be pandas.DataFrame, not {type(self.dat)}")
 
@@ -59,6 +72,7 @@ class BeForRecord:
         self.force_cols = np.flatnonzero(self.dat.columns != self.time_column)
 
     def __repr__(self):
+        """Return a string representation of the BeForRecord instance."""
         rtn = "BeForRecord"
         rtn += f"\n  sampling_rate: {self.sampling_rate}"
         rtn += f", n sessions: {self.n_sessions()}"
@@ -71,21 +85,45 @@ class BeForRecord:
         return rtn
 
     def n_samples(self) -> int:
-        """Number of sample in all sessions"""
+        """Return the total number of samples across all sessions.
+
+        Returns
+        -------
+        int
+            Number of samples (rows) in the data.
+        """
         return self.dat.shape[0]
 
     def n_forces(self) -> int:
-        """Number of force columns"""
+        """Return the number of force columns.
+
+        Returns
+        -------
+        int
+            Number of force measurement columns (excluding the time column).
+        """
         return len(self.force_cols)
 
     def n_sessions(self) -> int:
-        """Number of recoding sessions"""
+        """Return the number of recording sessions.
+
+        Returns
+        -------
+        int
+            Number of sessions.
+        """
         return len(self.sessions)
 
     def time_stamps(self) -> NDArray[np.floating]:
-        """The time stamps (numpy array)
+        """Return the time stamps as a numpy array.
 
-        Creates time stamps, of they are not define in the data
+        If a time column is specified, its values are returned.
+        Otherwise, time stamps are generated based on the sampling rate.
+
+        Returns
+        -------
+        np.ndarray
+            Array of time stamps (float).
         """
         if len(self.time_column) > 0:
             return self.dat.loc[:, self.time_column].to_numpy()
@@ -95,7 +133,19 @@ class BeForRecord:
             return np.arange(0, final_time, step)
 
     def forces(self, session: int | None = None) -> pd.DataFrame | pd.Series:
-        """Returns force data of a particular column and/or a particular session"""
+        """Return force data for all samples or a specific session.
+
+        Parameters
+        ----------
+        session : int or None, optional
+            If specified, returns force data for the given session index.
+            If None, returns force data for all samples.
+
+        Returns
+        -------
+        pd.DataFrame or pd.Series
+            Force data for the specified session or all data.
+        """
         if session is None:
             return self.dat.loc[:, self.force_cols]  # type: ignore
         else:
@@ -103,17 +153,27 @@ class BeForRecord:
             return self.dat.loc[r.start : r.stop, self.force_cols]  # type: ignore
 
     def add_session(self, dat: pd.DataFrame):
-        """Adds data (dataframe) as a new recording
+        """Append a new recording session to the data.
 
-        Dataframe has to have the same columns as the already existing data
+        The new DataFrame must have the same columns as the existing data.
+
+        Parameters
+        ----------
+        dat : pd.DataFrame
+            DataFrame containing new session data to append.
         """
         nbefore = self.dat.shape[0]
         self.dat = pd.concat([self.dat, dat], ignore_index=True)
         self.sessions.append(nbefore)
 
     def split_sessions(self) -> List[BeForRecord]:
-        """split record in list of records of separate sessions"""
+        """Split the record into a list of BeForRecord objects, one per session.
 
+        Returns
+        -------
+        list of BeForRecord
+            Each element contains data for a single session.
+        """
         rtn = []
         for idx in self.session_ranges():
             dat = BeForRecord(
@@ -123,15 +183,31 @@ class BeForRecord:
                 meta=self.meta,
             )
             rtn.append(dat)
-
         return rtn
 
     def session_ranges(self) -> List[range]:
-        """list of ranges of the samples of all sessions"""
+        """Return a list of sample index ranges for all sessions.
+
+        Returns
+        -------
+        list of range
+            Each range corresponds to the sample indices of a session.
+        """
         return [self.session_range(s) for s in range(len(self.sessions))]
 
     def session_range(self, session: int) -> range:
-        """range of the samples (from, to) of one particular session"""
+        """Return the sample index range for a specific session.
+
+        Parameters
+        ----------
+        session : int
+            Session index.
+
+        Returns
+        -------
+        range
+            Range of sample indices for the session.
+        """
         f = self.sessions[session]
         try:
             t = self.sessions[session + 1]
@@ -140,16 +216,23 @@ class BeForRecord:
         return range(f, t - 1)
 
     def find_samples_by_time(self, times: ArrayLike) -> NDArray:
-        """returns sample index (i) of the closes time in the BeForRecord.
-        Takes the next larger element, if the exact time could not be found.
+        """Find the sample indices closest to the given time stamps.
 
-        .. math:: \\text{time_stamps}[i-1] <= t < \\text{time_stamps}[i]
+        For each time in `times`, returns the index of the next larger or equal time stamp.
 
         Parameters
         ----------
         times : ArrayLike
-            the sorted array of time stamps
+            Array of time stamps to search for.
 
+        Returns
+        -------
+        np.ndarray
+            Array of sample indices corresponding to the input times.
+
+        Notes
+        -----
+        Uses numpy.searchsorted with 'right' side.
         """
         return np.searchsorted(self.time_stamps(), np.atleast_1d(times), "right")
 
@@ -162,32 +245,41 @@ class BeForRecord:
         zero_times: List[float] | NDArray[np.floating] | None = None,
         design: pd.DataFrame = pd.DataFrame(),
     ) -> BeForEpochs:
-        """extracts epochs from BeForRecord
+        """Extract epochs from the force data.
+
+        Extracts epochs centered around specified zero samples or zero times, with a given
+        number of samples before and after each zero point.
 
         Parameters
         ----------
-        column: str
-            name of column containing the force data to be used
-        n_samples: int
-            number of samples to be extract (from zero sample on)
-        n_samples_before: int, optional
-            number of samples to be extracted before the zero sample (default=0)
-        zero_samples: List or np.array of integer, optional
-            zero sample that define the epochs
-        zero_times:  List or np.array of float, optional
-            zero times that define the epochs
-        design: pd.DataFrame, optional
-            design information
+        column : str
+            Name of the column containing the force data to extract.
+        n_samples : int
+            Number of samples to extract after the zero sample.
+        n_samples_before : int
+            Number of samples to extract before the zero sample.
+        zero_samples : list of int or np.ndarray, optional
+            List of sample indices to center epochs on.
+        zero_times : list of float or np.ndarray, optional
+            List of time stamps to center epochs on.
+        design : pd.DataFrame, optional
+            Optional design matrix or metadata for the epochs.
+
+        Returns
+        -------
+        BeForEpochs
+            Object containing the extracted epochs.
+
+        Raises
+        ------
+        ValueError
+            If neither or both of `zero_samples` and `zero_times` are provided.
 
         Notes
         -----
-        Either `zero_samples` or `zero_times` has to be define!
-
-        Use `find_samples_by_time` to get list of zero samples, if you have
-        times only, or simply use `zero_times`
-
+        Provide either `zero_samples` or `zero_times`, not both.
+        Use `find_samples_by_time` to convert times to sample indices if needed.
         """
-
         if zero_samples is None and zero_times is None:
             raise ValueError(
                 "Define either the samples or times where to extract the epochs "
@@ -209,7 +301,7 @@ class BeForRecord:
                 design=design,
             )
 
-        assert zero_samples is not None  ## always!
+        assert zero_samples is not None  # always!
         fd = self.dat.loc[:, column]
         n = len(fd)  # samples for data
         n_epochs = len(zero_samples)
@@ -221,7 +313,8 @@ class BeForRecord:
                 t = zs + n_samples
                 if t > n:
                     warnings.warn(
-                        f"extract_force_epochs: last force epoch is incomplete, {t - n} samples missing.",
+                        "extract_force_epochs: last force epoch is incomplete, "
+                        f"{t - n} samples missing.",
                         RuntimeWarning,
                     )
                     tmp = fd[f:]

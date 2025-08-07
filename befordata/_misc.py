@@ -1,3 +1,7 @@
+"""Miscellaneous helper functions
+
+"""
+
 ENC = "utf-8"
 
 def values_as_string(d: dict) -> dict:
@@ -11,6 +15,16 @@ def values_as_string(d: dict) -> dict:
     return rtn
 
 def try_num(val):
+    """
+    Attempts to convert the input value to an integer or float.
+
+    Args:
+        val: The value to attempt to convert.
+
+    Returns:
+        int, float, or original value: The converted value if possible,
+        otherwise the original input.
+    """
     if isinstance(val, (int, float)):
         return val
     try:

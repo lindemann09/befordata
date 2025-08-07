@@ -1,4 +1,13 @@
-"""Epochs Data Structure"""
+"""
+Epochs Data Structure
+
+This module defines the BeForEpochs data class for organizing and managing
+behavioural force data segmented into epochs. Each epoch is represented as a
+row in a 2D numpy array, with columns corresponding to samples within that
+epoch. The class also maintains metadata such as sampling rate, experimental
+design, baseline values, and the zero sample index.
+
+"""
 
 from __future__ import annotations
 
@@ -12,26 +21,30 @@ from numpy.typing import NDArray
 
 @dataclass
 class BeForEpochs:
-    """Behavioural force data organized epoch-wis
+    """
+    Behavioural force data organized epoch-wise.
 
-    Args
-    ----
-    dat: : 2d numpy array
-        data. Each row of the 2D numpy array represents one epoch. Thus, the number
-        of rows equals the number of epochs and number of columns equals the number
-        of samples in each epoch.
+    This data structure stores and manages behavioural force data segmented
+    into epochs. Each epoch is represented as a row in a 2D numpy array,
+    with columns corresponding to samples within that epoch. Additional
+    metadata such as sampling rate, experimental design, baseline values,
+    and the zero sample index are also maintained.
 
-    sample_rate: float
-        sampling rate of the force measurements
-
+    Attributes
+    ----------
+    dat : NDArray[np.floating]
+        2D numpy array containing the force data. Each row is an epoch,
+        each column a sample.
+    sampling_rate : float
+        Sampling rate of the force measurements (Hz).
     design : pd.DataFrame
-        design data frame
-
-    baseline : numpy array
-        baseline for each epoch at `zero_sample`
-
+        DataFrame containing design/metadata for each epoch (one row per
+        epoch).
+    baseline : NDArray[np.float64]
+        1D numpy array containing baseline values for each epoch at
+        `zero_sample`.
     zero_sample : int, optional
-        sample index that represents the time 0
+        Sample index representing time zero within each epoch (default: 0).
 
     """
 
@@ -76,16 +89,23 @@ class BeForEpochs:
         return rtn
 
     def n_epochs(self) -> int:
-        """number of epochs"""
+        """Return the number of epochs."""
         return self.dat.shape[0]
 
     def n_samples(self) -> int:
-        """number of sample of one epoch"""
+        """Return the number of samples per epoch."""
         return self.dat.shape[1]
 
     def append(self, other: BeForEpochs):
-        """Append epochs to the data structure"""
+        """
+        Append epochs from another BeForEpochs instance.
 
+        Parameters
+        ----------
+        other : BeForEpochs
+            Another BeForEpochs object to append. Must have matching sample count,
+            sampling rate, zero sample, baseline adjustment status, and design columns.
+        """
         if other.n_samples() != self.n_samples():
             raise ValueError("Number of samples per epoch are not the same")
         if other.sampling_rate != self.sampling_rate:
@@ -102,22 +122,27 @@ class BeForEpochs:
         self.baseline = np.append(self.baseline, other.baseline)
 
     def is_baseline_adjusted(self):
-        """Returns true if data is baseline adjusted"""
+        """
+        Check if baseline adjustment has been applied.
+
+        Returns
+        -------
+        bool
+            True if baseline adjustment has been applied, False otherwise.
+        """
         return len(self.baseline) > 0
 
     def adjust_baseline(self, reference_window: Tuple[int, int]):
-        """Adjust the baseline of each epoch using the mean value of
-        a defined range of sample (reference window)
+        """
+        Adjust the baseline of each epoch using the mean value of a defined sample window.
 
         Parameters
         ----------
         reference_window : Tuple[int, int]
-            sample range that is used for the baseline adjustment
-
+            Tuple specifying the sample range (start, end) used for baseline adjustment.
         """
-
         if self.is_baseline_adjusted():
-            dat = self.dat + np.atleast_2d(self.baseline).T  # rest baseline
+            dat = self.dat + np.atleast_2d(self.baseline).T  # restore baseline
         else:
             dat = self.dat
         i = range(reference_window[0], reference_window[1])

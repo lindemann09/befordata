@@ -1,7 +1,5 @@
 """
-converting BeForData struct from and to arrow tables. Using for saving data.
-
-(c) O. Lindemann
+Converting BeForData struct from and to Arrow tables. Used for saving and loading data.
 """
 
 import typing as _tp
@@ -13,29 +11,37 @@ import pyarrow as _pa
 from . import BeForEpochs, BeForRecord, _misc
 from ._misc import ENC
 
-BSL_COL_NAME = '__befor_baseline__'
+BSL_COL_NAME = "__befor_baseline__"
 
-def record_to_arrow(rec:BeForRecord) -> _pa.Table:
-    """converts BeForRecord to ``pyarrow.Table``
 
-    metadata of schema will be defined.
+def record_to_arrow(rec: BeForRecord) -> _pa.Table:
+    """
+    Convert a BeForRecord instance to a pyarrow.Table.
+
+    The resulting Arrow table will include schema metadata for sampling rate,
+    time column, sessions, and any additional metadata from the BeForRecord.
+
+    Parameters
+    ----------
+    rec : BeForRecord
+        The BeForRecord instance to convert.
 
     Returns
     -------
     pyarrow.Table
+        Arrow table representation of the BeForRecord, with metadata.
 
     Examples
     --------
     >>> from pyarrow import feather
     >>> tbl = record_to_arrow(my_record)
     >>> feather.write_feather(tbl, "filename.feather",
-                        compression="lz4", compression_level=6)
-    """
+    ...                      compression="lz4", compression_level=6)
 
-    # Convert the DataFrame to a PyArrow table
+
+    """
     table = _pa.Table.from_pandas(rec.dat, preserve_index=False)
 
-    # Add metadata to the schema (serialize sampling_rate, timestamp, trigger, and meta)
     schema_metadata = {
         "sampling_rate": str(rec.sampling_rate),
         "time_column": rec.time_column,
@@ -44,6 +50,7 @@ def record_to_arrow(rec:BeForRecord) -> _pa.Table:
     schema_metadata.update(_misc.values_as_string(rec.meta))
     return table.replace_schema_metadata(schema_metadata)
 
+
 def arrow_to_record(
     tbl: _pa.Table,
     sampling_rate: float | None = None,
@@ -51,11 +58,36 @@ def arrow_to_record(
     time_column: str | None = None,
     meta: dict | None = None,
 ) -> BeForRecord:
-    """Creates BeForRecord struct from `pyarrow.Table`
+    """
+    Create a BeForRecord instance from a pyarrow.Table.
+
+    Reads metadata from the Arrow schema to reconstruct the BeForRecord's
+    sampling rate, time column, sessions, and meta dictionary.
 
     Parameters
     ----------
     tbl : pyarrow.Table
+        Arrow table to convert.
+    sampling_rate : float, optional
+        Override the sampling rate from metadata.
+    sessions : list of int, optional
+        Override the sessions from metadata.
+    time_column : str, optional
+        Override the time column from metadata.
+    meta : dict, optional
+        Additional metadata to merge with Arrow metadata.
+
+    Returns
+    -------
+    BeForRecord
+        The reconstructed BeForRecord instance.
+
+    Raises
+    ------
+    TypeError
+        If `tbl` is not a pyarrow.Table.
+    RuntimeError
+        If no sampling rate is defined.
 
     Examples
     --------
@@ -63,11 +95,9 @@ def arrow_to_record(
     >>> dat = arrow_to_record(read_table("my_force_data.feather"))
 
     """
-
     if not isinstance(tbl, _pa.Table):
         raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
 
-    # search arrow meta data for befor record parameter
     arrow_meta = {}
     if tbl.schema.metadata is not None:
         for k, v in tbl.schema.metadata.items():
@@ -83,7 +113,6 @@ def arrow_to_record(
             else:
                 arrow_meta[k.decode(ENC)] = _misc.try_num(v.decode(ENC).strip())
 
-    # make befor meta data
     if isinstance(meta, dict):
         meta.update(arrow_meta)
     else:
@@ -101,31 +130,38 @@ def arrow_to_record(
         sampling_rate=sampling_rate,
         sessions=sessions,
         time_column=time_column,
-        meta=meta
+        meta=meta,
     )
 
 
-def epochs_to_arrow(rec:BeForEpochs) -> _pa.Table:
-    """converts BeForEpochs to ``pyarrow.Table``
+def epochs_to_arrow(rec: BeForEpochs) -> _pa.Table:
+    """
+    Convert a BeForEpochs instance to a pyarrow.Table.
 
-    Samples and design will be concatenated to one arrow table. If baseline
-    is adjusted, additionally the baseline value will be added a column.
+    The resulting Arrow table will contain both the sample data and the design
+    matrix. If baseline adjustment was performed, the baseline values are
+    included as an additional column. Metadata for sampling rate and zero sample
+    are stored in the schema.
 
-    Zero sample and sampling_rate will be included to schema meta data.
-    of schema will be defined.
+    Parameters
+    ----------
+    rec : BeForEpochs
+        The BeForEpochs instance to convert.
 
     Returns
     -------
     pyarrow.Table
+        Arrow table representation of the BeForEpochs, with metadata.
 
     Examples
     --------
     >>> from pyarrow import feather
-    >>> tbl = record_to_arrow(my_epochs)
+    >>> tbl = epochs_to_arrow(my_epochs)
     >>> feather.write_feather(tbl, "my_epochs.feather",
-                        compression="lz4", compression_level=6)
-    """
+    ...                      compression="lz4", compression_level=6)
 
+
+    """
     dat = _pd.concat([_pd.DataFrame(rec.dat), rec.design], axis=1)
     if rec.is_baseline_adjusted():
         dat[BSL_COL_NAME] = rec.baseline
@@ -133,7 +169,7 @@ def epochs_to_arrow(rec:BeForEpochs) -> _pa.Table:
 
     schema_metadata = {
         "sampling_rate": str(rec.sampling_rate),
-        "zero_sample": str(rec.zero_sample)
+        "zero_sample": str(rec.zero_sample),
     }
     return tbl.replace_schema_metadata(schema_metadata)
 
@@ -143,11 +179,32 @@ def arrow_to_epochs(
     sampling_rate: float | None = None,
     zero_sample: int | None = None,
 ) -> BeForEpochs:
-    """Creates BeForEpoch struct from `pyarrow.Table`
+    """
+    Create a BeForEpochs instance from a pyarrow.Table.
+
+    Reads metadata from the Arrow schema to reconstruct the BeForEpochs'
+    sampling rate and zero sample. Extracts baseline values if present.
 
     Parameters
     ----------
     tbl : pyarrow.Table
+        Arrow table to convert.
+    sampling_rate : float, optional
+        Override the sampling rate from metadata.
+    zero_sample : int, optional
+        Override the zero sample from metadata.
+
+    Returns
+    -------
+    BeForEpochs
+        The reconstructed BeForEpochs instance.
+
+    Raises
+    ------
+    TypeError
+        If `tbl` is not a pyarrow.Table.
+    RuntimeError
+        If no sampling rate is defined.
 
     Examples
     --------
@@ -155,11 +212,9 @@ def arrow_to_epochs(
     >>> dat = arrow_to_epochs(read_table("my_epochs.feather"))
 
     """
-
     if not isinstance(tbl, _pa.Table):
         raise TypeError(f"must be pyarrow.Table, not {type(tbl)}")
 
-    # search arrow meta data for befor parameter
     if tbl.schema.metadata is not None:
         for k, v in tbl.schema.metadata.items():
             if k == b"sampling_rate":
@@ -184,7 +239,6 @@ def arrow_to_epochs(
     except KeyError:
         baseline = _np.array([])
 
-    # n_epoch_samples: count columns_name that have not int as name
     n_epoch_samples = dat.shape[1]
     for cn in reversed(dat.columns):
         try:
@@ -194,9 +248,9 @@ def arrow_to_epochs(
             n_epoch_samples -= 1
 
     return BeForEpochs(
-        dat= dat.iloc[:, :n_epoch_samples],
+        dat=dat.iloc[:, :n_epoch_samples],
         sampling_rate=sampling_rate,
         design=dat.iloc[:, n_epoch_samples:],
         baseline=baseline,
-        zero_sample=zero_sample
+        zero_sample=zero_sample,
     )

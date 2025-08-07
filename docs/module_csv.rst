@@ -1,7 +1,7 @@
 Module: csv
 ==============
 
-Reading compressed csv files with comments
+Support for reading compressed CSV files with embedded comments
 
 .. autofunction:: befordata.csv.read_csv
 

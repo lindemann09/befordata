@@ -1,7 +1,47 @@
-"""BeForData structure for handling behavioural force data"""
+"""
+BeForData: Python data structures for handling behavioural force data.
+
+This package provides core classes and utilities for loading, processing, and analysing
+behavioural force data, such as those collected in experimental psychology or neuroscience.
+It offers a structured approach to manage epochs and records of force measurements,
+enabling efficient data manipulation and analysis.
+
+Main Components:
+----------------
+- BeForEpochs: A container class for managing multiple epochs of force data. Each epoch
+    represents a segment of continuous force measurements, typically corresponding to a trial
+    or experimental condition. BeForEpochs provides methods for slicing, indexing, and
+    batch-processing epochs, as well as for loading and saving epoch data from various formats.
+
+- BeForRecord: Represents a single continuous recording of force data, including metadata
+    such as sampling rate, channel information, and experimental annotations. BeForRecord
+    supports data cleaning, resampling, and extraction of epochs, and provides convenient
+    access to raw and processed force signals.
+
+Features:
+---------
+- Flexible loading and saving of force data in common formats (e.g., CSV, HDF5).
+- Efficient slicing and indexing of epochs and records for batch analysis.
+- Metadata management for experimental context, including event markers and annotations.
+- Utilities for preprocessing, such as filtering, baseline correction, and artifact removal.
+- Integration with scientific Python libraries (NumPy, pandas) for advanced analysis.
+
+Typical Workflow:
+-----------------
+1. Load raw force data into a BeForRecord object.
+2. Preprocess and annotate the data as needed.
+3. Segment the data into epochs using event markers, creating a BeForEpochs object.
+
+Author:
+-------
+Oliver Lindemann
+
+"""
 
 __author__ = "Oliver Lindemann"
 __version__ = "0.3.5b"
+
+__all__ = ["BeForEpochs", "BeForRecord"]
 
 from ._epochs import BeForEpochs
 from ._record import BeForRecord

@@ -1,10 +1,10 @@
 # Usage
 
-## “BeForData”: Behavioral Force Data
+## “BeForData”: behavioural Force Data
 
 
 - [Usage](#usage)
-  - [“BeForData”: Behavioral Force Data](#befordata-behavioral-force-data)
+  - [“BeForData”: behavioural Force Data](#befordata-behavioural-force-data)
   - [Create BeForRecord from csv-file](#create-beforrecord-from-csv-file)
   - [Epochs-based representation](#epochs-based-representation)
   - [Pyarrow \& Feather Format](#pyarrow--feather-format)
@@ -15,7 +15,7 @@
 
 Install package
 
-    pip install beforedata
+    pip install befordata
 
 ## Create BeForRecord from csv-file
 
@@ -85,7 +85,7 @@ print(epochs)
 
 **Note**:
 
-BeForEpochs should contain information about the exerimental design. See
+BeForEpochs should contain information about the experimental design. See
 the example of data preprocessing below.
 
 ## Pyarrow & Feather Format

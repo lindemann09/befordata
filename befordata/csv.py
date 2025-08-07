@@ -1,5 +1,4 @@
-"""Reading compressed csv files with comments
-"""
+"""Reading compressed csv files with comments"""
 
 import gzip as _gzip
 import lzma as _lzma
@@ -17,29 +16,29 @@ def read_csv(
     encoding: str = "utf-8",
     comment_char: str = "#",
 ) -> _Tuple[_pd.DataFrame, _List[str]]:
-    """Reads CSV file
+    """
+    Reads a CSV file, supporting comments and compression.
 
-    The function can handle comments as well as compressed CSVs, if they end
-    with `.csv.xz` or `.csv.gz`
+    This function reads a CSV file, optionally compressed with `.xz` or `.gz`, and extracts
+    any comment lines (lines starting with `comment_char`). The comments are returned as a list,
+    and the CSV data is loaded into a pandas DataFrame.
 
     Parameters
     ----------
-    file_path : str | Path
-        the path to the CSV file. If file end with `.csv.xz` or `.csv.gz`,
-        decompression will be used
-    columns : str | list[str], Optional
-        the columns that should be read. If no columns are specified all columns
-        are read
-    encoding : str, optional
-        file encoding, default="utf-8",
-
-    comment_char : str, Optional
-        line starting with character or string will be treated as comments and
-        returned as a list of strings.
+    file_path : str or pathlib.Path
+        Path to the CSV file. Supports uncompressed, `.csv.xz`, or `.csv.gz` files.
+    columns : str or list of str, optional
+        Column name or list of column names to select from the CSV. If None, all columns are read.
+    encoding : str, default "utf-8"
+        File encoding to use when reading the file.
+    comment_char : str, default "#"
+        Lines starting with this character are treated as comments and returned separately.
 
     Returns
     -------
-    pandas.DataFrame and list[str] with all comments
+    tuple
+        (pandas.DataFrame, list of str)
+        DataFrame containing the CSV data, and a list of comment lines.
     """
 
     p = _Path(file_path)
@@ -52,19 +51,18 @@ def read_csv(
 
     csv_str = ""
     comments = []
-    for l in fl.readlines():
-        if l.startswith(comment_char):
-            comments.append(l)
+    for line in fl.readlines():
+        if line.startswith(comment_char):
+            comments.append(line)
         else:
-            csv_str += l
+            csv_str += line
     fl.close()
 
     df = _pd.read_csv(_StringIO(csv_str))
-    df = df.copy() # copy: to solve potential fragmented dataframe problem
+    df = df.copy()  # copy: to solve potential fragmented dataframe problem
     if isinstance(columns, str):
         columns = [columns]
     if isinstance(columns, list):
         df = df.loc[:, columns]
 
     return df, comments
-
