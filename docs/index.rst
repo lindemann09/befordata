@@ -1,28 +1,56 @@
-.. BeForData documentation master file, created by
-   sphinx-quickstart on Thu Dec  5 15:56:33 2024.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Behavioural Force Data (BeForData)
+==================================
 
-BeForData's documentation!
-==========================
+**Data structures for handling behavioural force data**
 
+This package provides core classes and utilities for loading, processing, and analysing behavioural force data, such as those collected in experimental psychology or neuroscience. It offers a structured approach to manage epochs and records of force measurements, enabling efficient data manipulation and analysis.
 
-A Python library for efficient handling, analysis, and visualisation of behavioural force data.
+**Features**
+
+- Flexible loading and saving of force data in common formats (e.g., CSV, XDF).
+- Efficient slicing and indexing of epochs and records for batch analysis.
+- Metadata management for experimental context, including event markers and annotations.
+- Utilities for preprocessing, such as filtering and baseline correction.
+- Integration with scientific Python libraries (NumPy, pandas) for advanced analysis.
+
+Source code: https://github.com/lindemann09/befordata
+
+\(c\) Oliver Lindemann
 
 |GitHub license| |PyPI|
 
-GitHub: https://github.com/lindemann09/befordata
+Main Components
+----------------
 
+- **BeForEpochs**
+    A container class for managing multiple epochs of force data. Each epoch represents a segment of continuous force measurements, typically corresponding to a trial or experimental condition. BeForEpochs provides methods for slicing, indexing, and batch-processing epochs, as well as for loading and saving epoch data from various formats.
+
+- **BeForRecord**
+    Represents a single continuous recording of force data, including metadata such as sampling rate, channel information, and experimental annotations. BeForRecord supports data cleaning, resampling, and extraction of epochs, and provides convenient access to raw and processed force signals.
+
+
+Typical Workflow
+----------------
+
+1. Load raw force data into a BeForRecord object.
+2. Preprocess and annotate the data as needed.
+3. Segment the data into epochs using event markers, creating a BeForEpochs object.
+
+See :doc:`usage` for a detailed usage guide.
 
 Install via pip
----------------
+----------------
 
 ::
 
    pip install befordata
 
 
-\(c\) Oliver Lindemann
+Julia
+-----
+
+A `Julia implementation of BeForData <https://github.com/lindemann09/BeForData.jl>`_
+is available as a beta release.
 
 .. |GitHub license| image:: https://img.shields.io/github/license/lindemann09/befordata
    :target: https://github.com/lindemann09/befordata/blob/master/LICENSE
@@ -30,10 +58,11 @@ Install via pip
    :target: https://pypi.org/project/befordata/
 
 
+Contents
+========
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    usage
    api
