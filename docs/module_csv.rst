@@ -1,5 +1,5 @@
 Module: csv
-============
+===============
 
 **Support for reading compressed CSV files with embedded comments**
 
