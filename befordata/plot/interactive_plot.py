@@ -18,7 +18,7 @@ class InteractiveXYPlot(object):
         self,
         x_vals: NDArray,
         y_vals: NDArray,
-        win_width=100,
+        win_width:float,
         y_factor: float = 1.1,
         figsize=(14, 4),
     ):
@@ -30,8 +30,7 @@ class InteractiveXYPlot(object):
             win_width=win_width,
             y_factor=y_factor,
             y_range=(np.max(y_vals) - np.min(y_vals)),
-            center_y=np.mean(y_vals[0:win_width]),
-            min_window_width=10,
+            center_y=np.mean(y_vals[0:win_width])
         )
 
     def _create_plot(self, figsize):
@@ -48,12 +47,11 @@ class InteractiveXYPlot(object):
         y_factor: float,
         y_range: float,
         center_y: float | np.floating,
-        min_window_width: float = 10,
     ) -> None:
         """Initialize sliders for the interactive plot."""
         max_window_width = max_x - min_x
-        if win_width < min_window_width:
-            win_width = min_window_width
+        if win_width <= 0:
+            win_width = max_window_width * 0.10
         elif win_width > max_window_width:
             win_width = max_window_width
 
@@ -75,7 +73,7 @@ class InteractiveXYPlot(object):
         self.slider_winwidth = Slider(
             winwidth_slider_axis,
             "range",
-            valmin=min_window_width,
+            valmin=0,
             valmax=max_window_width,
             valinit=win_width,
         )
@@ -123,7 +121,7 @@ class InteractiveDataFramePlot(InteractiveXYPlot):
         self,
         dat: pd.DataFrame,
         x_column: str,
-        win_width=100,
+        win_width:float,
         y_factor: float = 1.1,
         figsize=(14, 4),
     ):
@@ -156,6 +154,5 @@ class InteractiveDataFramePlot(InteractiveXYPlot):
             win_width=win_width,
             y_factor=y_factor,
             y_range=(max_y - min_y),
-            center_y=center_y,
-            min_window_width=10,
+            center_y=center_y
         )
