@@ -35,9 +35,9 @@ print(mydata)
 
     [2334878 rows x 3 columns]
 
-``` python
-# Adding some additional meta data
+If your data includes time stamps, you must specify the time column when creating the record. The example below also demonstrates how to add a metadata dictionary.
 
+``` python
 mydata = BeForRecord(
     df, sampling_rate=1000, time_column="time", meta={"Exp": "my experiment"}
 )
@@ -68,10 +68,7 @@ print(epochs)
       sampling_rate: 1000, zero_sample: 10
       design: None
 
-**Note**:
-
-BeForEpochs should contain information about the experimental design. See
-the example of data preprocessing below.
+**Note**: BeForEpochs should usually contain information about the experimental design. See the example of data preprocessing below.
 
 ## Pyarrow & Feather Format
 
@@ -86,7 +83,7 @@ from befordata import arrow
 
 # writing
 tbl = arrow.record_to_arrow(mydata)
-write_feather(tbl, "demo.feather", compression="lz4", compression_level=6)
+write_feather(tbl, "demo.feather")
 
 # reading
 mydata2 = arrow.arrow_to_record(read_table("demo.feather"))
@@ -97,7 +94,8 @@ mydata2 = arrow.arrow_to_record(read_table("demo.feather"))
 ``` python
 # writing
 tbl = arrow.epochs_to_arrow(epochs)
-write_feather(tbl, "epochs.feather", compression="lz4", compression_level=6)
+write_feather(tbl, "epochs.feather",
+    compression="lz4", compression_level=8) # optional compression parameters
 
 # reading
 epochs2 = arrow.arrow_to_epochs(read_table("epochs.feather"))

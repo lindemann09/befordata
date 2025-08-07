@@ -1,6 +1,8 @@
 
 Module: tools
-================
+==============
+
+**Several tools for manipulation of BeForRecord and BeForEpochs data**
 
 .. autofunction:: befordata.tools.scale_record
 

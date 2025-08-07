@@ -1,10 +1,9 @@
 Module: xdf
-==============
+============
 
-Converting XDF streaming data from `pyxdf` to BeForData
+**Converting XDF streaming data to BeForData**
 
-Set string variable `befordata.xdf.before.TIME_STAMPS` (default = "time") to
-change column name of the time stamps in the dataframe.
+Use the library *pyxdf* to read XDF files.
 
 .. autofunction:: befordata.xdf.before_record
 
@@ -12,4 +11,11 @@ change column name of the time stamps in the dataframe.
 
 .. autofunction:: befordata.xdf.channel_info
 
+
+Globals
+--------
+
+To change the column name for time stamps in the dataframe, modify the global string
+variable ``befordata.xdf.before.TIME_STAMPS`` (default: ``"time"``). Set this variable
+to your preferred column name before loading data.
 

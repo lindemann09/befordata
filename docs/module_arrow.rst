@@ -1,6 +1,11 @@
 
 Module: arrow
-================
+==============
+
+**Loading and saving BeForRecord data in Apache Arrow format**
+
+
+To use this module, please install the python library *pyarrow*
 
 .. autofunction:: befordata.arrow.record_to_arrow
 

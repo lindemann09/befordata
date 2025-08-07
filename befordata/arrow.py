@@ -6,7 +6,12 @@ import typing as _tp
 
 import numpy as _np
 import pandas as _pd
-import pyarrow as _pa
+
+try:
+    import pyarrow as _pa
+except ImportError:
+    raise ImportError("pyarrow is required for BeForData Arrow support. "
+                      "Please install it with `pip install pyarrow`.")
 
 from . import BeForEpochs, BeForRecord, _misc
 from ._misc import ENC
@@ -253,4 +258,5 @@ def arrow_to_epochs(
         design=dat.iloc[:, n_epoch_samples:],
         baseline=baseline,
         zero_sample=zero_sample,
+    )
     )

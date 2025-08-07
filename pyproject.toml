@@ -10,10 +10,11 @@ license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
 requires-python = ">=3.10"
-dependencies =  ["numpy>=1.22",
-            "pandas>=2.2",
-            "scipy>=1.14",
-            "pyarrow>=17.0"]
+dependencies =  [
+    "numpy>=2.2.6",
+    "pandas>=2.3.1",
+    "scipy>=1.15.3",
+]
 
 [project.urls]
 Home = "https://github.com/lindemann09/befordata"
@@ -21,3 +22,9 @@ Home = "https://github.com/lindemann09/befordata"
 [project.optional-dependencies]
 docs = ["sphinx>=8.1", "pydata-sphinx-theme>=0.16.0",
         "sphinx_autodoc_typehints>=2.5.0", "numpydoc>=1.7", "myst_parser>=4.0"]
+plot = [
+    "matplotlib>=3.10.5",
+]
+arrow = [
+    "pyarrow>=21.0.0",
+]
