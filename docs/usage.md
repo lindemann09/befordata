@@ -1,21 +1,4 @@
-# Usage
-
-## “BeForData”: behavioural Force Data
-
-
-- [Usage](#usage)
-  - [“BeForData”: behavioural Force Data](#befordata-behavioural-force-data)
-  - [Create BeForRecord from csv-file](#create-beforrecord-from-csv-file)
-  - [Epochs-based representation](#epochs-based-representation)
-  - [Pyarrow \& Feather Format](#pyarrow--feather-format)
-    - [Writing and reading BeforRecord using the feather format](#writing-and-reading-beforrecord-using-the-feather-format)
-    - [Writing and reading epochs](#writing-and-reading-epochs)
-  - [Extracting data for XDF files (as used by LSL)](#extracting-data-for-xdf-files-as-used-by-lsl)
-  - [Example of data preprocessing with experimental design](#example-of-data-preprocessing-with-experimental-design)
-
-Install package
-
-    pip install befordata
+# BeForData Usage Examples
 
 ## Create BeForRecord from csv-file
 
