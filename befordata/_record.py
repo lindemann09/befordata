@@ -6,6 +6,7 @@ measurement datasets. It provides tools for session management, force data
 manipulation, and conversion to an epoch-based representation. The structure
 encapsulates measurement data, session boundaries, and metadata, offering a
 unified and extensible interface.
+
 """
 
 from __future__ import annotations

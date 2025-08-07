@@ -30,7 +30,7 @@ class BeForEpochs:
     metadata such as sampling rate, experimental design, baseline values,
     and the zero sample index are also maintained.
 
-    Attributes
+    Parameters
     ----------
     dat : NDArray[np.floating]
         2D numpy array containing the force data. Each row is an epoch,
