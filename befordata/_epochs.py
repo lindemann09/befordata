@@ -97,7 +97,7 @@ class BeForEpochs:
         return self.dat.shape[1]
 
 
-    def is_baseline_adjusted(self):
+    def is_baseline_adjusted(self) -> bool:
         """
         Check if baseline adjustment has been applied.
 

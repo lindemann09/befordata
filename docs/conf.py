@@ -29,9 +29,9 @@ extensions = [
     # "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
     "sphinx.ext.autosummary",
-    "sphinx.ext.napoleon",
+    # "sphinx.ext.napoleon",
     "numpydoc",
-    "myst_parser",
+    "myst_parser",  # markdown support
 ]
 
 templates_path = ["_templates"]
@@ -43,14 +43,25 @@ source_suffix = [".rst", ".md"]
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "pydata_sphinx_theme"
+# html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 html_show_sourcelink = False
-html_theme_options = {"show_nav_level": 2}
-
+html_theme_options = {"show_nav_level": 2,
+                      }
 
 numpydoc_show_class_members = True
 add_module_names = False
-typehints_use_rtype = False # return type is not shown in the signature
+
+
+typehints_use_rtype = False
 typehints_use_signature = False
 typehints_use_signature_return = True
+
+autodoc_type_aliases = {
+    "NDArray": "NDArray",
+    "DataFrame": "pd.DataFrame",
+    "ArrayLike": "ArrayLike",
+}
+
+autosummary_generate = True

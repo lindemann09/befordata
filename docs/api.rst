@@ -7,13 +7,10 @@ API Reference
 .. toctree::
    :maxdepth: 1
 
-   beforrecord
-   beforepochs
-   module_tools
-   module_arrow
-   module_xdf
-   module_plot
-   module_csv
+   data_struct
+   tools
+   file_formats
+   visualizing
 
 Indices and tables
 ------------------

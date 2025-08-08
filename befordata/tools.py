@@ -187,8 +187,7 @@ def extract_epochs(
     zero_times: _tp.List[float] | _NDArray[_np.floating] | None = None,
     design: _pd.DataFrame = _pd.DataFrame(),
 ) -> BeForEpochs:
-    """Extract epochs from the force data.
-
+    """
     Extracts epochs centred around specified zero samples or zero times, with a given
     number of samples before and after each zero point.
 

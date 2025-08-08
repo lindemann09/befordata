@@ -5,6 +5,10 @@
 
 This package provides core classes and utilities for loading, processing, and analysing behavioural force data, such as those collected in experimental psychology or neuroscience. It offers a structured approach to manage epochs and records of force measurements, enabling efficient data manipulation and analysis.
 
+BeForData is based on two structured classes of force data: one for the representation of
+the raw time-based force measurements in the shape of a dataframe (**BeForRecord**) and
+one for epoch-based representations as matrices (**BeForEpochs**).
+
 **Features**
 
 - Flexible loading and saving of force data in common formats (e.g., CSV, XDF).
@@ -22,7 +26,7 @@ Documentation: https://lindemann09.github.io/befordata/
 [![GitHub license](https://img.shields.io/github/license/lindemann09/befordata)](https://github.com/lindemann09/befordata/blob/master/LICENSE) [![PyPI](https://img.shields.io/pypi/v/befordata?style=flat)](https://pypi.org/project/befordata/)
 
 
-## Main Components
+## Data Structures
 
 - **BeForRecord**
    Represents a single continuous recording of force data, including metadata such as
