@@ -12,7 +12,6 @@ design, baseline values, and the zero sample index.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -97,30 +96,6 @@ class BeForEpochs:
         """Return the number of samples per epoch."""
         return self.dat.shape[1]
 
-    def append(self, other: BeForEpochs):
-        """
-        Append epochs from another BeForEpochs instance.
-
-        Parameters
-        ----------
-        other : BeForEpochs
-            Another BeForEpochs object to append. Must have matching sample count,
-            sampling rate, zero sample, baseline adjustment status, and design columns.
-        """
-        if other.n_samples() != self.n_samples():
-            raise ValueError("Number of samples per epoch are not the same")
-        if other.sampling_rate != self.sampling_rate:
-            raise ValueError("Sampling rates are not the same.")
-        if other.zero_sample != self.zero_sample:
-            raise ValueError("Zero samples are not the same.")
-        if other.is_baseline_adjusted() != self.is_baseline_adjusted():
-            raise ValueError("One data structure is baseline adjusted, the other not.")
-        if np.any(other.design.columns != self.design.columns):
-            raise ValueError("Design column names are not the same.")
-
-        self.dat = np.concat([self.dat, other.dat], axis=0)
-        self.design = pd.concat([self.design, other.design], ignore_index=True)
-        self.baseline = np.append(self.baseline, other.baseline)
 
     def is_baseline_adjusted(self):
         """
@@ -132,20 +107,3 @@ class BeForEpochs:
             True if baseline adjustment has been applied, False otherwise.
         """
         return len(self.baseline) > 0
-
-    def adjust_baseline(self, reference_window: Tuple[int, int]):
-        """
-        Adjust the baseline of each epoch using the mean value of a defined sample window.
-
-        Parameters
-        ----------
-        reference_window : Tuple[int, int]
-            Tuple specifying the sample range (start, end) used for baseline adjustment.
-        """
-        if self.is_baseline_adjusted():
-            dat = self.dat + np.atleast_2d(self.baseline).T  # restore baseline
-        else:
-            dat = self.dat
-        i = range(reference_window[0], reference_window[1])
-        self.baseline = np.mean(dat[:, i], axis=1)
-        self.dat = dat - np.atleast_2d(self.baseline).T

@@ -1,8 +1,13 @@
 # Usage
 
+
 BeForData Usage Examples
 
 ## Create BeForRecord from csv-file
+
+If your data includes time stamps, you must specify the time column when
+creating the record. The example below also demonstrates how to add a
+metadata dictionary.
 
 ``` python
 import pandas as pd
@@ -35,8 +40,6 @@ print(mydata)
 
     [2334878 rows x 3 columns]
 
-If your data includes time stamps, you must specify the time column when creating the record. The example below also demonstrates how to add a metadata dictionary.
-
 ``` python
 mydata = BeForRecord(
     df, sampling_rate=1000, time_column="time", meta={"Exp": "my experiment"}
@@ -54,8 +57,9 @@ Example
 -   the 6 epochs start at the 6 “zero samples”
 
 ``` python
-epochs = mydata.extract_epochs(
-    "Fx",
+from befordata import tools
+
+epochs = tools.extract_epochs(mydata, "Fx",
     zero_samples=[1530, 6021, 16983, 28952, 67987],
     n_samples=2000,
     n_samples_before=10,
@@ -68,7 +72,8 @@ print(epochs)
       sampling_rate: 1000, zero_sample: 10
       design: None
 
-**Note**: BeForEpochs should usually contain information about the experimental design. See the example of data preprocessing below.
+**Note**: BeForEpochs should usually contain information about the
+experimental design. See the example of data preprocessing below.
 
 ## Pyarrow & Feather Format
 
@@ -117,7 +122,7 @@ rec
 
     BeForRecord
       sampling_rate: 1000, n sessions: 1
-      time_column: time_stamps
+      time_column: time
       metadata
       - name: MousePosition
       - type: Position
@@ -125,7 +130,7 @@ rec
       - channel_format: float32
       - clock_times: [29570.8205096245, 29575.8203263595, 29580.8201211015]
       - clock_values: [-7.819500751793385e-06, -7.819498932803981e-06, -5.864501872565597e-06]
-          time_stamps  MouseX  MouseY
+                 time  MouseX  MouseY
     0    29570.255833   592.0   373.0
     1    29570.268411   575.0   373.0
     2    29570.280998   553.0   373.0
@@ -156,22 +161,22 @@ mydata = BeForRecord(
 )
 
 # 3. detect pauses and treat data as recording with different sessions
-mydata = tools.detect_sessions(mydata, time_gap=2000)
+tools.detect_sessions(mydata, time_gap=2000)
 
 # 4. filter data (takes into account the different sessions)
-mydata = tools.lowpass_filter(mydata, cutoff=30, order=4)
+flt_data = tools.lowpass_filter(mydata, cutoff=30, order=4)
 
 # 5. read design data (csv)
 design = pd.read_csv("samples/demo_design_data.csv")
 
 # 6. extract epochs
-ep = mydata.extract_epochs(
-    "Fx", n_samples=5000, n_samples_before=100, design=design,
+ep = tools.extract_epochs(flt_data, "Fx",
+    n_samples=5000, n_samples_before=100, design=design,
     zero_times = design.trial_time
 )
 
 # 7. adjust baseline
-ep.adjust_baseline((80, 100))
+tools.adjust_baseline(ep, (80, 100))
 
 print(ep)
 ```
