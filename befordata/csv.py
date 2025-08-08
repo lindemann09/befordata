@@ -19,26 +19,26 @@ def read_csv(
     """
     Reads a CSV file, supporting comments and compression.
 
-    This function reads a CSV file, optionally compressed with `.xz` or `.gz`, and extracts
-    any comment lines (lines starting with `comment_char`). The comments are returned as a list,
-    and the CSV data is loaded into a pandas DataFrame.
+    This function reads a CSV file and returns a Pandas DataFrame,
+    optionally compressed with `.xz` or `.gz`, and extracts any comment
+    lines (lines starting with `comment_char`). The comments are returned
+    as a list, and the CSV data is loaded into a pandas DataFrame.
 
     Parameters
     ----------
     file_path : str or pathlib.Path
-        Path to the CSV file. Supports uncompressed, `.csv.xz`, or `.csv.gz` files.
+        Path to the CSV file. Supports uncompressed, `.csv.xz`, or
+        `.csv.gz` files.
     columns : str or list of str, optional
-        Column name or list of column names to select from the CSV. If None, all columns are read.
+        Column name or list of column names to select from the CSV.
+        If None, all columns are read.
     encoding : str, default "utf-8"
         File encoding to use when reading the file.
     comment_char : str, default "#"
-        Lines starting with this character are treated as comments and returned separately.
+        Lines starting with this character are treated as comments and
+        returned separately.
 
-    Returns
-    -------
-    tuple
-        (pandas.DataFrame, list of str)
-        DataFrame containing the CSV data, and a list of comment lines.
+
     """
 
     p = _Path(file_path)

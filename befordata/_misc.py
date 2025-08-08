@@ -21,8 +21,7 @@ def try_num(val):
     Args:
         val: The value to attempt to convert.
 
-    Returns:
-        int, float, or original value: The converted value if possible,
+    Returns an int, float, or original value: The converted value if possible,
         otherwise the original input.
     """
     if isinstance(val, (int, float)):

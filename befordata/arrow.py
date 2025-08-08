@@ -31,11 +31,6 @@ def record_to_arrow(rec: BeForRecord) -> _pa.Table:
     rec : BeForRecord
         The BeForRecord instance to convert.
 
-    Returns
-    -------
-    pyarrow.Table
-        Arrow table representation of the BeForRecord, with metadata.
-
     Examples
     --------
     >>> from pyarrow import feather
@@ -81,11 +76,6 @@ def arrow_to_record(
         Override the time column from metadata.
     meta : dict, optional
         Additional metadata to merge with Arrow metadata.
-
-    Returns
-    -------
-    BeForRecord
-        The reconstructed BeForRecord instance.
 
     Raises
     ------
@@ -153,10 +143,6 @@ def epochs_to_arrow(rec: BeForEpochs) -> _pa.Table:
     rec : BeForEpochs
         The BeForEpochs instance to convert.
 
-    Returns
-    -------
-    pyarrow.Table
-        Arrow table representation of the BeForEpochs, with metadata.
 
     Examples
     --------
@@ -198,11 +184,6 @@ def arrow_to_epochs(
         Override the sampling rate from metadata.
     zero_sample : int, optional
         Override the zero sample from metadata.
-
-    Returns
-    -------
-    BeForEpochs
-        The reconstructed BeForEpochs instance.
 
     Raises
     ------

@@ -41,13 +41,16 @@ def scale_record(rec: BeForRecord, factor: float) -> None:
     rec.dat.iloc[:, rec.force_cols] *= factor
 
 
-def concat_record(
+def concat_records(
     record_list: _tp.List[BeForRecord] | _tp.Tuple[BeForRecord],
     no_sessions: bool = False,
 ) -> BeForRecord:
     """
-    Concatenate a list or tuple of BeForRecord instances into a single
-    BeForRecord.
+    Concatenate a list or tuple of `BeForRecord` instances into a single
+    `BeForRecord`.
+
+    Returns a `BeForRecord` instance containing the concatenated records from
+        all input objects.
 
     Parameters
     ----------
@@ -58,11 +61,6 @@ def concat_record(
         If True, session information will be ignored during concatenation.
         Default is False.
 
-    Returns
-    -------
-    BeForRecord
-        A new BeForRecord instance containing the concatenated records from
-        all input objects.
 
     Notes
     -----
@@ -159,16 +157,14 @@ def detect_sessions(rec: BeForRecord, time_gap: float) -> None:
 
 
 def split_sessions(rec: BeForRecord) -> _tp.List[BeForRecord]:
-    """Split the record into a list of BeForRecord objects, one per session.
+    """Split the record into a list of `BeForRecord` objects, one per session.
+
+    Returns a list of `BeForRecord` objects, each containing the data for one session.
 
     Parameters
     ----------
     rec : BeForRecord
 
-    Returns
-    -------
-    list of BeForRecord
-        Each element contains data for a single session.
     """
     rtn = []
     for idx in rec.session_ranges():
@@ -196,6 +192,8 @@ def extract_epochs(
     Extracts epochs centred around specified zero samples or zero times, with a given
     number of samples before and after each zero point.
 
+    Returns an `BeForEpochs` object containing the extracted epochs.
+
     Parameters
     ----------
     rec : BeForRecord
@@ -211,11 +209,6 @@ def extract_epochs(
         List of time stamps to center epochs on.
     design : pd.DataFrame, optional
         Optional design matrix or metadata for the epochs.
-
-    Returns
-    -------
-    BeForEpochs
-        Object containing the extracted epochs.
 
     Raises
     ------
@@ -303,11 +296,15 @@ def lowpass_filter(
     rec: BeForRecord, cutoff: float, order: int, center_data: bool = True
 ) -> BeForRecord:
     """
-    Applies a lowpass Butterworth filter to the force data in a BeForRecord.
+    Applies a lowpass Butterworth filter to the force data in a `BeForRecord`.
 
-    This function filters each force data column in every session of the provided BeForRecord
-    using a zero-phase Butterworth lowpass filter. Optionally, the data can be centred
-    (subtracting the first sample) before filtering to reduce edge artifacts.
+    This function filters each force data column in every session of the provided
+    `BeForRecord` using a zero-phase Butterworth lowpass filter. Optionally, the
+    data can be centred (subtracting the first sample) before filtering to reduce
+    edge artifacts.
+
+    Returns a `BeForRecord` instance with the filtered force data. No inplace
+    modification is performed to preserve the original data.
 
     Parameters
     ----------
@@ -319,11 +316,6 @@ def lowpass_filter(
     center_data : bool, optional (default: True)
         If True, center the data by subtracting the first sample before filtering.
 
-    Returns
-    -------
-    BeForRecord
-        A new BeForRecord instance with the filtered force data. No in-place
-        modification is performed to preserve the original data.
 
     Notes
     -----
@@ -357,9 +349,10 @@ def lowpass_filter(
 
 def scale_epochs(epochs: BeForEpochs, factor: float) -> None:
     """
-    Scales the force data (inplace) of the BeForEpochs structure by a specified factor.
+    Scales the force data (inplace) of the `BeForEpochs` structure by a specified
+    factor.
 
-    This function multiplies all force data in the BeForEpochs instance by the
+    This function multiplies all force data in the `BeForEpochs` instance by the
     given scaling factor. The baseline is also scaled accordingly. All other
     attributes (sampling rate, design, zero_sample) are preserved.
 
@@ -368,10 +361,6 @@ def scale_epochs(epochs: BeForEpochs, factor: float) -> None:
     epochs : BeForEpochs
     factor : float
         The scaling factor to apply to the force data and baseline.
-
-    Returns
-    -------
-    BeForEpochs
 
     """
     epochs.dat *= factor
@@ -382,18 +371,15 @@ def concat_epochs(
     epochs_list: _tp.List[BeForEpochs] | _tp.Tuple[BeForEpochs],
 ) -> BeForEpochs:
     """
-    Concatenate a list or tuple of BeForEpochs instances into a single BeForEpochs object.
+    Concatenate a list or tuple of BeForEpochs instances into a single
+    `BeForEpochs` object.
 
     Parameters
     ----------
     epochs_list : list or tuple of BeForEpochs
-        A list or tuple containing BeForEpochs objects to concatenate. All objects must have
-        matching sample count, sampling rate, zero sample, baseline adjustment status, and design columns.
-
-    Returns
-    -------
-    BeForEpochs
-        A new BeForEpochs instance containing the concatenated epochs from all input objects.
+        A list or tuple containing BeForEpochs objects to concatenate. All
+        objects must have matching sample count, sampling rate, zero sample,
+        baseline adjustment status, and design columns.
 
     Raises
     ------

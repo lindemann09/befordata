@@ -29,11 +29,6 @@ def plot_record(
     figsize : tuple, optional
         Size of the figure in inches (width, height), by default (14, 4).
 
-    Returns
-    -------
-    InteractiveDataFramePlot
-        An object representing the interactive plot
-
     Raises
     ------
     AssertionError

@@ -50,6 +50,6 @@ html_theme_options = {"show_nav_level": 2}
 
 
 numpydoc_show_class_members = True
-add_module_names = True
+add_module_names = False
 typehints_use_signature = False
 typehints_use_signature_return = True

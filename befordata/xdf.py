@@ -40,18 +40,15 @@ def channel_info(xdf_streams: _tp.List[dict], channel: int | str) -> _tp.Dict:
     """
     Retrieve metadata information for a specific channel from XDF streaming data.
 
+    Returns a dictionary containing channel metadata such as name, type, channel
+    count, channel format, clock times, and clock values.
+
     Parameters
     ----------
     xdf_streams : list of dict
         List of XDF streams as returned by `pyxdf.load_xdf`.
     channel : int or str
         Channel index (int) or channel name (str).
-
-    Returns
-    -------
-    dict
-        Dictionary containing channel metadata such as name, type, channel count,
-        channel format, clock times, and clock values.
 
     Raises
     ------
@@ -83,8 +80,6 @@ def _channel_labels(xdf_streams: _tp.List[dict], channel: int | str) -> _tp.List
         Channel identifier. Can be an integer index or a string representing
         the channel name.
 
-        A list of channel label strings. If no channel information is found,
-        returns a list containing the stream's name.
 
     Raises
     ------
@@ -110,6 +105,9 @@ def data(xdf_streams: _tp.List[dict], channel: int | str) -> _pd.DataFrame:
     """
     Convert XDF channel data to a pandas DataFrame.
 
+    Returns a Pandas DataFrame containing time stamps and channel data, with
+    columns named according to the global `TIME_STAMPS` variable and channel labels.
+
     Parameters
     ----------
     xdf_streams : list of dict
@@ -117,11 +115,6 @@ def data(xdf_streams: _tp.List[dict], channel: int | str) -> _pd.DataFrame:
     channel : int or str
         Channel index (int) or channel name (str).
 
-    Returns
-    -------
-    pandas.DataFrame
-        DataFrame containing time stamps and channel data, with columns named
-        according to the global TIME_STAMPS variable and channel labels.
 
     Raises
     ------
@@ -142,6 +135,9 @@ def before_record(
     """
     Create a BeForRecord object from XDF stream data.
 
+    Returns a `BeForRecord` object containing the channel data, sampling rate,
+        time column name, and channel metadata.
+
     Parameters
     ----------
     xdf_streams : list of dict
@@ -150,12 +146,6 @@ def before_record(
         Channel index (int) or channel name (str) to extract data from.
     sampling_rate : float
         Sampling rate of the channel data.
-
-    Returns
-    -------
-    BeForRecord
-        A BeForRecord object containing the channel data, sampling rate,
-        time column name, and channel metadata.
 
     Raises
     ------

@@ -4,6 +4,9 @@ Module: tools
 
 **Several tools for manipulation of BeForRecord and BeForEpochs data**
 
+.. toctree::
+   :maxdepth: 1
+
 BeForRecord
 ------------
 

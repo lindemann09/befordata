@@ -83,45 +83,26 @@ class BeForRecord:
         return rtn
 
     def n_samples(self) -> int:
-        """Return the total number of samples across all sessions.
-
-        Returns
-        -------
-        int
-            Number of samples (rows) in the data.
+        """Returns the total number of samples across all sessions.
         """
         return self.dat.shape[0]
 
     def n_forces(self) -> int:
-        """Return the number of force columns.
-
-        Returns
-        -------
-        int
-            Number of force measurement columns (excluding the time column).
+        """Returns the number of force columns.
         """
         return len(self.force_cols)
 
     def n_sessions(self) -> int:
-        """Return the number of recording sessions.
-
-        Returns
-        -------
-        int
-            Number of sessions.
+        """Returns the number of recording sessions.
         """
         return len(self.sessions)
 
     def time_stamps(self) -> NDArray[np.floating]:
-        """Return the time stamps as a numpy array.
+        """Returns the time stamps as a numpy array.
 
         If a time column is specified, its values are returned.
         Otherwise, time stamps are generated based on the sampling rate.
 
-        Returns
-        -------
-        np.ndarray
-            Array of time stamps (float).
         """
         if len(self.time_column) > 0:
             return self.dat.loc[:, self.time_column].to_numpy()
@@ -131,7 +112,7 @@ class BeForRecord:
             return np.arange(0, final_time, step)
 
     def forces(self, session: int | None = None) -> pd.DataFrame | pd.Series:
-        """Return force data for all samples or a specific session.
+        """Returns force data for all samples or a specific session.
 
         Parameters
         ----------
@@ -139,10 +120,6 @@ class BeForRecord:
             If specified, returns force data for the given session index.
             If None, returns force data for all samples.
 
-        Returns
-        -------
-        pd.DataFrame or pd.Series
-            Force data for the specified session or all data.
         """
         if session is None:
             return self.dat.iloc[:, self.force_cols]
@@ -155,6 +132,8 @@ class BeForRecord:
         """
         Appends new recordings to the existing data.
 
+        Parameters
+        ----------
         dat : pd.DataFrame
             DataFrame containing the new data to append. Must have the same
             columns as the current data.
@@ -171,27 +150,20 @@ class BeForRecord:
 
 
     def session_ranges(self) -> List[range]:
-        """Return a list of sample index ranges for all sessions.
+        """Returns a list of sample index ranges for all sessions.  Each range
+        corresponds to the sample indices of a session.
 
-        Returns
-        -------
-        list of range
-            Each range corresponds to the sample indices of a session.
         """
         return [self.session_range(s) for s in range(len(self.sessions))]
 
     def session_range(self, session: int) -> range:
-        """Return the sample index range for a specific session.
+        """Returns the sample index range for a specific session.
 
         Parameters
         ----------
         session : int
             Session index.
 
-        Returns
-        -------
-        range
-            Range of sample indices for the session.
         """
         f = self.sessions[session]
         try:
@@ -209,11 +181,6 @@ class BeForRecord:
         ----------
         times : ArrayLike
             Array of time stamps to search for.
-
-        Returns
-        -------
-        np.ndarray
-            Array of sample indices corresponding to the input times.
 
         Notes
         -----

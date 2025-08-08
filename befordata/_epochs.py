@@ -101,9 +101,6 @@ class BeForEpochs:
         """
         Check if baseline adjustment has been applied.
 
-        Returns
-        -------
-        bool
-            True if baseline adjustment has been applied, False otherwise.
+        Returns `True` if baseline adjustment has been applied, `False` otherwise.
         """
         return len(self.baseline) > 0
