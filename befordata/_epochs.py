@@ -89,11 +89,11 @@ class BeForEpochs:
         return rtn
 
     def n_epochs(self) -> int:
-        """Return the number of epochs."""
+        """Returns the number of epochs."""
         return self.dat.shape[0]
 
     def n_samples(self) -> int:
-        """Return the number of samples per epoch."""
+        """Returns the number of samples per epoch."""
         return self.dat.shape[1]
 
 

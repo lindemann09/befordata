@@ -4,11 +4,6 @@ Module: tools
 
 **Several tools for manipulation of BeForRecord and BeForEpochs data**
 
-.. toctree::
-   :maxdepth: 1
-
-BeForRecord
-------------
 
 .. autofunction:: befordata.tools.scale_record
 
@@ -23,8 +18,6 @@ BeForRecord
 .. autofunction:: befordata.tools.extract_epochs
 
 
-BeForEpochs
-------------
 
 .. autofunction:: befordata.tools.scale_epochs
 
