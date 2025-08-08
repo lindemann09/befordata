@@ -63,5 +63,3 @@ autodoc_type_aliases = {
     "DataFrame": "pd.DataFrame",
     "ArrayLike": "ArrayLike",
 }
-
-autosummary_generate = True
