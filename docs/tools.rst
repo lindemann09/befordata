@@ -28,7 +28,7 @@ BeForEpochs functions
 
 
 befordata.tools
-===============
+----------------------
 
 .. autofunction:: befordata.tools.scale_record
 

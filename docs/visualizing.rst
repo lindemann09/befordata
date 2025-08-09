@@ -15,6 +15,6 @@ support for plotting BeForRecord data.
 
 
 befordata.plot
-=======================
+----------------------
 
 .. autofunction:: befordata.plot.plot_record

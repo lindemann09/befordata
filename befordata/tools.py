@@ -319,7 +319,8 @@ def lowpass_filter(
     Notes
     -----
     Filtering is performed using `scipy.signal.butter` and `scipy.signal.filtfilt`
-    for zero-phase filtering. See the SciPy documentation for more details.
+    for zero-phase filtering. See the SciPy documentation for more details:
+    https://docs.scipy.org/doc/scipy/reference/signal.html
     """
 
     df = rec.dat.copy()

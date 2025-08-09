@@ -47,8 +47,7 @@ html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
 
 html_show_sourcelink = False
-html_theme_options = {"show_nav_level": 2,
-                      }
+html_theme_options = {"show_nav_level": 2, "show_toc_level": 3}
 
 numpydoc_show_class_members = True
 add_module_names = False
@@ -56,7 +55,7 @@ add_module_names = False
 
 typehints_use_rtype = False
 typehints_use_signature = False
-typehints_use_signature_return = True
+typehints_use_signature_return = False
 
 autodoc_type_aliases = {
     "NDArray": "NDArray",

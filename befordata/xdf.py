@@ -136,7 +136,7 @@ def before_record(
     Create a BeForRecord object from XDF stream data.
 
     Returns a `BeForRecord` object containing the channel data, sampling rate,
-        time column name, and channel metadata.
+    time column name, and channel metadata.
 
     Parameters
     ----------
@@ -151,6 +151,14 @@ def before_record(
     ------
     ValueError
         If the specified channel cannot be found.
+
+    Examples
+    --------
+
+    >>> from pyxdf import load_xdf
+    >>> streams, header = load_xdf("my_lsl_recording.xdf")
+    >>> rec = xdf.before_record(streams, "Force", 1000)
+
     """
     channel_id = _get_channel_id(xdf_streams, channel)
     return BeForRecord(

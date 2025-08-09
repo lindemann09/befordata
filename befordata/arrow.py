@@ -21,7 +21,7 @@ BSL_COL_NAME = "__befor_baseline__"
 
 def record_to_arrow(rec: BeForRecord) -> _pa.Table:
     """
-    Convert a BeForRecord instance to a pyarrow.Table.
+    Convert a BeForRecord instance to a `pyarrow.Table`
 
     The resulting Arrow table will include schema metadata for sampling rate,
     time column, sessions, and any additional metadata from the BeForRecord.
@@ -59,7 +59,7 @@ def arrow_to_record(
     meta: dict | None = None,
 ) -> BeForRecord:
     """
-    Create a BeForRecord instance from a pyarrow.Table.
+    Create a BeForRecord instance from a `pyarrow.Table`.
 
     Reads metadata from the Arrow schema to reconstruct the BeForRecord's
     sampling rate, time column, sessions, and meta dictionary.
@@ -131,7 +131,7 @@ def arrow_to_record(
 
 def epochs_to_arrow(rec: BeForEpochs) -> _pa.Table:
     """
-    Convert a BeForEpochs instance to a pyarrow.Table.
+    Convert a BeForEpochs instance to a `pyarrow.Table`.
 
     The resulting Arrow table will contain both the sample data and the design
     matrix. If baseline adjustment was performed, the baseline values are
@@ -171,7 +171,7 @@ def arrow_to_epochs(
     zero_sample: int | None = None,
 ) -> BeForEpochs:
     """
-    Create a BeForEpochs instance from a pyarrow.Table.
+    Create a BeForEpochs instance from a `pyarrow.Table`.
 
     Reads metadata from the Arrow schema to reconstruct the BeForEpochs'
     sampling rate and zero sample. Extracts baseline values if present.

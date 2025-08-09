@@ -43,7 +43,7 @@ CSV
 
 
 befordata.arrow
-=======================
+----------------------
 
 .. autofunction:: befordata.arrow.record_to_arrow
 
@@ -55,7 +55,7 @@ befordata.arrow
 
 
 befordata.xdf
-=======================
+----------------------
 
 .. autofunction:: befordata.xdf.before_record
 
@@ -65,7 +65,7 @@ befordata.xdf
 
 
 Globals
---------
+~~~~~~~~~~~~~~~~~~~~~
 
 To change the column name for time stamps in the dataframe, modify the global string
 variable ``befordata.xdf.before.TIME_STAMPS`` (default: ``"time"``). Set this variable
@@ -73,6 +73,6 @@ to your preferred column name before loading data.
 
 
 befordata.csv
-=======================
+----------------------
 
 .. autofunction:: befordata.csv.read_csv

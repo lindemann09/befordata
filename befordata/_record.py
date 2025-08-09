@@ -97,7 +97,7 @@ class BeForRecord:
         """
         return len(self.sessions)
 
-    def time_stamps(self) -> NDArray[np.floating]:
+    def time_stamps(self) -> NDArray:
         """Returns the time stamps as a numpy array.
 
         If a time column is specified, its values are returned.

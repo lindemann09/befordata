@@ -1,7 +1,10 @@
 # Usage
 
+Typical workflow
 
-BeForData Usage Examples
+1. Load raw force data into a BeForRecord object.
+2. Preprocess and annotate the data as needed.
+3. Segment the data into epochs using event markers, creating a BeForEpochs object.
 
 ## Create BeForRecord from csv-file
 

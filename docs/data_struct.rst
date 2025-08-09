@@ -34,21 +34,20 @@ Data Structures
    - **`dat`**: 2D numpy array containing the force data (epochs x samples).
    - **`sampling_rate`**: Sampling rate of the force measurements (Hz).
    - **`design`**: DataFrame containing design/metadata for each epoch.
-   - **`baseline`** (optional): 1D numpy array containing baseline values for each
-      epoch at `zero_sample`.
-   - **`zero_sample`**: Sample index representing the sample of the time zero within
-      each epoch (default: 0).
+   - **`baseline`** (optional): 1D numpy array containing baseline values for each epoch at `zero_sample`.
+   - **`zero_sample`**: Sample index representing the sample of the time zero within each epoch (default: 0).
 
 
 BeForRecord
-======================
+----------------------
+
 
 .. autoclass:: befordata.BeForRecord
    :members:
    :member-order: bysource
 
 BeForEpochs
-======================
+----------------------
 
 .. autoclass:: befordata.BeForEpochs
    :members:

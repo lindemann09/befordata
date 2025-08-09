@@ -11,6 +11,7 @@ records of force measurements, enabling efficient data manipulation and analysis
 BeForData is based on two :doc:`data_struct` of force data: one for the representation of
 the raw time-based force measurements in the shape of a dataframe (**BeForRecord**) and
 one for epoch-based representations as matrices (**BeForEpochs**).
+See :doc:`usage` for a detailed usage guide.
 
 
 **Features**
@@ -28,14 +29,6 @@ Source code: https://github.com/lindemann09/befordata
 |GitHub license| |PyPI|
 
 
-Typical Workflow
-----------------
-
-1. Load raw force data into a BeForRecord object.
-2. Preprocess and annotate the data as needed.
-3. Segment the data into epochs using event markers, creating a BeForEpochs object.
-
-See :doc:`usage` for a detailed usage guide.
 
 Install via pip
 ----------------
