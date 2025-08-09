@@ -29,6 +29,7 @@ Documentation: https://lindemann09.github.io/befordata/
 ## Data Structures
 
 - **BeForRecord**
+ 
    Represents a single continuous recording of force data, including metadata such as
    sampling rate, channel information, and experimental annotations. BeForRecord
    supports data cleaning, resampling, and extraction of epochs, and provides
@@ -43,6 +44,7 @@ Documentation: https://lindemann09.github.io/befordata/
    - **`meta`** (optional): Arbitrary metadata associated with the record.
 
 - **BeForEpochs**
+  
    A container class for managing multiple epochs of force data. Each epoch
    represents a segment of continuous force measurements, typically corresponding
    to a trial or experimental condition. BeForEpochs provides methods for slicing,
