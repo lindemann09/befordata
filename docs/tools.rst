@@ -9,12 +9,22 @@ BeForRecord functions
 
 .. autosummary::
 
-   befordata.tools.scale_epochs
-   befordata.tools.concat_records
-   befordata.tools.detect_sessions
-   befordata.tools.split_sessions
-   befordata.tools.lowpass_filter
-   befordata.tools.extract_epochs
+   befordata.scale_record
+   befordata.concat_records
+   befordata.detect_sessions
+   befordata.split_sessions
+   befordata.extract_epochs
+
+.. autofunction:: befordata.scale_record
+
+.. autofunction:: befordata.concat_records
+
+.. autofunction:: befordata.detect_sessions
+
+.. autofunction:: befordata.split_sessions
+
+.. autofunction:: befordata.extract_epochs
+
 
 
 BeForEpochs functions
@@ -22,30 +32,15 @@ BeForEpochs functions
 
 .. autosummary::
 
-   befordata.tools.scale_epochs
-   befordata.tools.concat_epochs
-   befordata.tools.adjust_baseline
-
-
-befordata.tools
-----------------------
-
-.. autofunction:: befordata.tools.scale_record
-
-.. autofunction:: befordata.tools.concat_records
-
-.. autofunction:: befordata.tools.detect_sessions
-
-.. autofunction:: befordata.tools.split_sessions
-
-.. autofunction:: befordata.tools.lowpass_filter
-
-.. autofunction:: befordata.tools.extract_epochs
+   befordata.scale_epochs
+   befordata.concat_epochs
+   befordata.adjust_baseline
 
 
 
-.. autofunction:: befordata.tools.scale_epochs
 
-.. autofunction:: befordata.tools.concat_epochs
+.. autofunction:: befordata.scale_epochs
 
-.. autofunction:: befordata.tools.adjust_baseline
+.. autofunction:: befordata.concat_epochs
+
+.. autofunction:: befordata.adjust_baseline

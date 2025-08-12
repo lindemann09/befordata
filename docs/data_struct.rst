@@ -1,6 +1,8 @@
-
 Data Structures
 ================
+
+Description
+-----------
 
 .. autosummary::
 
@@ -36,6 +38,9 @@ Data Structures
    - **`design`**: DataFrame containing design/metadata for each epoch.
    - **`baseline`** (optional): 1D numpy array containing baseline values for each epoch at `zero_sample`.
    - **`zero_sample`**: Sample index representing the sample of the time zero within each epoch (default: 0).
+
+
+
 
 
 BeForRecord

@@ -9,6 +9,7 @@ API Reference
 
    data_struct
    tools
+   filter
    file_formats
    visualizing
 

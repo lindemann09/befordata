@@ -1,10 +1,11 @@
 # Usage
 
+
 Typical workflow
 
-1. Load raw force data into a BeForRecord object.
-2. Preprocess and annotate the data as needed.
-3. Segment the data into epochs using event markers, creating a BeForEpochs object.
+1.  Load raw force data into a BeForRecord object.
+2.  Preprocess and annotate the data as needed.
+3.  Segment the data into epochs using event markers, creating a BeForEpochs object.
 
 ## Create BeForRecord from csv-file
 
@@ -14,13 +15,13 @@ metadata dictionary.
 
 ``` python
 import pandas as pd
-from befordata import BeForRecord
+import befordata as bf
 
 # 1. read csv with Pandas
 df = pd.read_csv("samples/demo_force_data.csv")
 
 # 2. converting to before record
-mydata = BeForRecord(df, sampling_rate=1000)
+mydata = bf.BeForRecord(df, sampling_rate=1000)
 print(mydata)
 ```
 
@@ -60,9 +61,7 @@ Example
 -   the 6 epochs start at the 6 “zero samples”
 
 ``` python
-from befordata import tools
-
-epochs = tools.extract_epochs(mydata, "Fx",
+epochs = bf.extract_epochs(mydata, "Fx",
     zero_samples=[1530, 6021, 16983, 28952, 67987],
     n_samples=2000,
     n_samples_before=10,
