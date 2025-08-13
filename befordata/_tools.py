@@ -35,7 +35,7 @@ def scale_record(rec: BeForRecord, factor: float) -> None:
 
 
 def concat_records(
-    record_list: _tp.List[BeForRecord] | _tp.Tuple[BeForRecord],
+    record_list: _tp.List[BeForRecord] | _tp.Tuple[BeForRecord, ...],
     no_sessions: bool = False,
 ) -> BeForRecord:
     """
@@ -303,7 +303,7 @@ def scale_epochs(epochs: BeForEpochs, factor: float) -> None:
 
 
 def concat_epochs(
-    epochs_list: _tp.List[BeForEpochs] | _tp.Tuple[BeForEpochs],
+    epochs_list: _tp.List[BeForEpochs] | _tp.Tuple[BeForEpochs, ...],
 ) -> BeForEpochs:
     """
     Concatenate a list or tuple of BeForEpochs instances into a single
