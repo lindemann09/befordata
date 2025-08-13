@@ -109,7 +109,7 @@ write_feather(tbl, "epochs.feather",
 epochs2 = arrow.arrow_to_epochs(read_table("epochs.feather"))
 ```
 
-## Extracting data for XDF files (as used by LSL)
+## Extracting data from XDF files (as used by LSL)
 
 ``` python
 from pyxdf import load_xdf
