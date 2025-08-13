@@ -6,9 +6,8 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Behavioural Force Data (BeForData) &#8212; BeForData 0.4.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Module Index &#8212; BeForData 0.4.2 documentation</title>
   
   
   
@@ -41,13 +40,19 @@
     <script src="_static/documentation_options.js?v=ff822928"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'py-modindex';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Usage" href="usage.html" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+
+    <script>
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+
   </head>
   
   
@@ -102,7 +107,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="index.html">
   
   
   
@@ -178,10 +183,6 @@
     </div>
   
 
-  
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
   
 </div>
 
@@ -274,64 +275,23 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="behavioural-force-data-befordata">
-<h1>Behavioural Force Data (BeForData)<a class="headerlink" href="#behavioural-force-data-befordata" title="Link to this heading">#</a></h1>
-<p><strong>Data structures for handling behavioural force data</strong></p>
-<p>This package provides core classes and utilities for loading, processing,
-and analysing behavioural force data, such as those collected in experimental
-psychology or neuroscience. It offers a structured approach to manage epochs and
-records of force measurements, enabling efficient data manipulation and analysis.</p>
-<p>BeForData is based on two <a class="reference internal" href="data_struct.html"><span class="doc">Data Structures</span></a> of force data: one for the representation of
-the raw time-based force measurements in the shape of a dataframe (<strong>BeForRecord</strong>) and
-one for epoch-based representations as matrices (<strong>BeForEpochs</strong>).
-See <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for a detailed usage guide.</p>
-<p><strong>Features</strong></p>
-<ul class="simple">
-<li><p>Flexible loading and saving of force data in common formats (e.g., CSV, XDF).</p></li>
-<li><p>Efficient slicing and indexing of epochs and records for batch analysis.</p></li>
-<li><p>Metadata management for experimental context, including event markers and annotations.</p></li>
-<li><p>Utilities for preprocessing, such as filtering and baseline correction.</p></li>
-<li><p>Integration with scientific Python libraries (NumPy, pandas) for advanced analysis.</p></li>
-</ul>
-<p>Source code: <a class="github reference external" href="https://github.com/lindemann09/befordata">lindemann09/befordata</a></p>
-<p>(c) Oliver Lindemann</p>
-<p><a class="reference external" href="https://github.com/lindemann09/befordata/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/lindemann09/befordata" /></a> <a class="reference external" href="https://pypi.org/project/befordata/"><img alt="PyPI" src="https://img.shields.io/pypi/v/befordata?style=flat" /></a></p>
-<section id="install-via-pip">
-<h2>Install via pip<a class="headerlink" href="#install-via-pip" title="Link to this heading">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">befordata</span>
-</pre></div>
-</div>
-</section>
-<section id="julia">
-<h2>Julia<a class="headerlink" href="#julia" title="Link to this heading">#</a></h2>
-<p>A <a class="reference external" href="https://github.com/lindemann09/BeForData.jl">Julia implementation of BeForData</a>
-is available as a beta release.</p>
-</section>
-</section>
-<section id="contents">
-<h1>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#create-beforrecord-from-csv-file">Create BeForRecord from csv-file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#epochs-based-representation">Epochs-based representation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#pyarrow-feather-format">Pyarrow &amp; Feather Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#extracting-data-for-xdf-files-as-used-by-lsl">Extracting data for XDF files (as used by LSL)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#example-of-data-preprocessing-with-experimental-design">Example of data preprocessing with experimental design</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data_struct.html">Data Structures</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="filtering.html">Filtering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file_formats.html">File Formats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualizing.html">Visualizing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#indices-and-tables">Indices and tables</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
+
+   <h1>Python Module Index</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-b"><strong>b</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-b"><td></td><td>
+       <strong>b</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api.html#module-befordata"><code class="xref">befordata</code></a></td><td>
+       <em></em></td></tr>
+   </table>
 
 
                 </article>
@@ -343,45 +303,12 @@ is available as a beta release.</p>
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="right-next"
-       href="usage.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Usage</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Behavioural Force Data (BeForData)</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-via-pip">Install via pip</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#julia">Julia</a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
-</ul>
-
-  </nav></div>
-
-</div></div>
               
             
           </div>
