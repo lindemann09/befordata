@@ -13,11 +13,18 @@ Author: Oliver Lindemann
 """
 
 __author__ = "Oliver Lindemann"
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 
 from ._epochs import BeForEpochs
 from ._record import BeForRecord
-from ._tools import (adjust_baseline, concat_epochs, concat_records,
-                     detect_sessions, extract_epochs, scale_epochs,
-                     scale_record, split_sessions)
+from ._tools import (
+                     adjust_baseline,
+                     concat_epochs,
+                     concat_records,
+                     detect_sessions,
+                     extract_epochs,
+                     scale_epochs,
+                     scale_record,
+                     split_sessions,
+)

@@ -212,6 +212,14 @@ def extract_epochs(
     Provide either `zero_samples` or `zero_times`, not both.
     Use `find_samples_by_time` to convert times to sample indices if needed.
 
+    Examples
+    --------
+    >>> ep = extract_epochs(my_record, "Fx",
+    ...          n_samples=5000,
+    ...          n_samples_before=100,
+    ...          design=my_design,
+    ...          zero_times=my_design.trial_time)
+
     """
 
     if zero_samples is None and zero_times is None:

@@ -5,7 +5,8 @@ Typical workflow
 
 1.  Load raw force data into a BeForRecord object.
 2.  Preprocess and annotate the data as needed.
-3.  Segment the data into epochs using event markers, creating a BeForEpochs object.
+3.  Segment the data into epochs using event markers, creating a
+    BeForEpochs object.
 
 ## Create BeForRecord from csv-file
 
@@ -45,7 +46,7 @@ print(mydata)
     [2334878 rows x 3 columns]
 
 ``` python
-mydata = BeForRecord(
+mydata = bf.BeForRecord(
     df, sampling_rate=1000, time_column="time", meta={"Exp": "my experiment"}
 )
 ```
@@ -151,34 +152,35 @@ rec
 
 ``` python
 import pandas as pd
-from befordata import BeForRecord, BeForEpochs, tools
+import befordata as bf
+from befordata.filtering import lowpass_filter
 
 # 1. read csv with Pandas
 df = pd.read_csv("samples/demo_force_data.csv")
 
 
 # 2. converting pandas data to before record
-mydata = BeForRecord(
+mydata = bf.BeForRecord(
     df, sampling_rate=1000, time_column="time", meta={"Exp": "my experiment"}
 )
 
 # 3. detect pauses and treat data as recording with different sessions
-tools.detect_sessions(mydata, time_gap=2000)
+bf.detect_sessions(mydata, time_gap=2000)
 
 # 4. filter data (takes into account the different sessions)
-flt_data = tools.lowpass_filter(mydata, cutoff=30, order=4)
+flt_data = lowpass_filter(mydata, cutoff=30, order=4)
 
 # 5. read design data (csv)
 design = pd.read_csv("samples/demo_design_data.csv")
 
 # 6. extract epochs
-ep = tools.extract_epochs(flt_data, "Fx",
+ep = bf.extract_epochs(flt_data, "Fx",
     n_samples=5000, n_samples_before=100, design=design,
     zero_times = design.trial_time
 )
 
 # 7. adjust baseline
-tools.adjust_baseline(ep, (80, 100))
+bf.adjust_baseline(ep, (80, 100))
 
 print(ep)
 ```
