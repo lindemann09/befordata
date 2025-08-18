@@ -2,7 +2,6 @@
 Collection of functions for filtering BeForeRecord data.
 """
 
-
 from copy import deepcopy as _deepcopy
 
 from scipy import signal as _signal
@@ -55,14 +54,15 @@ def filtfilt(b, a, rec: BeForRecord, inplace: bool = False, **kwargs) -> BeForRe
     rec.meta["filter"] = "filtered data"
     for idx in rec.session_ranges():
         for c in rec.force_cols:
-            rec.dat.iloc[idx, c] = _signal.filtfilt(b, a, rec.dat.iloc[idx, c], # type: ignore
-                                                     **kwargs)
+            # idx is expected to be a range or slice for rows; c is the column index
+            idx = range(idx.start, idx.stop)
+            rec.dat.iloc[idx.start : idx.stop, c] = _signal.filtfilt(
+                b, a, rec.dat.iloc[idx.start : idx.stop, c], **kwargs
+            )
     return rec
 
 
-def lowpass_filter(
-    rec: BeForRecord, cutoff: float, order: int
-) -> BeForRecord:
+def lowpass_filter(rec: BeForRecord, cutoff: float, order: int) -> BeForRecord:
     """
     Convenience function to apply a lowpass Butterworth filter to the force data
     in a `BeForRecord`.

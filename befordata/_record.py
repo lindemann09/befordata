@@ -83,18 +83,15 @@ class BeForRecord:
         return rtn
 
     def n_samples(self) -> int:
-        """Returns the total number of samples across all sessions.
-        """
+        """Returns the total number of samples across all sessions."""
         return self.dat.shape[0]
 
     def n_forces(self) -> int:
-        """Returns the number of force columns.
-        """
+        """Returns the number of force columns."""
         return len(self.force_cols)
 
     def n_sessions(self) -> int:
-        """Returns the number of recording sessions.
-        """
+        """Returns the number of recording sessions."""
         return len(self.sessions)
 
     def time_stamps(self) -> NDArray:
@@ -128,7 +125,6 @@ class BeForRecord:
             return self.dat.iloc[r.start : r.stop, self.force_cols]
 
     def append(self, dat: pd.DataFrame, new_session: bool = False) -> None:
-
         """
         Appends new recordings to the existing data.
 
@@ -147,7 +143,6 @@ class BeForRecord:
         self.dat = pd.concat([self.dat, dat], ignore_index=True)
         if new_session:
             self.sessions.append(nbefore)
-
 
     def session_ranges(self) -> List[range]:
         """Returns a list of sample index ranges for all sessions.  Each range
@@ -187,4 +182,3 @@ class BeForRecord:
         Uses numpy.searchsorted with 'right' side.
         """
         return np.searchsorted(self.time_stamps(), np.atleast_1d(times), "right")
-

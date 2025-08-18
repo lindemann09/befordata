@@ -29,3 +29,15 @@ plot = [
 arrow = [
     "pyarrow>=21.0.0",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.9",
+]
+
+[tool.ruff.lint]
+ignore = ["F401"]
+
+[tool.ruff.format]
+line-ending = "lf"
+indent-style = "space"

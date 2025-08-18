@@ -50,7 +50,7 @@ class BeForEpochs:
 
     dat: NDArray[np.floating]
     sampling_rate: float
-    design: pd.DataFrame = field(default_factory=pd.DataFrame())  # type: ignore
+    design: pd.DataFrame = field(default_factory=pd.DataFrame)
     baseline: NDArray[np.float64] = field(
         default_factory=lambda: np.array([], dtype=np.float64)
     )
