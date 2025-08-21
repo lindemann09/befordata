@@ -168,9 +168,13 @@ class BeForRecord:
         return range(f, t - 1)
 
     def find_samples_by_time(self, times: ArrayLike) -> NDArray:
-        """Find the sample indices closest to the given time stamps.
+        """Find the indices of samples corresponding to or immediately following
+        the given time stamps.
 
-        For each time in `times`, returns the index of the next larger or equal time stamp.
+        This method searches for the indices of time stamps in the dataset that
+        are equal to or the next larger value for each time in the input array.
+        If an exact match is not found,the index of the next larger time stamp
+        is returned.
 
         Parameters
         ----------
@@ -179,6 +183,6 @@ class BeForRecord:
 
         Notes
         -----
-        Uses numpy.searchsorted with 'right' side.
+        Uses numpy.searchsorted with 'left' side.
         """
-        return np.searchsorted(self.time_stamps(), np.atleast_1d(times), "right")
+        return np.searchsorted(self.time_stamps(), np.atleast_1d(times), "left")

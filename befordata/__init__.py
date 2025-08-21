@@ -13,7 +13,7 @@ Author: Oliver Lindemann
 """
 
 __author__ = "Oliver Lindemann"
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 
 
 from ._epochs import BeForEpochs
