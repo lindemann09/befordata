@@ -379,7 +379,8 @@ def adjust_baseline(epochs: BeForEpochs, reference_window: _tp.Tuple[int, int]) 
     Parameters
     ----------
     reference_window : Tuple[int, int]
-        Tuple specifying the sample range (start, end) used for baseline adjustment.
+        Tuple specifying the sample range (start, stop) used for baseline adjustment.
+        Samples from "start" to "stop-1" will be included in the adjustment.
     """
 
     if epochs.is_baseline_adjusted():
