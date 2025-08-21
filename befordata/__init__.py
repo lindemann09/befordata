@@ -27,4 +27,5 @@ from ._tools import (
                      scale_epochs,
                      scale_record,
                      split_sessions,
+                     subset_epochs,
 )

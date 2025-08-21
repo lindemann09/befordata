@@ -189,3 +189,22 @@ print(ep)
       n epochs: 391, n_samples: 5100
       sampling_rate: 1000, zero_sample: 100
       design: 'operand_1', 'operand_2', 'operator', 'correct_response', 'response', 'resp_number_digits', 'resp_num_category', 'subject_id', 'trial', 'trial_time'
+
+## Selecting subset of epochs
+
+Example: get all epochs were the trial counter (defined in `design`) is
+between 100 and 199.
+
+``` python
+# get indices
+idx = (ep.design.trial >= 100) & (ep.design.trial <= 199)
+# create subset
+sel = bf.subset_epochs(ep, idx)
+
+print(sel)
+```
+
+    BeForEpochs
+      n epochs: 100, n_samples: 5100
+      sampling_rate: 1000, zero_sample: 100
+      design: 'operand_1', 'operand_2', 'operator', 'correct_response', 'response', 'resp_number_digits', 'resp_num_category', 'subject_id', 'trial', 'trial_time'

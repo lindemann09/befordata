@@ -245,6 +245,7 @@ def extract_epochs(
             n_samples_before=n_samples_before,
             zero_samples=rec.find_samples_by_time(zero_times),
             design=design,
+            suppress_warnings=suppress_warnings,
         )
 
     assert zero_samples is not None  # always!
@@ -265,7 +266,7 @@ def extract_epochs(
             if t > n:
                 if not suppress_warnings:
                     _warnings.warn(
-                        "extract_force_epochs: last force epoch is incomplete, "
+                        f"extract_force_epochs: force epoch {r} is incomplete, "
                         f"{t - n} samples missing.",
                         RuntimeWarning,
                     )
@@ -390,3 +391,43 @@ def adjust_baseline(epochs: BeForEpochs, reference_window: _tp.Tuple[int, int]) 
     epochs.dat = dat - _np.atleast_2d(epochs.baseline).T
     epochs.dat = dat - _np.atleast_2d(epochs.baseline).T
     epochs.dat = dat - _np.atleast_2d(epochs.baseline).T
+
+
+def subset_epochs(
+    epochs: BeForEpochs,
+    idx: _tp.List[int]
+    | _tp.List[bool]
+    | _NDArray[_np.bool]
+    | _NDArray[_np.int_]
+    | _pd.Series,
+) -> BeForEpochs:
+    """
+    Extract a subset of epochs from a BeForEpochs instance.
+
+    Parameters
+    ----------
+    epochs : BeForEpochs
+        The original BeForEpochs instance to extract the subset from.
+    idx : list of int or list of bool or np.ndarray or pd.Series
+        The indices of the epochs to extract.
+
+    Returns
+    -------
+    BeForEpochs
+        A new BeForEpochs instance containing the extracted subset.
+
+    """
+    if len(epochs.baseline) > 0:
+        bsl = epochs.baseline[idx]
+    else:
+        bsl = _np.array([])
+    if isinstance(idx, _pd.Series):
+        idx = idx.to_numpy()
+
+    return BeForEpochs(
+        dat=epochs.dat[idx, :],
+        sampling_rate=epochs.sampling_rate,
+        design=epochs.design.iloc[idx, :],
+        baseline=bsl,
+        zero_sample=epochs.zero_sample,
+    )
