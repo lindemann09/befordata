@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Usage &#8212; BeForData 0.4.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=5bfaad31"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Behavioural Force Data (BeForData)" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">BeForData 0.4.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Usage</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h1>
+<p>Typical workflow</p>
+<ol class="arabic simple">
+<li><p>Load raw force data into a BeForRecord object.</p></li>
+<li><p>Preprocess and annotate the data as needed.</p></li>
+<li><p>Segment the data into epochs using event markers, creating a
+BeForEpochs object.</p></li>
+</ol>
+<section id="create-beforrecord-from-csv-file">
+<h2>Create BeForRecord from csv-file<a class="headerlink" href="#create-beforrecord-from-csv-file" title="Link to this heading">#</a></h2>
+<p>If your data includes time stamps, you must specify the time column when
+creating the record. The example below also demonstrates how to add a
+metadata dictionary.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">befordata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bf</span>
+
+<span class="c1"># 1. read csv with Pandas</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;samples/demo_force_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. converting to before record</span>
+<span class="n">mydata</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">BeForRecord</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mydata</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BeForRecord
+  sampling_rate: 1000, n sessions: 1
+  time_column:
+  metadata
+             Fx      Fy     time
+0       -0.1717 -0.1143   601676
+1       -0.1719 -0.1136   601678
+2       -0.1719 -0.1133   601679
+3       -0.1718 -0.1209   601680
+4       -0.1697 -0.1020   601681
+...         ...     ...      ...
+2334873  0.0991 -0.3851  3120147
+2334874  0.1034 -0.3789  3120147
+2334875  0.1013 -0.3704  3120149
+2334876  0.1013 -0.3875  3120149
+2334877  0.0992 -0.3883  3120151
+
+[2334878 rows x 3 columns]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mydata</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">BeForRecord</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">time_column</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Exp&quot;</span><span class="p">:</span> <span class="s2">&quot;my experiment&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="epochs-based-representation">
+<h2>Epochs-based representation<a class="headerlink" href="#epochs-based-representation" title="Link to this heading">#</a></h2>
+<p>Epochs are represented as matrix. Each row is one trial</p>
+<p>Example</p>
+<ul class="simple">
+<li><p>Extracting epochs of the length 2000 from <code class="docutils literal notranslate"><span class="pre">Fx</span></code> (plus 100 samples
+before)</p></li>
+<li><p>the 6 epochs start at the 6 “zero samples”</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">epochs</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">extract_epochs</span><span class="p">(</span><span class="n">mydata</span><span class="p">,</span> <span class="s2">&quot;Fx&quot;</span><span class="p">,</span>
+    <span class="n">zero_samples</span><span class="o">=</span><span class="p">[</span><span class="mi">1530</span><span class="p">,</span> <span class="mi">6021</span><span class="p">,</span> <span class="mi">16983</span><span class="p">,</span> <span class="mi">28952</span><span class="p">,</span> <span class="mi">67987</span><span class="p">],</span>
+    <span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+    <span class="n">n_samples_before</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BeForEpochs
+  n epochs: 5, n_samples: 2010
+  sampling_rate: 1000, zero_sample: 10
+  design: None
+</pre></div>
+</div>
+<p><strong>Note</strong>: BeForEpochs should usually contain information about the
+experimental design. See the example of data preprocessing below.</p>
+</section>
+<section id="pyarrow-feather-format">
+<h2>Pyarrow &amp; Feather Format<a class="headerlink" href="#pyarrow-feather-format" title="Link to this heading">#</a></h2>
+<p>Arrow and feather file format is fast and platform &amp; language
+independent</p>
+<section id="writing-and-reading-beforrecord-using-the-feather-format">
+<h3>Writing and reading BeforRecord using the feather format<a class="headerlink" href="#writing-and-reading-beforrecord-using-the-feather-format" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyarrow.feather</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_feather</span><span class="p">,</span> <span class="n">read_table</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">befordata</span><span class="w"> </span><span class="kn">import</span> <span class="n">arrow</span>
+
+<span class="c1"># writing</span>
+<span class="n">tbl</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">record_to_arrow</span><span class="p">(</span><span class="n">mydata</span><span class="p">)</span>
+<span class="n">write_feather</span><span class="p">(</span><span class="n">tbl</span><span class="p">,</span> <span class="s2">&quot;demo.feather&quot;</span><span class="p">)</span>
+
+<span class="c1"># reading</span>
+<span class="n">mydata2</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">arrow_to_record</span><span class="p">(</span><span class="n">read_table</span><span class="p">(</span><span class="s2">&quot;demo.feather&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="writing-and-reading-epochs">
+<h3>Writing and reading epochs<a class="headerlink" href="#writing-and-reading-epochs" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># writing</span>
+<span class="n">tbl</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">epochs_to_arrow</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="n">write_feather</span><span class="p">(</span><span class="n">tbl</span><span class="p">,</span> <span class="s2">&quot;epochs.feather&quot;</span><span class="p">,</span>
+    <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;lz4&quot;</span><span class="p">,</span> <span class="n">compression_level</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span> <span class="c1"># optional compression parameters</span>
+
+<span class="c1"># reading</span>
+<span class="n">epochs2</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">arrow_to_epochs</span><span class="p">(</span><span class="n">read_table</span><span class="p">(</span><span class="s2">&quot;epochs.feather&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="extracting-data-from-xdf-files-as-used-by-lsl">
+<h2>Extracting data from XDF files (as used by LSL)<a class="headerlink" href="#extracting-data-from-xdf-files-as-used-by-lsl" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyxdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_xdf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">befordata</span><span class="w"> </span><span class="kn">import</span> <span class="n">xdf</span>
+
+<span class="c1"># read xdf</span>
+<span class="n">streams</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="n">load_xdf</span><span class="p">(</span><span class="s2">&quot;samples/xdf_sample.xdf&quot;</span><span class="p">)</span>
+
+<span class="c1"># extract data</span>
+<span class="n">rec</span> <span class="o">=</span> <span class="n">xdf</span><span class="o">.</span><span class="n">before_record</span><span class="p">(</span><span class="n">streams</span><span class="p">,</span> <span class="s2">&quot;MousePosition&quot;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">rec</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BeForRecord
+  sampling_rate: 1000, n sessions: 1
+  time_column: time
+  metadata
+  - name: MousePosition
+  - type: Position
+  - channel_count: 2
+  - channel_format: float32
+  - clock_times: [29570.8205096245, 29575.8203263595, 29580.8201211015]
+  - clock_values: [-7.819500751793385e-06, -7.819498932803981e-06, -5.864501872565597e-06]
+             time  MouseX  MouseY
+0    29570.255833   592.0   373.0
+1    29570.268411   575.0   373.0
+2    29570.280998   553.0   373.0
+3    29570.293601   523.0   376.0
+4    29570.305144   493.0   380.0
+..            ...     ...     ...
+204  29581.561514   192.0   146.0
+205  29581.574091   194.0   146.0
+206  29581.599295   195.0   146.0
+207  29581.637042   197.0   146.0
+208  29581.662244   198.0   146.0
+
+[209 rows x 3 columns]
+</pre></div>
+</div>
+</section>
+<section id="example-of-data-preprocessing-with-experimental-design">
+<h2>Example of data preprocessing with experimental design<a class="headerlink" href="#example-of-data-preprocessing-with-experimental-design" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">befordata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">befordata.filtering</span><span class="w"> </span><span class="kn">import</span> <span class="n">lowpass_filter</span>
+
+<span class="c1"># 1. read csv with Pandas</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;samples/demo_force_data.csv&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># 2. converting pandas data to before record</span>
+<span class="n">mydata</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">BeForRecord</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">time_column</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Exp&quot;</span><span class="p">:</span> <span class="s2">&quot;my experiment&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># 3. detect pauses and treat data as recording with different sessions</span>
+<span class="n">bf</span><span class="o">.</span><span class="n">detect_sessions</span><span class="p">(</span><span class="n">mydata</span><span class="p">,</span> <span class="n">time_gap</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+
+<span class="c1"># 4. filter data (takes into account the different sessions)</span>
+<span class="n">flt_data</span> <span class="o">=</span> <span class="n">lowpass_filter</span><span class="p">(</span><span class="n">mydata</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># 5. read design data (csv)</span>
+<span class="n">design</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;samples/demo_design_data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># 6. extract epochs</span>
+<span class="n">ep</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">extract_epochs</span><span class="p">(</span><span class="n">flt_data</span><span class="p">,</span> <span class="s2">&quot;Fx&quot;</span><span class="p">,</span>
+    <span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">n_samples_before</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">design</span><span class="o">=</span><span class="n">design</span><span class="p">,</span>
+    <span class="n">zero_times</span> <span class="o">=</span> <span class="n">design</span><span class="o">.</span><span class="n">trial_time</span>
+<span class="p">)</span>
+
+<span class="c1"># 7. adjust baseline</span>
+<span class="n">bf</span><span class="o">.</span><span class="n">adjust_baseline</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ep</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BeForEpochs
+  n epochs: 391, n_samples: 5100
+  sampling_rate: 1000, zero_sample: 100
+  design: &#39;operand_1&#39;, &#39;operand_2&#39;, &#39;operator&#39;, &#39;correct_response&#39;, &#39;response&#39;, &#39;resp_number_digits&#39;, &#39;resp_num_category&#39;, &#39;subject_id&#39;, &#39;trial&#39;, &#39;trial_time&#39;
+</pre></div>
+</div>
+</section>
+<section id="selecting-subset-of-epochs">
+<h2>Selecting subset of epochs<a class="headerlink" href="#selecting-subset-of-epochs" title="Link to this heading">#</a></h2>
+<p>Example: get all epochs were the trial counter (defined in <code class="docutils literal notranslate"><span class="pre">design</span></code>) is
+between 100 and 199.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get indices</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">ep</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">trial</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ep</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">trial</span> <span class="o">&lt;=</span> <span class="mi">199</span><span class="p">)</span>
+<span class="c1"># create subset</span>
+<span class="n">sel</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">subset_epochs</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sel</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BeForEpochs
+  n epochs: 100, n_samples: 5100
+  sampling_rate: 1000, zero_sample: 100
+  design: &#39;operand_1&#39;, &#39;operand_2&#39;, &#39;operator&#39;, &#39;correct_response&#39;, &#39;response&#39;, &#39;resp_number_digits&#39;, &#39;resp_num_category&#39;, &#39;subject_id&#39;, &#39;trial&#39;, &#39;trial_time&#39;
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Behavioural Force Data (BeForData)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-beforrecord-from-csv-file">Create BeForRecord from csv-file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#epochs-based-representation">Epochs-based representation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyarrow-feather-format">Pyarrow &amp; Feather Format</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-and-reading-beforrecord-using-the-feather-format">Writing and reading BeforRecord using the feather format</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-and-reading-epochs">Writing and reading epochs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-data-from-xdf-files-as-used-by-lsl">Extracting data from XDF files (as used by LSL)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-data-preprocessing-with-experimental-design">Example of data preprocessing with experimental design</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-subset-of-epochs">Selecting subset of epochs</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Oliver Lindemann.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

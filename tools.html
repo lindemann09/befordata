@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tools &#8212; BeForData 0.4.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=5bfaad31"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tools';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Filtering" href="filtering.html" />
+    <link rel="prev" title="Data Structures" href="data_struct.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">BeForData 0.4.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="data_struct.html">Data Structures</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering.html">Filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_formats.html">File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualizing.html">Visualizing</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="api.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Tools</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tools">
+<h1>Tools<a class="headerlink" href="#tools" title="Link to this heading">#</a></h1>
+<p><strong>Several tools for manipulation of BeForRecord and BeForEpochs data</strong></p>
+<section id="beforrecord-functions">
+<h2>BeForRecord functions<a class="headerlink" href="#beforrecord-functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#befordata.scale_record" title="befordata.scale_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.scale_record</span></code></a>(rec, factor)</p></td>
+<td><p>Scales the force data (inplace) of the BeForRecord by a specified factor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#befordata.concat_records" title="befordata.concat_records"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.concat_records</span></code></a>(record_list[, ...])</p></td>
+<td><p>Concatenate a list or tuple of <cite>BeForRecord</cite> instances into a single <cite>BeForRecord</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#befordata.detect_sessions" title="befordata.detect_sessions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.detect_sessions</span></code></a>(rec, time_gap)</p></td>
+<td><p>Detects recording sessions in a BeForRecord based on time gaps.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#befordata.split_sessions" title="befordata.split_sessions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.split_sessions</span></code></a>(rec)</p></td>
+<td><p>Split the record into a list of <cite>BeForRecord</cite> objects, one per session.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#befordata.extract_epochs" title="befordata.extract_epochs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.extract_epochs</span></code></a>(rec, column, ...[, ...])</p></td>
+<td><p>Extracts epochs centred around specified zero samples or zero times, with a given number of samples before and after each zero point.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.scale_record">
+<span class="sig-name descname"><span class="pre">scale_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.scale_record" title="Link to this definition">#</a></dt>
+<dd><p>Scales the force data (inplace) of the BeForRecord by a specified factor.</p>
+<p>This function creates a deep copy of the input BeForRecord, multiplies the columns
+corresponding to force measurements by the given scaling factor, and returns a new
+BeForRecord with the scaled data. All other attributes (sampling rate, sessions,
+time column, and metadata) are preserved via deep copy to avoid side effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>rec</strong><span class="classifier">BeForRecord</span></dt><dd></dd>
+<dt><strong>factor</strong><span class="classifier">float</span></dt><dd><p>The scaling factor to apply to the force data columns.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.concat_records">
+<span class="sig-name descname"><span class="pre">concat_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_sessions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.concat_records" title="Link to this definition">#</a></dt>
+<dd><p>Concatenate a list or tuple of <cite>BeForRecord</cite> instances into a single
+<cite>BeForRecord</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="data_struct.html#befordata.BeForRecord" title="befordata._record.BeForRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">BeForRecord</span></code></a></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns a <cite>BeForRecord</cite> instance containing the concatenated records from</dt><dd><p>all input objects.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>record_list</strong><span class="classifier">list or tuple of BeForRecord</span></dt><dd><p>A list or tuple containing BeForRecord objects to concatenate. All
+objects must have matching data columns, time_column, sampling rate.</p>
+</dd>
+<dt><strong>no_sessions</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, session information will be ignored during concatenation.
+Default is False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the input list or tuple is empty.</p>
+</dd>
+<dt>TypeError</dt><dd><p>If any element in the input is not a BeForRecord instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Metadata will not be copied and only the metadata of the first
+BeForRecord will be used.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.detect_sessions">
+<span class="sig-name descname"><span class="pre">detect_sessions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_gap</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.detect_sessions" title="Link to this definition">#</a></dt>
+<dd><p>Detects recording sessions in a BeForRecord based on time gaps. The function
+modifies the <cite>sessions</cite> attribute of the BeForRecord in place.</p>
+<p>This function analyses the time column of the provided BeForRecord and identifies
+breaks in the recording where the time difference between consecutive samples
+exceeds the specified time_gap. Each detected break marks the start of a new
+session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>rec</strong><span class="classifier">BeForRecord</span></dt><dd></dd>
+<dt><strong>time_gap</strong><span class="classifier">float</span></dt><dd><p>The minimum time difference (in the same units as the time column) that is
+considered a pause in the recording and thus the start of a new session.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.split_sessions">
+<span class="sig-name descname"><span class="pre">split_sessions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.split_sessions" title="Link to this definition">#</a></dt>
+<dd><p>Split the record into a list of <cite>BeForRecord</cite> objects, one per session.</p>
+<p>Returns a list of <cite>BeForRecord</cite> objects, each containing the data for one session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="data_struct.html#befordata.BeForRecord" title="befordata._record.BeForRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">BeForRecord</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>rec</strong><span class="classifier">BeForRecord</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.extract_epochs">
+<span class="sig-name descname"><span class="pre">extract_epochs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples_before</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_samples=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_times=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design=Empty</span> <span class="pre">DataFrame</span> <span class="pre">Columns:</span> <span class="pre">[]</span> <span class="pre">Index:</span> <span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.extract_epochs" title="Link to this definition">#</a></dt>
+<dd><p>Extracts epochs centred around specified zero samples or zero times, with a given
+number of samples before and after each zero point.</p>
+<p>Returns an <cite>BeForEpochs</cite> object containing the extracted epochs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="data_struct.html#befordata.BeForEpochs" title="befordata._epochs.BeForEpochs"><code class="xref py py-class docutils literal notranslate"><span class="pre">BeForEpochs</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>rec</strong><span class="classifier">BeForRecord</span></dt><dd></dd>
+<dt><strong>column</strong><span class="classifier">str</span></dt><dd><p>Name of the column containing the force data to extract.</p>
+</dd>
+<dt><strong>n_samples</strong><span class="classifier">int</span></dt><dd><p>Number of samples to extract after the zero sample.</p>
+</dd>
+<dt><strong>n_samples_before</strong><span class="classifier">int</span></dt><dd><p>Number of samples to extract before the zero sample.</p>
+</dd>
+<dt><strong>zero_samples</strong><span class="classifier">list of int or np.ndarray, optional</span></dt><dd><p>List of sample indices to center epochs on.</p>
+</dd>
+<dt><strong>zero_times</strong><span class="classifier">list of float or np.ndarray, optional</span></dt><dd><p>List of time stamps to center epochs on.</p>
+</dd>
+<dt><strong>design</strong><span class="classifier">pd.DataFrame, optional</span></dt><dd><p>Optional design matrix or metadata for the epochs.</p>
+</dd>
+<dt><strong>suppress_warnings</strong><span class="classifier">bool, optional (default: False)</span></dt><dd><p>If True, suppress incomplete epoch warnings during epoch extraction.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If neither or both of <cite>zero_samples</cite> and <cite>zero_times</cite> are provided.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Provide either <cite>zero_samples</cite> or <cite>zero_times</cite>, not both.
+Use <cite>find_samples_by_time</cite> to convert times to sample indices if needed.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ep</span> <span class="o">=</span> <span class="n">extract_epochs</span><span class="p">(</span><span class="n">my_record</span><span class="p">,</span> <span class="s2">&quot;Fx&quot;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">n_samples_before</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">design</span><span class="o">=</span><span class="n">my_design</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">zero_times</span><span class="o">=</span><span class="n">my_design</span><span class="o">.</span><span class="n">trial_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="beforepochs-functions">
+<h2>BeForEpochs functions<a class="headerlink" href="#beforepochs-functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#befordata.scale_epochs" title="befordata.scale_epochs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.scale_epochs</span></code></a>(epochs, factor)</p></td>
+<td><p>Scales the force data (inplace) of the <cite>BeForEpochs</cite> structure by a specified factor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#befordata.concat_epochs" title="befordata.concat_epochs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.concat_epochs</span></code></a>(epochs_list)</p></td>
+<td><p>Concatenate a list or tuple of BeForEpochs instances into a single <cite>BeForEpochs</cite> object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#befordata.adjust_baseline" title="befordata.adjust_baseline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">befordata.adjust_baseline</span></code></a>(epochs, ...)</p></td>
+<td><p>Adjust the baseline of each epoch (inplace) of the BeForEpochs data using the mean value of a defined sample window.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.scale_epochs">
+<span class="sig-name descname"><span class="pre">scale_epochs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.scale_epochs" title="Link to this definition">#</a></dt>
+<dd><p>Scales the force data (inplace) of the <cite>BeForEpochs</cite> structure by a specified
+factor.</p>
+<p>This function multiplies all force data in the <cite>BeForEpochs</cite> instance by the
+given scaling factor. The baseline is also scaled accordingly. All other
+attributes (sampling rate, design, zero_sample) are preserved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>epochs</strong><span class="classifier">BeForEpochs</span></dt><dd></dd>
+<dt><strong>factor</strong><span class="classifier">float</span></dt><dd><p>The scaling factor to apply to the force data and baseline.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.concat_epochs">
+<span class="sig-name descname"><span class="pre">concat_epochs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.concat_epochs" title="Link to this definition">#</a></dt>
+<dd><p>Concatenate a list or tuple of BeForEpochs instances into a single
+<cite>BeForEpochs</cite> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="data_struct.html#befordata.BeForEpochs" title="befordata._epochs.BeForEpochs"><code class="xref py py-class docutils literal notranslate"><span class="pre">BeForEpochs</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>epochs_list</strong><span class="classifier">list or tuple of BeForEpochs</span></dt><dd><p>A list or tuple containing BeForEpochs objects to concatenate. All
+objects must have matching sample count, sampling rate, zero sample,
+baseline adjustment status, and design columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the input list or tuple is empty.</p>
+</dd>
+<dt>TypeError</dt><dd><p>If any element in the input is not a BeForEpochs instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="befordata.adjust_baseline">
+<span class="sig-name descname"><span class="pre">adjust_baseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#befordata.adjust_baseline" title="Link to this definition">#</a></dt>
+<dd><p>Adjust the baseline of each epoch (inplace) of the BeForEpochs data using the
+mean value of a defined sample window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>reference_window</strong><span class="classifier">Tuple[int, int]</span></dt><dd><p>Tuple specifying the sample range (start, end) used for baseline adjustment.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="data_struct.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Data Structures</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="filtering.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Filtering</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beforrecord-functions">BeForRecord functions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.scale_record"><code class="docutils literal notranslate"><span class="pre">scale_record()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.concat_records"><code class="docutils literal notranslate"><span class="pre">concat_records()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.detect_sessions"><code class="docutils literal notranslate"><span class="pre">detect_sessions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.split_sessions"><code class="docutils literal notranslate"><span class="pre">split_sessions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.extract_epochs"><code class="docutils literal notranslate"><span class="pre">extract_epochs()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beforepochs-functions">BeForEpochs functions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.scale_epochs"><code class="docutils literal notranslate"><span class="pre">scale_epochs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.concat_epochs"><code class="docutils literal notranslate"><span class="pre">concat_epochs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#befordata.adjust_baseline"><code class="docutils literal notranslate"><span class="pre">adjust_baseline()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Oliver Lindemann.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
