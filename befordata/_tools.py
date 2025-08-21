@@ -179,6 +179,7 @@ def extract_epochs(
     zero_samples: _tp.List[int] | _NDArray[_np.int_] | None = None,
     zero_times: _tp.List[float] | _NDArray[_np.floating] | None = None,
     design: _pd.DataFrame = _pd.DataFrame(),
+    suppress_warnings: bool = False,
 ) -> BeForEpochs:
     """
     Extracts epochs centred around specified zero samples or zero times, with a given
@@ -201,6 +202,8 @@ def extract_epochs(
         List of time stamps to center epochs on.
     design : pd.DataFrame, optional
         Optional design matrix or metadata for the epochs.
+    suppress_warnings : bool, optional (default: False)
+        If True, suppress incomplete epoch warnings during epoch extraction.
 
     Raises
     ------
@@ -260,11 +263,12 @@ def extract_epochs(
         if f > 0 and f < n:
             t = zs + n_samples
             if t > n:
-                _warnings.warn(
-                    "extract_force_epochs: last force epoch is incomplete, "
-                    f"{t - n} samples missing.",
-                    RuntimeWarning,
-                )
+                if not suppress_warnings:
+                    _warnings.warn(
+                        "extract_force_epochs: last force epoch is incomplete, "
+                        f"{t - n} samples missing.",
+                        RuntimeWarning,
+                    )
                 tmp = fd[f:].to_numpy(copy=True)  # make copy
                 force_mtx[r, : len(tmp)] = tmp
                 force_mtx[r, len(tmp) :] = 0
@@ -279,8 +283,8 @@ def extract_epochs(
     )
 
 
-
 ### BeForEpochs ###
+
 
 def scale_epochs(epochs: BeForEpochs, factor: float) -> None:
     """
